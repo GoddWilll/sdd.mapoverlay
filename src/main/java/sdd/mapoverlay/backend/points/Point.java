@@ -9,11 +9,11 @@ public class Point {
         this.y_coord = y_coord;
     }
 
-    public double getX_coords(){
+    public double getXCoords(){
         return x_coord;
     }
 
-    public double getY_coords() {
+    public double getYCoords() {
         return y_coord;
     }
 }

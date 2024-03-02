@@ -3,6 +3,8 @@ package sdd.mapoverlay.backend.segments;
 import sdd.mapoverlay.backend.points.EndPoint;
 import sdd.mapoverlay.backend.points.types.PointType;
 
+
+
 public class Segment {
     private EndPoint upperEndPoint;
     private EndPoint lowerEndPoint;
@@ -34,6 +36,11 @@ public class Segment {
         } else {
             return lowerEndPoint;
         }
+    }
+
+    public double[] vector(){
+        double[] vector = {lowerEndPoint.getXCoords() - upperEndPoint.getXCoords(), lowerEndPoint.getYCoords() - upperEndPoint.getYCoords()};
+        return vector;
     }
 
 

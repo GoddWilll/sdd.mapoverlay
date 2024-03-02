@@ -1,9 +1,8 @@
 package sdd.mapoverlay.frontend;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.application.Application;
@@ -28,10 +27,11 @@ public class TestFX extends Application {
     @Override
     public void start(Stage stage){
         Pane root = new Pane();
-        Map map = new Map("fichier4.txt");
-        ArrayList<Segment> segments = map.getSegments();
+        root.setScaleY(-1); // Inverse l'axe des Y
+        Map map = new Map("fichier1.txt");
+        ArrayList<Segment> segments = map.getVerticallySortedSegments();
         for (Segment segment : segments){
-            Line line = new Line(segment.getLeftEndPoint().getX_coords(), segment.getLeftEndPoint().getY_coords(), segment.getRightEndPoint().getX_coords(), segment.getRightEndPoint().getY_coords());
+            Line line = new Line(segment.getLeftEndPoint().getXCoords(), segment.getLeftEndPoint().getYCoords(), segment.getRightEndPoint().getXCoords(), segment.getRightEndPoint().getYCoords());
             root.getChildren().addAll(line);
         }
         double maxX = map.getMaxXPosition();
