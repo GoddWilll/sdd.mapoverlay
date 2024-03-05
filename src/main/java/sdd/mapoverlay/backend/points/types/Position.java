@@ -1,8 +1,6 @@
 package sdd.mapoverlay.backend.points.types;
 
-public enum PointType {
-    UPPERENDPOINT,
-    LOWERENDPOINT,
+public enum Position {
     LEFT,
     RIGHT
 }

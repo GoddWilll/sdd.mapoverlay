@@ -1,48 +1,46 @@
 package sdd.mapoverlay.backend.segments;
 
-import sdd.mapoverlay.backend.points.EndPoint;
-import sdd.mapoverlay.backend.points.types.PointType;
-
+import sdd.mapoverlay.backend.points.EventPoint;
+import sdd.mapoverlay.backend.points.types.EventType;
+import sdd.mapoverlay.backend.points.types.Position;
 
 
 public class Segment {
-    private EndPoint upperEndPoint;
-    private EndPoint lowerEndPoint;
+    private EventPoint upperEventPoint;
+    private EventPoint lowerEventPoint;
 
-    public Segment(EndPoint upperEndPoint, EndPoint lowerEndPoint){
-        this.upperEndPoint = upperEndPoint;
-        this.lowerEndPoint = lowerEndPoint;
+    public Segment(EventPoint upperEventPoint, EventPoint lowerEventPoint){
+        this.upperEventPoint = upperEventPoint;
+        this.lowerEventPoint = lowerEventPoint;
     }
 
-    public EndPoint getUpperEndPoint(){
-        return upperEndPoint;
+    public EventPoint getUpperEndPoint(){
+        return upperEventPoint;
     }
 
-    public EndPoint getLowerEndPoint(){
-        return lowerEndPoint;
+    public EventPoint getLowerEndPoint(){
+        return lowerEventPoint;
     }
 
-    public EndPoint getLeftEndPoint(){
-        if (upperEndPoint.getPosition() == PointType.LEFT){
-            return upperEndPoint;
+    public EventPoint getLeftEndPoint(){
+        if (upperEventPoint.getPosition() == Position.LEFT){
+            return upperEventPoint;
         } else {
-            return lowerEndPoint;
+            return lowerEventPoint;
         }
     }
 
-    public EndPoint getRightEndPoint(){
-        if (upperEndPoint.getPosition() == PointType.RIGHT){
-            return upperEndPoint;
+    public EventPoint getRightEndPoint(){
+        if (upperEventPoint.getPosition() == Position.RIGHT){
+            return upperEventPoint;
         } else {
-            return lowerEndPoint;
+            return lowerEventPoint;
         }
     }
 
     public double[] vector(){
-        double[] vector = {lowerEndPoint.getXCoords() - upperEndPoint.getXCoords(), lowerEndPoint.getYCoords() - upperEndPoint.getYCoords()};
+        double[] vector = {lowerEventPoint.getXCoords() - upperEventPoint.getXCoords(), lowerEventPoint.getYCoords() - upperEventPoint.getYCoords()};
         return vector;
     }
-
-
 
 }

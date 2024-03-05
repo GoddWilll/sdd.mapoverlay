@@ -1,19 +1,20 @@
 package sdd.mapoverlay.backend.points;
 
-public class Point {
-    private double x_coord;
-    private double y_coord;
+public abstract class Point {
+    private double xCoord;
+    private double yCoord;
 
-    public Point(double x_coord,  double y_coord){
-        this.x_coord = x_coord;
-        this.y_coord = y_coord;
+    public Point(double xCoord, double yCoord){
+        this.xCoord = xCoord;
+        this.yCoord = yCoord;
     }
 
     public double getXCoords(){
-        return x_coord;
+        return xCoord;
     }
 
     public double getYCoords() {
-        return y_coord;
+        return yCoord;
     }
+
 }

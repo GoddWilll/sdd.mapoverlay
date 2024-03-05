@@ -1,7 +1,8 @@
 package sdd.mapoverlay.backend.map;
 
-import sdd.mapoverlay.backend.points.EndPoint;
-import sdd.mapoverlay.backend.points.types.PointType;
+import sdd.mapoverlay.backend.points.EventPoint;
+import sdd.mapoverlay.backend.points.types.EventType;
+import sdd.mapoverlay.backend.points.types.Position;
 import sdd.mapoverlay.backend.segments.Segment;
 import sdd.mapoverlay.backend.utils.MapLoader;
 import sdd.mapoverlay.backend.utils.SegmentComparator;
@@ -24,8 +25,8 @@ public class Map {
         
         MapLoader mapLoader = new MapLoader(fileName);
         ArrayList<String> mapData = mapLoader.getMap();
-        EndPoint upperEndPoint = null;
-        EndPoint lowerEndPoint = null;
+        EventPoint upperEndPoint = null;
+        EventPoint lowerEndPoint = null;
 
         maxXPosition = 0;
         maxYPosition = 0;
@@ -48,34 +49,39 @@ public class Map {
 
             if (coordinates[1] < coordinates[3]) { // y1 < y2
                 if (coordinates[0] <= coordinates[2]) { // x1 < x2
-                    lowerEndPoint = new EndPoint(coordinates[0], coordinates[1], PointType.LOWERENDPOINT, PointType.LEFT);
-                    upperEndPoint = new EndPoint(coordinates[2], coordinates[3], PointType.UPPERENDPOINT, PointType.RIGHT);
+                    lowerEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.LOWERENDPOINT, Position.LEFT);
+                    upperEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.UPPERENDPOINT, Position.RIGHT);
                 } else { // x1 > x2
-                    lowerEndPoint = new EndPoint(coordinates[0], coordinates[1], PointType.LOWERENDPOINT, PointType.RIGHT);
-                    upperEndPoint = new EndPoint(coordinates[2], coordinates[3], PointType.UPPERENDPOINT, PointType.LEFT);
+                    lowerEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.LOWERENDPOINT, Position.RIGHT);
+                    upperEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.UPPERENDPOINT, Position.LEFT);
                 }
 
             } else { // y1 >= y2
                 if (coordinates[1].equals(coordinates[3])) { // y1 == y2
                     if (coordinates[0] < coordinates[2]) { // si x1 < x2
-                        upperEndPoint = new EndPoint(coordinates[0], coordinates[1], PointType.UPPERENDPOINT, PointType.LEFT);
-                        lowerEndPoint = new EndPoint(coordinates[2], coordinates[3], PointType.LOWERENDPOINT, PointType.RIGHT);
+                        upperEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.UPPERENDPOINT, Position.LEFT);
+                        lowerEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.LOWERENDPOINT, Position.RIGHT);
                     } else { // si x1 > x2
-                        lowerEndPoint = new EndPoint(coordinates[0], coordinates[1], PointType.LOWERENDPOINT, PointType.RIGHT);
-                        upperEndPoint = new EndPoint(coordinates[2], coordinates[3], PointType.UPPERENDPOINT, PointType.LEFT);
+                        lowerEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.LOWERENDPOINT, Position.RIGHT);
+                        upperEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.UPPERENDPOINT, Position.LEFT);
                     }
                 } else { // si y1 > y2
                     if (coordinates[0] < coordinates[2]) { // si x1 < x2
-                        upperEndPoint = new EndPoint(coordinates[0], coordinates[1], PointType.UPPERENDPOINT, PointType.LEFT);
-                        lowerEndPoint = new EndPoint(coordinates[2], coordinates[3], PointType.LOWERENDPOINT, PointType.RIGHT);
+                        upperEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.UPPERENDPOINT, Position.LEFT);
+                        lowerEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.LOWERENDPOINT, Position.RIGHT);
                     } else { // si x1 > x2
-                        upperEndPoint = new EndPoint(coordinates[0], coordinates[1], PointType.UPPERENDPOINT, PointType.RIGHT);
-                        lowerEndPoint = new EndPoint(coordinates[2], coordinates[3], PointType.LOWERENDPOINT, PointType.LEFT);
+                        upperEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.UPPERENDPOINT, Position.RIGHT);
+                        lowerEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.LOWERENDPOINT, Position.LEFT);
                     }
                 }
             }
-            segments.add(new Segment(upperEndPoint, lowerEndPoint));
+            // Section permettant d'ajouter le segment au endpoint superieur pour stockage dans eventQueue
+            Segment upperPointSegment = new Segment(upperEndPoint, lowerEndPoint);
+            upperEndPoint.setSegment(upperPointSegment);
 
+            // Creation du segment et ajout a la liste de segments
+            segments.add(new Segment(upperEndPoint, lowerEndPoint));
+            
         }
 
     }
