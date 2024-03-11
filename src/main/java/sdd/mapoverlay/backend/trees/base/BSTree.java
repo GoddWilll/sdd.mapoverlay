@@ -2,8 +2,10 @@ package sdd.mapoverlay.backend.trees.base;//Classe BSTree decrivant un arbre bin
 //Elle etend la classe Tree, sachant que les donnees sont a present comparables
 //Les doublons ne sont pas autorises
 
+import sdd.mapoverlay.backend.points.EventPoint;
+
 public class BSTree<D extends Comparable> extends Tree<D> {
-	
+	final Boolean isStatus = false;
 //constructeurs
 	public BSTree() {
 		super();
@@ -36,16 +38,50 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 //insertion recursive d'une donnee
 //rem: la methode equilibrate ne fait rien ici, mais sera utile pour la classe AVLTree
 	public void insert(D d) {
-		if (isEmpty())
-			insertEmpty(d);
-		else	{
-			if (getData().compareTo(d) < 0)
-				getRight().insert(d);
-			else 	if (getData().compareTo(d) > 0)
+		if (getIsStatus()){
+			insertStatusStructureVariant(d);
+		} else {
+			if (isEmpty())
+				insertEmpty(d);
+			else	{
+				if (getData().compareTo(d) < 0)
+					getRight().insert(d);
+				else 	if (getData().compareTo(d) > 0)
 					getLeft().insert(d);
-			equilibrate();
+				equilibrate();
 			}
+		}
 	}
+
+	public void insertStatusStructureVariant(D d){
+		if (isEmpty()){
+			setData(d);
+			setLeft(new AVLTree());
+			setRight(new AVLTree());
+			getLeft().insert(d);
+		}
+		else {
+			if (getData().compareTo(d) < 0) { // si la donnee a inserer est plus grande que la donnee du noeud
+				if (getRight().isEmpty()){
+					getLeft().insert(getData());
+					getRight().insert(d);
+				} else {
+					getRight().insertStatusStructureVariant(d);
+				}
+			} else if (getData().compareTo(d) > 0){ // si la donnee a inserer est plus petite
+				if (getLeft().isEmpty()){
+					getLeft().insert(d);
+					getRight().insert(getData());
+					setData(d);
+				} else {
+					getLeft().insertStatusStructureVariant(d);
+				}
+			}
+			equilibrate();
+		}
+	}
+
+
 
 //On redefinit la methode insertEmpty de la classe Tree, afin de travailler avec 
 //le type BSTree au lieu de Tree
@@ -143,5 +179,9 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 				else 	if (getRight().isEmpty()) 
 						return x;
 					else    return getRight().searchMin();
+	}
+
+	public Boolean getIsStatus() {
+		return isStatus;
 	}
 }

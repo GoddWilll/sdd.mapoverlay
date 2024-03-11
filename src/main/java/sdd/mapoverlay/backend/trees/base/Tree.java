@@ -62,11 +62,22 @@ public class Tree<D> {
 	}
 
 //affichage recursif
-	public void print() {
-		if (!isEmpty()) {
-			left.print();
-			System.out.println(data.toString());
-			right.print();
+//	public void print() {
+//		if (!isEmpty()) {
+//			left.print();
+//			System.out.println(getData());
+//			right.print();
+//		}
+//	}
+
+
+	public void print(String prefix, boolean isLeft){
+		if (!isEmpty()){
+			System.out.println(prefix + (isLeft ? "⌊ " : "⌈ ") + getData());
+			right.print(prefix + (isLeft ? "│   " : "    "), false);
+			left.print(prefix + (isLeft ? "│   " : "    "), true);
+
 		}
-	}	
+	}
+
 }

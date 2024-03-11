@@ -4,6 +4,7 @@ package sdd.mapoverlay.backend.trees.base;//Classe AVLTree décrivant un arbre A
 
 public class AVLTree<D extends Comparable> extends BSTree<D> {
 
+	final Boolean isStatus = false;
 //Ajout de la hauteur dans la liste des variables d'instance
 //La hauteur est ainsi stockée dans la racine de l'arbre
 	private int height;
@@ -104,5 +105,9 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 			rightRotation();
 		}
 	else computeHeight();
+	}
+
+	public Boolean getIsStatus(){
+		return isStatus;
 	}
 }

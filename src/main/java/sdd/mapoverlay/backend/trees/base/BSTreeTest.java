@@ -14,13 +14,13 @@ public class BSTreeTest {
 		t.insert("zoe");
 		t.insert("xavier");
 		t.insert("willy");
-		t.print();
+		//t.print();
 		System.out.println("-----------");
 		
 		System.out.println(t.searchSucc("quentin"));
 		System.out.println("-----------");
 		t.suppress("vero");
-		t.print();
+		//t.print();
 		System.out.println("-----------");
 		
 		System.out.println(t.searchMin());

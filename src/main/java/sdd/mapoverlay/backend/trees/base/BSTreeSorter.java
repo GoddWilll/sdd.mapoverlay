@@ -13,6 +13,6 @@ public class BSTreeSorter<D extends Comparable> {
 		BSTree<D> t = new BSTree<D>();
 		for (int i=0; i<a.length; i++) 
 			t.insert(a[i]);
-		t.print();
+		//t.print();
 	}
 }

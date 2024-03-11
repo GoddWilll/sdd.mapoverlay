@@ -14,6 +14,6 @@ public class AVLTreeSorter<D extends Comparable> {
 		AVLTree<D> t = new AVLTree<D>();
 		for (int i=0; i<a.length; i++) 
 			t.insert(a[i]);
-		t.print();
+		//t.print();
 	}
 }
