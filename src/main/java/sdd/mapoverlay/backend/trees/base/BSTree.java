@@ -94,15 +94,64 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 //suppression recursive d'une donnee
 //rem: la methode equilibrate ne fait rien ici, mais sera utile pour la classe AVLTree
 	public void suppress(D d) {
-		if (!isEmpty()) {
-			if (getData().compareTo(d) < 0) 
-				getRight().suppress(d);
-			else 	if (getData().compareTo(d) > 0)
+		if (getIsStatus()){
+			suppressStatusStructure(d);
+		} else {
+			if (!isEmpty()) {
+				if (getData().compareTo(d) < 0)
+					getRight().suppress(d);
+				else 	if (getData().compareTo(d) > 0)
 					getLeft().suppress(d);
 				else 	suppressRoot();
-			equilibrate();
+				equilibrate();
 			}
+		}
+
 	}
+
+	public D suppressStatusStructure(D d){
+		if (!isEmpty()){
+			if (getData().compareTo(d) < 0){
+				getRight().suppressStatusStructure(d);
+			}
+			else if (getData().compareTo(d) > 0) {
+				getLeft().suppressStatusStructure(d);
+			}
+			else {
+				if (getData().compareTo(d) == 0 && height() > 2){
+					D data = getData();
+					suppressRoot();
+					D newData = getData(); // on recupere la nouvelle valeur de la racine
+					getRight().suppressStatusStructure(newData); // on supprime la valeur residuelle si elle existe
+					getLeft().replace(data, newData); // on remplace la donnee la plus a droite du sous arbre gauche par la nouvelle valeur
+					equilibrate();
+					return data;
+				} else if (getData().compareTo(d) == 0 && height() == 2){
+					D data = getData();
+					suppressRoot();
+					getLeft().suppressRoot();
+					equilibrate();
+					return data;
+				} else if (getData().compareTo(d) == 0 && height() == 1){
+					D data = getData();
+					suppressRoot();
+					equilibrate();
+					return data;
+				}
+			}
+			equilibrate();
+		}
+		return null;
+	}
+
+	public void replace(D d, D replacement){
+		if (getData().compareTo(d) == 0){
+			setData(replacement);
+		} else {
+			getRight().replace(d, replacement);
+		}
+	}
+
 
 //suppression de la racine (on sait qu'elle existe)
 //rem: la methode equilibrate ne fait rien ici, mais sera utile pour la classe AVLTree

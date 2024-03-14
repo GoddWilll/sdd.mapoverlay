@@ -1,5 +1,6 @@
 package sdd.mapoverlay;
 
+import org.w3c.dom.events.EventException;
 import sdd.mapoverlay.backend.map.Map;
 import sdd.mapoverlay.backend.points.EventPoint;
 import sdd.mapoverlay.backend.segments.Segment;
@@ -20,14 +21,25 @@ public class Main {
         eventQueue.initialize(map);
         StatusStructure<EventPoint> status = new StatusStructure<>();
         Random random = new Random();
-        for (int i = 0; i < 10; i++){
-            EventPoint ep = new EventPoint(Double.parseDouble(df.format(random.nextDouble()).replace(',', '.')), Double.parseDouble(df.format(random.nextDouble()).replace(',', '.')));
+//        for (int i = 0; i < 4; i++){
+//            EventPoint ep = new EventPoint(Double.parseDouble(df.format(random.nextDouble()).replace(',', '.')), Double.parseDouble(df.format(random.nextDouble()).replace(',', '.')));
+//            status.insert(ep);
+//        }
+        for (double i = 0; i < 0.6; i+= 0.1){
+            EventPoint ep = new EventPoint(0, Double.parseDouble(df.format(i).replace(',', '.')));
             status.insert(ep);
         }
+        EventPoint tester = new EventPoint(0.22, 0.22);
+
+        status.insert(tester);
+
         status.print("", true);
 
+        System.out.println("---------------------------------------------------------");
 
+        status.suppress(tester);
 
+        status.print("", true);
     }
 
 
