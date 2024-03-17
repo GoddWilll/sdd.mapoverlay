@@ -51,6 +51,6 @@ public class EventPoint extends Point implements Comparable<Point>{
 
     public String toString(){
         //return getXCoords() + " " + getYCoords();
-        return getYCoords() + "( x : " + getXCoords() + " )";
+        return "" + getXCoords();
     }
 }

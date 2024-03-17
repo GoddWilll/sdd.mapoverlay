@@ -53,25 +53,26 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 		}
 	}
 
-	public void insertStatusStructureVariant(D d){
+	public void insertStatusStructureVariant(D d){ // dans la status structure, ordonne de gauche a droite !
 		if (isEmpty()){
 			setData(d);
 			setLeft(new AVLTree());
 			setRight(new AVLTree());
-			getLeft().insert(d);
+			getLeft().insertEmpty(d);
 		}
 		else {
-			if (getData().compareTo(d) < 0) { // si la donnee a inserer est plus grande que la donnee du noeud
+			// Si on insere un point apres celui du noeud
+			if (((EventPoint) d).getXCoords() > ((EventPoint)getData()).getXCoords()) { // si la donnee a inserer est plus grande que la donnee du noeud
 				if (getRight().isEmpty()){
 					getLeft().insert(getData());
 					getRight().insert(d);
 				} else {
 					getRight().insertStatusStructureVariant(d);
 				}
-			} else if (getData().compareTo(d) > 0){ // si la donnee a inserer est plus petite
+			} else if (((EventPoint) d).getXCoords() < ((EventPoint) getData()).getXCoords()){ // si la donnee a inserer est plus petite
 				if (getLeft().isEmpty()){
-					getLeft().insert(d);
-					getRight().insert(getData());
+					getLeft().insertEmpty(d);
+					getRight().insertEmpty(getData());
 					setData(d);
 				} else {
 					getLeft().insertStatusStructureVariant(d);
@@ -109,39 +110,39 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 
 	}
 
-	public D suppressStatusStructure(D d){
+	public void suppressStatusStructure(D d){
 		if (!isEmpty()){
-			if (getData().compareTo(d) < 0){
+			if (((EventPoint) d).getXCoords() > ((EventPoint)getData()).getXCoords()){
 				getRight().suppressStatusStructure(d);
 			}
-			else if (getData().compareTo(d) > 0) {
+			else if (((EventPoint) d).getXCoords() < ((EventPoint) getData()).getXCoords()) {
 				getLeft().suppressStatusStructure(d);
 			}
 			else {
-				if (getData().compareTo(d) == 0 && height() > 2){
+				if (((EventPoint) d).getXCoords() == ((EventPoint) getData()).getXCoords() && height() > 2){
 					D data = getData();
 					suppressRoot();
 					D newData = getData(); // on recupere la nouvelle valeur de la racine
 					getRight().suppressStatusStructure(newData); // on supprime la valeur residuelle si elle existe
 					getLeft().replace(data, newData); // on remplace la donnee la plus a droite du sous arbre gauche par la nouvelle valeur
 					equilibrate();
-					return data;
-				} else if (getData().compareTo(d) == 0 && height() == 2){
-					D data = getData();
-					suppressRoot();
-					getLeft().suppressRoot();
+				} else if (((EventPoint) d).getXCoords() == ((EventPoint) getData()).getXCoords() && height() == 2){
+					//D data = getData();
+					if (!getRight().isEmpty() && getLeft().isEmpty()){
+						suppressRoot();
+					} else if (getRight().isEmpty() && !getLeft().isEmpty()){
+						suppressRoot();
+						suppressRoot();
+					}
 					equilibrate();
-					return data;
-				} else if (getData().compareTo(d) == 0 && height() == 1){
-					D data = getData();
+				} else if (((EventPoint) d).getXCoords() == ((EventPoint) getData()).getXCoords() && height() == 1){
+					//D data = getData();
 					suppressRoot();
 					equilibrate();
-					return data;
 				}
 			}
 			equilibrate();
 		}
-		return null;
 	}
 
 	public void replace(D d, D replacement){

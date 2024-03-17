@@ -16,4 +16,5 @@ public class StatusStructure<EventPoint extends Comparable> extends AVLTree<Even
         return isStatus;
     }
 
+
 }
