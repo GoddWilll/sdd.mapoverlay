@@ -17,7 +17,7 @@ public class TestFX extends Application {
     public void start(Stage stage){
         Pane root = new Pane();
         root.setScaleY(-1); // Inverse l'axe des Y
-        Map map = new Map("fichier1.txt");
+        Map map = new Map("test.txt");
         ArrayList<Segment> segments = map.getSegments();
         for (Segment segment : segments){
             Line line = new Line(segment.getLeftEndPoint().getXCoords(), segment.getLeftEndPoint().getYCoords(), segment.getRightEndPoint().getXCoords(), segment.getRightEndPoint().getYCoords());

@@ -77,7 +77,8 @@ public class Map {
             }
             // Section permettant d'ajouter le segment au endpoint superieur pour stockage dans eventQueue
             Segment upperPointSegment = new Segment(upperEndPoint, lowerEndPoint);
-            upperEndPoint.setSegment(upperPointSegment);
+            //System.out.println(upperPointSegment);
+            upperEndPoint.addSegment(upperPointSegment);
 
             // Creation du segment et ajout a la liste de segments
             segments.add(new Segment(upperEndPoint, lowerEndPoint));

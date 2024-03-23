@@ -3,10 +3,13 @@ package sdd.mapoverlay.backend.points;
 import sdd.mapoverlay.backend.points.types.EventType;
 import sdd.mapoverlay.backend.points.types.Position;
 import sdd.mapoverlay.backend.segments.Segment;
+
+import java.util.ArrayList;
+
 public class EventPoint extends Point implements Comparable<Point>{
     private EventType eventType;
     private Position position;
-    private Segment segment;
+    private ArrayList<Segment> segments = new ArrayList<>();
     public EventPoint(double xCoord, double yCoord, EventType eventType, Position position) {
         super(xCoord, yCoord);
         this.eventType = eventType;
@@ -25,12 +28,12 @@ public class EventPoint extends Point implements Comparable<Point>{
         return position;
     }
 
-    public void setSegment(Segment segment){
-        this.segment = segment;
+    public void addSegment(Segment segment){
+        this.segments.add(segment);
     }
 
-    public Segment getSegment(){
-        return segment;
+    public ArrayList<Segment> getSegments(){
+        return segments;
     }
     @Override
     public int compareTo(Point o) {
@@ -50,7 +53,7 @@ public class EventPoint extends Point implements Comparable<Point>{
     }
 
     public String toString(){
-        //return getXCoords() + " " + getYCoords();
-        return "" + getXCoords();
+        return getXCoords() + " " + getYCoords();
+
     }
 }

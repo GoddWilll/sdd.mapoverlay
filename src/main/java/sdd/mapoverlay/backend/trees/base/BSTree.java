@@ -3,6 +3,9 @@ package sdd.mapoverlay.backend.trees.base;//Classe BSTree decrivant un arbre bin
 //Les doublons ne sont pas autorises
 
 import sdd.mapoverlay.backend.points.EventPoint;
+import sdd.mapoverlay.backend.points.types.EventType;
+import sdd.mapoverlay.backend.points.types.Position;
+import sdd.mapoverlay.backend.segments.Segment;
 
 public class BSTree<D extends Comparable> extends Tree<D> {
 	final Boolean isStatus = false;
@@ -46,14 +49,27 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 			else	{
 				if (getData().compareTo(d) < 0)
 					getRight().insert(d);
-				else 	if (getData().compareTo(d) > 0)
+				else 	if (getData().compareTo(d) > 0) {
 					getLeft().insert(d);
+				} else if (getData().compareTo(d) == 0){
+					if (d.getClass().equals(EventPoint.class)){
+						if (((EventPoint)d).getEventType() == EventType.UPPERENDPOINT ){
+							for (Segment segment : ((EventPoint) d).getSegments()){
+								((EventPoint) getData()).addSegment(segment);
+							}
+						}
+					} else if (d.getClass().equals(Segment.class)){
+						insertStatusStructureVariant(d);
+					}
+
+				}
 				equilibrate();
 			}
 		}
 	}
 
-	public void insertStatusStructureVariant(D d){ // dans la status structure, ordonne de gauche a droite !
+
+	public void insertStatusStructureVariant(D d){
 		if (isEmpty()){
 			setData(d);
 			setLeft(new AVLTree());
@@ -61,15 +77,14 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 			getLeft().insertEmpty(d);
 		}
 		else {
-			// Si on insere un point apres celui du noeud
-			if (((EventPoint) d).getXCoords() > ((EventPoint)getData()).getXCoords()) { // si la donnee a inserer est plus grande que la donnee du noeud
+			if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.RIGHT) {
 				if (getRight().isEmpty()){
 					getLeft().insert(getData());
 					getRight().insert(d);
 				} else {
 					getRight().insertStatusStructureVariant(d);
 				}
-			} else if (((EventPoint) d).getXCoords() < ((EventPoint) getData()).getXCoords()){ // si la donnee a inserer est plus petite
+			} else if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.LEFT){
 				if (getLeft().isEmpty()){
 					getLeft().insertEmpty(d);
 					getRight().insertEmpty(getData());
@@ -112,31 +127,32 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 
 	public void suppressStatusStructure(D d){
 		if (!isEmpty()){
-			if (((EventPoint) d).getXCoords() > ((EventPoint)getData()).getXCoords()){
+			if (((Segment) d).determinePosition(((Segment)getData())) == Position.LEFT){
 				getRight().suppressStatusStructure(d);
 			}
-			else if (((EventPoint) d).getXCoords() < ((EventPoint) getData()).getXCoords()) {
+			else if (((Segment)d).determinePosition(((Segment)getData())) == Position.RIGHT) {
 				getLeft().suppressStatusStructure(d);
 			}
 			else {
-				if (((EventPoint) d).getXCoords() == ((EventPoint) getData()).getXCoords() && height() > 2){
+				if (((Segment) d).getVector() == ((Segment) getData()).getVector() && height() > 2){
 					D data = getData();
 					suppressRoot();
 					D newData = getData(); // on recupere la nouvelle valeur de la racine
 					getRight().suppressStatusStructure(newData); // on supprime la valeur residuelle si elle existe
 					getLeft().replace(data, newData); // on remplace la donnee la plus a droite du sous arbre gauche par la nouvelle valeur
 					equilibrate();
-				} else if (((EventPoint) d).getXCoords() == ((EventPoint) getData()).getXCoords() && height() == 2){
-					//D data = getData();
+				} else if ( getData().compareTo(d) == 0 && height() == 2){
 					if (!getRight().isEmpty() && getLeft().isEmpty()){
 						suppressRoot();
 					} else if (getRight().isEmpty() && !getLeft().isEmpty()){
 						suppressRoot();
 						suppressRoot();
+					} else {
+						suppressRoot();
+						getLeft().suppressRoot();
 					}
 					equilibrate();
-				} else if (((EventPoint) d).getXCoords() == ((EventPoint) getData()).getXCoords() && height() == 1){
-					//D data = getData();
+				} else if (((Segment) d).getVector() == ((Segment) getData()).getVector() && height() == 1){
 					suppressRoot();
 					equilibrate();
 				}

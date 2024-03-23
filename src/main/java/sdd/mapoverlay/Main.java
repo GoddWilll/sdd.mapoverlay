@@ -1,46 +1,47 @@
 package sdd.mapoverlay;
 
+import org.w3c.dom.events.Event;
 import sdd.mapoverlay.backend.map.Map;
 import sdd.mapoverlay.backend.points.EventPoint;
+import sdd.mapoverlay.backend.points.types.EventType;
+import sdd.mapoverlay.backend.segments.Segment;
 import sdd.mapoverlay.backend.trees.EventQueue;
 import sdd.mapoverlay.backend.trees.StatusStructure;
-
+import sdd.mapoverlay.backend.Logic;
 
 import java.text.DecimalFormat;
 
 
 public class Main {
-    public static void main(String[] args){
-        Map map = new Map("fichier1.txt");
+    public static void main(String[] args) {
+        Map map = new Map("test.txt");
         DecimalFormat df = new DecimalFormat("#.##");
 
         EventQueue eventQueue = new EventQueue();
         eventQueue.initialize(map);
-        StatusStructure<EventPoint> status = new StatusStructure<>();
-
-        for (double i = 0; i < 0.6; i+= 0.1){
-            EventPoint ep = new EventPoint(Double.parseDouble(df.format(i * 2).replace(',', '.')), Double.parseDouble(df.format(i).replace(',', '.')));
-            status.insert(ep);
+        StatusStructure status = new StatusStructure();
+        eventQueue.print("", true);
+        System.out.println("------------------");
+        while(!eventQueue.isEmpty()){
+            EventPoint nextEvent = eventQueue.suppressMin();
+            if (nextEvent.getEventType() == EventType.UPPERENDPOINT){
+                if (nextEvent.getSegments().size() > 1){
+                    for (Segment segment : nextEvent.getSegments()){
+                        status.insertStatusStructureVariant(segment);
+                    }
+                } else {
+                    status.insertStatusStructureVariant(nextEvent.getSegments().getFirst());
+                }
+            }
         }
-        EventPoint tester = new EventPoint(0.9, 0.9);
-
-        status.insert(tester);
-
-        status.print("", true);
-
-        System.out.println("---------------------------------------------------------");
-
-        status.suppress(tester);
+        Segment seg = new Segment(new EventPoint(0.15, 0.15), new EventPoint(0.34, 0.56));
+        status.insertStatusStructureVariant(seg);
 
         status.print("", true);
-
-        EventPoint ep = new EventPoint(0.2, 0.2);
-
-        status.suppressStatusStructure(ep);
-
-        System.out.println("---------------------------------------------------------");
-
+        System.out.println("------------------");
+        status.suppressStatusStructure(new Segment(new EventPoint(0.15, 0.15), new EventPoint(0.34, 0.56)));
         status.print("", true);
+
 
     }
 

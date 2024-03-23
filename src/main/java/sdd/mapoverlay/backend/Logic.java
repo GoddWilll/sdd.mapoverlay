@@ -10,25 +10,32 @@ import java.util.ArrayList;
 
 public class Logic {
 
-    public ArrayList<EventPoint> findIntersection(ArrayList<Segment> segments){
+    private static StatusStructure statusStructure = new StatusStructure();
+    private static EventQueue eventQueue = new EventQueue();
+
+    public static ArrayList<EventPoint> findIntersection(ArrayList<Segment> segments){
         Map map = new Map("fichier1.txt");
-        EventQueue eventQueue = new EventQueue();
         eventQueue.initialize(map);
-        StatusStructure<EventPoint> statusStructure = new StatusStructure<>();
         while (!eventQueue.isEmpty()){
-            EventPoint p = determineNextEvent();
+            EventPoint p = determineNextEvent(eventQueue);
             handleEventPoint(p);
         }
         // ToDo completer la fonction
         return null;
     }
 
-    public EventPoint determineNextEvent(){
-        // ToDo
-        return null;
+    public static EventPoint determineNextEvent(EventQueue eventQueue){
+        return  eventQueue.suppressMin();
     }
 
-    public void handleEventPoint(EventPoint p){
-        // ToDo
+    public static void handleEventPoint(EventPoint p){
+        ArrayList<Segment> U = p.getSegments();
+        // trouver tous les segments dans T qui contiennent p (?????)
+
+
+    }
+
+    public static void findNewEvent(){
+        // Todo
     }
 }
