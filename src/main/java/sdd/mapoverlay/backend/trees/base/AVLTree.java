@@ -8,6 +8,8 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 //Ajout de la hauteur dans la liste des variables d'instance
 //La hauteur est ainsi stockée dans la racine de l'arbre
 	private int height;
+
+	private AVLTree<D> father; //Todo implementer reference vers le noeud predecesseur pour faciliter futures operations
 	
 //constructeur
 	public AVLTree() {
