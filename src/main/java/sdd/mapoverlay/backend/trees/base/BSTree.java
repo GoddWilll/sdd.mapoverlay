@@ -61,7 +61,6 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 					} else if (d.getClass().equals(Segment.class)){
 						insertStatusStructureVariant(d);
 					}
-
 				}
 				equilibrate();
 			}
@@ -134,7 +133,7 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 				getLeft().suppressStatusStructure(d);
 			}
 			else {
-				if (((Segment) d).getVector() == ((Segment) getData()).getVector() && height() > 2){
+				if (getData().compareTo(d) == 0 && height() > 2){
 					D data = getData();
 					suppressRoot();
 					D newData = getData(); // on recupere la nouvelle valeur de la racine
@@ -152,7 +151,7 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 						getLeft().suppressRoot();
 					}
 					equilibrate();
-				} else if (((Segment) d).getVector() == ((Segment) getData()).getVector() && height() == 1){
+				} else if (getData().compareTo(d) == 0 && height() == 1){
 					suppressRoot();
 					equilibrate();
 				}

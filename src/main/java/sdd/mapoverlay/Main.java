@@ -41,7 +41,8 @@ public class Main {
         System.out.println("------------------");
         status.suppressStatusStructure(new Segment(new EventPoint(0.15, 0.15), new EventPoint(0.34, 0.56)));
         status.print("", true);
-
+        status.suppressStatusStructure(new Segment(new EventPoint(75.91, 199.52), new EventPoint( 122.97, 95.32)));
+        status.print("", true);
 
     }
 
