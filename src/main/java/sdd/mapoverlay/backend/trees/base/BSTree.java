@@ -9,9 +9,17 @@ import sdd.mapoverlay.backend.segments.Segment;
 
 public class BSTree<D extends Comparable> extends Tree<D> {
 	final Boolean isStatus = false;
+
+	public BSTree<D> father;
+
 //constructeurs
 	public BSTree() {
 		super();
+	}
+
+	public BSTree(BSTree<D> father){
+		super();
+		this.father = father;
 	}
 	public BSTree(D d, BSTree l, BSTree r) {
 		super(d,l,r);
@@ -68,22 +76,83 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 	}
 
 
+//	public void insertStatusStructureVariant(D d){
+//		if (isEmpty()){
+//			BSTree<D> thisTree = this;
+//			setData(d);
+//			setLeft(new AVLTree((AVLTree) this));
+//			setRight(new AVLTree((AVLTree) this));
+//			getLeft().insertEmpty(d);
+//
+//		}
+//		else {
+//			if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.RIGHT) {
+//				if (getRight().isEmpty()){
+//					getLeft().insert(getData());
+//					getRight().insert(d);
+//				} else {
+//					getRight().insertStatusStructureVariant(d);
+//				}
+//			} else if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.LEFT){
+//				if (getLeft().isEmpty()){
+//					getLeft().insertEmpty(d);
+//					getRight().insertEmpty(getData());
+//					setData(d);
+//				} else {
+//					getLeft().insertStatusStructureVariant(d);
+//				}
+//			}
+//			equilibrate();
+//		}
+//	}
+
+//	public void insertStatusStructureVariant(D d){
+//		if (isEmpty()){
+//			BSTree<D> thisTree = this;
+//			setData(d);
+//			setLeft(new AVLTree((AVLTree) this));
+//			setRight(new AVLTree((AVLTree) this));
+//			getLeft().insertEmpty(d);
+//
+//		}
+//		else {
+//			if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.RIGHT) {
+//				if (getRight().isEmpty()){
+//					getLeft().insert(getData());
+//					getRight().insert(d);
+//				} else {
+//					getRight().insertStatusStructureVariant(d);
+//				}
+//			} else if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.LEFT){
+//				if (getLeft().isEmpty()){
+//					getLeft().insertEmpty(d);
+//					getRight().insertEmpty(getData());
+//					setData(d);
+//				} else {
+//					getLeft().insertStatusStructureVariant(d);
+//				}
+//			}
+//			equilibrate();
+//		}
+//	}
+
 	public void insertStatusStructureVariant(D d){
 		if (isEmpty()){
 			setData(d);
-			setLeft(new AVLTree());
-			setRight(new AVLTree());
+			setLeft(new AVLTree((AVLTree) this));
+			setRight(new AVLTree((AVLTree) this));
 			getLeft().insertEmpty(d);
+
 		}
 		else {
-			if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.RIGHT) {
+			if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.LEFT) {
 				if (getRight().isEmpty()){
 					getLeft().insert(getData());
 					getRight().insert(d);
 				} else {
 					getRight().insertStatusStructureVariant(d);
 				}
-			} else if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.LEFT){
+			} else if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.RIGHT){
 				if (getLeft().isEmpty()){
 					getLeft().insertEmpty(d);
 					getRight().insertEmpty(getData());
@@ -104,6 +173,16 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 		setData(d);
 		setLeft(new BSTree());
 		setRight(new BSTree());
+//		getLeft().setFather(this);
+//		getRight().setFather(this);
+	}
+
+	public void setFather(BSTree<D> father){
+		this.father = father;
+	}
+
+	public BSTree<D> getFather(){
+		return this.father;
 	}
 	
 //suppression recursive d'une donnee
@@ -126,10 +205,10 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 
 	public void suppressStatusStructure(D d){
 		if (!isEmpty()){
-			if (((Segment) d).determinePosition(((Segment)getData())) == Position.LEFT){
+			if (((Segment) d).pos(((Segment)getData()).getLowerEndPoint()) == Position.LEFT){
 				getRight().suppressStatusStructure(d);
 			}
-			else if (((Segment)d).determinePosition(((Segment)getData())) == Position.RIGHT) {
+			else if (((Segment)d).determinePosition(((Segment)getData()).getLowerEndPoint()) == Position.RIGHT) {
 				getLeft().suppressStatusStructure(d);
 			}
 			else {

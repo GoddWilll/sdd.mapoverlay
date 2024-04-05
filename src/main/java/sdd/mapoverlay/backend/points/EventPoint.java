@@ -9,15 +9,17 @@ import java.util.ArrayList;
 public class EventPoint extends Point implements Comparable<Point>{
     private EventType eventType;
     private Position position;
-    private ArrayList<Segment> segments = new ArrayList<>();
+    private ArrayList<Segment> segments;
     public EventPoint(double xCoord, double yCoord, EventType eventType, Position position) {
         super(xCoord, yCoord);
         this.eventType = eventType;
         this.position = position;
+        this.segments = new ArrayList<>();
     }
 
     public EventPoint(double xCoord, double yCoord){
         super(xCoord, yCoord);
+        this.segments = new ArrayList<>();
     }
 
     public EventType getEventType(){
@@ -28,12 +30,16 @@ public class EventPoint extends Point implements Comparable<Point>{
         return position;
     }
 
+    public void setPosition(Position position){
+        this.position = position;
+    }
+
     public void addSegment(Segment segment){
         this.segments.add(segment);
     }
 
     public ArrayList<Segment> getSegments(){
-        return segments;
+        return this.segments;
     }
     @Override
     public int compareTo(Point o) {

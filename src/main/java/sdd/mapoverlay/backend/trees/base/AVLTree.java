@@ -2,6 +2,12 @@ package sdd.mapoverlay.backend.trees.base;//Classe AVLTree décrivant un arbre A
 //Elle étend la classe BSTree décrivant les arbres binaires de recherche
 //Les doublons ne sont pas autorisés
 
+import org.w3c.dom.events.Event;
+import sdd.mapoverlay.backend.points.EventPoint;
+import sdd.mapoverlay.backend.segments.Segment;
+
+import java.util.ArrayList;
+
 public class AVLTree<D extends Comparable> extends BSTree<D> {
 
 	final Boolean isStatus = false;
@@ -9,12 +15,18 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 //La hauteur est ainsi stockée dans la racine de l'arbre
 	private int height;
 
-	private AVLTree<D> father; //Todo implementer reference vers le noeud predecesseur pour faciliter futures operations
+	private AVLTree<D> father;
 	
 //constructeur
 	public AVLTree() {
 		super();
 		height = 0;
+	}
+
+	public AVLTree(AVLTree<D> father){
+		super();
+		height = 0;
+		this.father = father;
 	}
 	
 //On redéfinit les "get" de la classe AVLTree afin d'éviter de faire du casting 
@@ -39,9 +51,12 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 //le type AVLTree au lieu de BSTree
 	public void insertEmpty(D d) {
 		setData(d);
-		setLeft(new AVLTree());
-		setRight(new AVLTree());
+		setLeft(new AVLTree<D>(this));
+		setRight(new AVLTree<D>(this));
 		height = 1;
+//		AVLTree<D> thisTree = this;
+//		getLeft().setFather(thisTree);
+//		getRight().setFather(thisTree);
 	}
 	
 //Calcul la hauteur en fonction des hauteurs des sous-arbres
@@ -68,10 +83,14 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		AVLTree<D> t = getRight();
 		setData(t.getData());
 		setRight(t.getRight());
+		getRight().setFather(this);
 		t.setData(d);
 		t.setRight(t.getLeft());
 		t.setLeft(getLeft());
+		t.getRight().setFather(t);
+		t.getLeft().setFather(t);
 		setLeft(t);
+		t.setFather(this);
 		t.computeHeight();
 		computeHeight();
 	}
@@ -79,13 +98,17 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 //rotation droite
 	public void rightRotation() {
 		D d = getData();
-		AVLTree<D> t = getLeft();
-		setData(t.getData());
+		AVLTree<D> t = getLeft(); // t = fils gauche
+		setData(t.getData()); // on defini notre donnee comme celles de t
 		setLeft(t.getLeft());
+		getLeft().setFather(this);
 		t.setData(d);
 		t.setLeft(t.getRight());
 		t.setRight(getRight());
+		t.getLeft().setFather(t);
+		t.getRight().setFather(t);
 		setRight(t);
+		t.setFather(this);
 		t.computeHeight();
 		computeHeight();
 	}
@@ -112,4 +135,109 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 	public Boolean getIsStatus(){
 		return isStatus;
 	}
+
+	public void setFather(AVLTree<D> father){
+		this.father = father;
+	}
+
+	public AVLTree<D> getFather(){
+		return this.father;
+	}
+
+
+	public ArrayList<D> getRightNeighbors(EventPoint p){
+		ArrayList<D> neighbors = new ArrayList<>();
+		if (getFather() == null){
+			return null;
+		} else {
+			boolean searching = true;
+			AVLTree<D> startingLeaf = this;
+			while (searching){
+				if (startingLeaf.getFather().getLeft() == startingLeaf){
+					AVLTree<D> currentTree = startingLeaf;
+					currentTree = currentTree.getFather().getRight();
+					if (currentTree.getLeft().getData() != null){
+						currentTree = currentTree.getLeft();
+					}
+					if (((Segment)currentTree.getData()).containsPoint(p)){
+						neighbors.add(currentTree.getData());
+						startingLeaf = currentTree;
+					} else {
+						return neighbors;
+					}
+				} else if (startingLeaf.getFather().getRight() == startingLeaf){
+					AVLTree<D> currentTree = startingLeaf;
+					if (currentTree.getFather().getFather() == null) {
+						return neighbors;
+					}
+					while(currentTree.getFather() != null && currentTree.getFather().getRight() == currentTree  ){
+						currentTree = currentTree.getFather();
+					}
+					if (currentTree.getFather() == null){
+						return neighbors;
+					}
+					currentTree = currentTree.getFather().getRight();
+					while (currentTree.getLeft().getData() != null){
+						currentTree = currentTree.getLeft();
+					}
+					if (((Segment)currentTree.getData()).containsPoint(p)){
+						neighbors.add(currentTree.getData());
+						startingLeaf = currentTree;
+					} else {
+						return neighbors;
+					}
+				}
+			}
+		}
+		return neighbors;
+	}
+
+	public ArrayList<D> getLeftNeighbors(EventPoint p){
+		ArrayList<D> neighbors = new ArrayList<>();
+		if (getFather() == null){
+			return null;
+		} else {
+			boolean searching = true;
+			AVLTree<D> startingLeaf = this;
+			while (searching){
+				if (startingLeaf.getFather().getRight() == startingLeaf){ // on part d'un fils droit
+					AVLTree<D> currentTree = startingLeaf; // on va dans le pere vu qu'on est un fils droit
+					currentTree = currentTree.getFather().getLeft();
+					if (currentTree.getRight().getData() != null){
+						currentTree = currentTree.getRight();
+					}
+					if (((Segment)currentTree.getData()).containsPoint(p)){
+						neighbors.add(currentTree.getData());
+						startingLeaf = currentTree;
+					} else {
+						return neighbors;
+					}
+				} else if (startingLeaf.getFather().getLeft() == startingLeaf){
+					AVLTree<D> currentTree = startingLeaf;
+					if (currentTree.getFather().getFather() == null) {
+						return neighbors;
+					}
+					while(currentTree.getFather() != null && currentTree.getFather().getLeft() == currentTree){
+						currentTree = currentTree.getFather();
+					}
+					if (currentTree.getFather() == null){
+						return neighbors;
+					}
+					currentTree = currentTree.getFather().getLeft();
+					while (currentTree.getRight().getData() != null){
+						currentTree = currentTree.getRight();
+					}
+					if (((Segment)currentTree.getData()).containsPoint(p)){
+						neighbors.add(currentTree.getData());
+						startingLeaf = currentTree;
+					} else {
+						return neighbors;
+					}
+				}
+			}
+		}
+		return neighbors;
+	}
+
+
 }

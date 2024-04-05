@@ -25,8 +25,8 @@ public class Map {
         
         MapLoader mapLoader = new MapLoader(fileName);
         ArrayList<String> mapData = mapLoader.getMap();
-        EventPoint upperEndPoint = null;
-        EventPoint lowerEndPoint = null;
+        EventPoint upperEndPoint;
+        EventPoint lowerEndPoint;
 
         maxXPosition = 0;
         maxYPosition = 0;
@@ -77,7 +77,6 @@ public class Map {
             }
             // Section permettant d'ajouter le segment au endpoint superieur pour stockage dans eventQueue
             Segment upperPointSegment = new Segment(upperEndPoint, lowerEndPoint);
-            //System.out.println(upperPointSegment);
             upperEndPoint.addSegment(upperPointSegment);
 
             // Creation du segment et ajout a la liste de segments
@@ -91,12 +90,12 @@ public class Map {
         return segments;
     }
 
-    public ArrayList<Segment> getVerticallySortedSegments(){
-        Comparator<? super Segment> SegmentComparator = new SegmentComparator();
-        segments.sort(SegmentComparator);
-        Collections.reverse(segments);
-        return segments;
-    }
+//    public ArrayList<Segment> getVerticallySortedSegments(){
+//        Comparator<? super Segment> SegmentComparator = new SegmentComparator();
+//        segments.sort(SegmentComparator);
+//        Collections.reverse(segments);
+//        return segments;
+//    }
 
     public double getMaxYPosition(){
         return maxYPosition;
