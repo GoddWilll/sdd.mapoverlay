@@ -20,8 +20,21 @@ public class EventQueue extends AVLTree<EventPoint> {
     public void initialize(Map map){
         ArrayList<Segment> segments = map.getSegments();
         for (Segment segment : segments){
-            insert(segment.getUpperEndPoint());
-            insert(segment.getLowerEndPoint());
+            if (search(segment.getUpperEndPoint())){
+                AVLTree<EventPoint> eq = this;
+                while (eq.getData().getXCoords() != segment.getUpperEndPoint().getXCoords() && eq.getData().getYCoords() != segment.getUpperEndPoint().getYCoords()){
+                    if (eq.getData().compareTo(segment.getUpperEndPoint()) < 0){
+                        eq = eq.getRight();
+                    } else if (eq.getData().compareTo(segment.getUpperEndPoint()) > 0){
+                        eq = eq.getLeft();
+                    }
+                }
+                eq.getData().addSegment(segment);
+                insert(segment.getLowerEndPoint());
+            } else {
+                insert(segment.getUpperEndPoint());
+                insert(segment.getLowerEndPoint());
+            }
         }
     }
 }

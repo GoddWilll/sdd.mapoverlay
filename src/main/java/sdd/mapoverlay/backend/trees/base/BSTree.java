@@ -48,30 +48,44 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 
 //insertion recursive d'une donnee
 //rem: la methode equilibrate ne fait rien ici, mais sera utile pour la classe AVLTree
+//	public void insert(D d) {
+//		if (getIsStatus()){
+//			insertStatusStructureVariant(d);
+//		} else {
+//			if (isEmpty())
+//				insertEmpty(d);
+//			else	{
+//				if (getData().compareTo(d) < 0)
+//					getRight().insert(d);
+//				else 	if (getData().compareTo(d) > 0) {
+//					getLeft().insert(d);
+//				} else if (getData().compareTo(d) == 0){
+//					if (d.getClass().equals(EventPoint.class)){
+//						if (((EventPoint)d).getEventType() == EventType.UPPERENDPOINT ){
+//							for (Segment segment : ((EventPoint) d).getSegments()){
+//								((EventPoint) getData()).addSegment(segment);
+//							}
+//						}
+//					} else if (d.getClass().equals(Segment.class)){
+//						insertStatusStructureVariant(d);
+//					}
+//				}
+//				equilibrate();
+//			}
+//		}
+//	}
+
 	public void insert(D d) {
-		if (getIsStatus()){
-			insertStatusStructureVariant(d);
-		} else {
-			if (isEmpty())
-				insertEmpty(d);
-			else	{
-				if (getData().compareTo(d) < 0)
-					getRight().insert(d);
-				else 	if (getData().compareTo(d) > 0) {
-					getLeft().insert(d);
-				} else if (getData().compareTo(d) == 0){
-					if (d.getClass().equals(EventPoint.class)){
-						if (((EventPoint)d).getEventType() == EventType.UPPERENDPOINT ){
-							for (Segment segment : ((EventPoint) d).getSegments()){
-								((EventPoint) getData()).addSegment(segment);
-							}
-						}
-					} else if (d.getClass().equals(Segment.class)){
-						insertStatusStructureVariant(d);
-					}
-				}
-				equilibrate();
+		if (isEmpty())
+			insertEmpty(d);
+		else	{
+			if (getData().compareTo(d) < 0)
+				getRight().insert(d);
+			else 	if (getData().compareTo(d) > 0) {
+				getLeft().insert(d);
 			}
+			equilibrate();
+
 		}
 	}
 
@@ -136,29 +150,93 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 //		}
 //	}
 
-	public void insertStatusStructureVariant(D d){
-		if (isEmpty()){
+//	public void insertStatusStructureVariant(D d){
+//		if (isEmpty()){
+//			setData(d);
+//			setLeft(new AVLTree((AVLTree) this));
+//			setRight(new AVLTree((AVLTree) this));
+//			getLeft().insertEmpty(d);
+//
+//		}
+//		else {
+//			if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.LEFT) {
+//				if (getRight().isEmpty()){
+//					getLeft().insert(getData());
+//					getRight().insert(d);
+//				} else {
+//					getRight().insertStatusStructureVariant(d);
+//				}
+//			} else if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.RIGHT){
+//				if (getLeft().isEmpty()){
+//					getLeft().insertEmpty(d);
+//					getRight().insertEmpty(getData());
+//					setData(d);
+//				} else {
+//					getLeft().insertStatusStructureVariant(d);
+//				}
+//			}
+//			equilibrate();
+//		}
+//	}
+
+//	public void insertStatusStructureVariant(D d, double yp){
+//		if (isEmpty()){
+//			setData(d);
+//			setLeft(new AVLTree((AVLTree) this));
+//			setRight(new AVLTree((AVLTree) this));
+//			getLeft().insertEmpty(d);
+//
+//		}
+//		else {
+//			if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)) {
+//				if (getRight().isEmpty()){
+//					getLeft().insert(getData());
+//					getRight().insert(d);
+//				} else {
+//					getRight().insertStatusStructureVariant(d, yp);
+//				}
+//			} else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)){
+//				if (getLeft().isEmpty()){
+//					getLeft().insertEmpty(d);
+//					getRight().insertEmpty(getData());
+//					setData(d);
+//				} else {
+//					getLeft().insertStatusStructureVariant(d, yp);
+//				}
+//			}
+//			equilibrate();
+//		}
+//	}
+
+	public void insertStatusStructureVariant(D d, double yp){
+		if (isEmpty() && getFather() == null) {
+//			System.out.println(d);
 			setData(d);
 			setLeft(new AVLTree((AVLTree) this));
 			setRight(new AVLTree((AVLTree) this));
 			getLeft().insertEmpty(d);
 
+		} else if (isEmpty() && getFather() != null ){
+			setData(d);
+			setLeft(new AVLTree((AVLTree)this ));
+			setRight(new AVLTree((AVLTree) this));
+			equilibrate();
 		}
 		else {
-			if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.LEFT) {
+			if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)) {
 				if (getRight().isEmpty()){
-					getLeft().insert(getData());
-					getRight().insert(d);
+					getLeft().insertStatusStructureVariant(getData(), yp);
+					getRight().insertStatusStructureVariant(d, yp);
 				} else {
-					getRight().insertStatusStructureVariant(d);
+					getRight().insertStatusStructureVariant(d, yp);
 				}
-			} else if (((Segment) getData()).determinePosition(((Segment)d).getUpperEndPoint()) == Position.RIGHT){
+			} else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)){
 				if (getLeft().isEmpty()){
 					getLeft().insertEmpty(d);
 					getRight().insertEmpty(getData());
 					setData(d);
 				} else {
-					getLeft().insertStatusStructureVariant(d);
+					getLeft().insertStatusStructureVariant(d, yp);
 				}
 			}
 			equilibrate();
@@ -167,7 +245,8 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 
 
 
-//On redefinit la methode insertEmpty de la classe Tree, afin de travailler avec 
+
+	//On redefinit la methode insertEmpty de la classe Tree, afin de travailler avec
 //le type BSTree au lieu de Tree
 	public void insertEmpty(D d) {
 		setData(d);
@@ -187,37 +266,51 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 	
 //suppression recursive d'une donnee
 //rem: la methode equilibrate ne fait rien ici, mais sera utile pour la classe AVLTree
-	public void suppress(D d) {
-		if (getIsStatus()){
-			suppressStatusStructure(d);
-		} else {
-			if (!isEmpty()) {
-				if (getData().compareTo(d) < 0)
-					getRight().suppress(d);
-				else 	if (getData().compareTo(d) > 0)
-					getLeft().suppress(d);
-				else 	suppressRoot();
-				equilibrate();
-			}
-		}
+//	public void suppress(D d) {
+//		if (getIsStatus()){
+//			suppressStatusStructure(d);
+//		} else {
+//			if (!isEmpty()) {
+//				if (getData().compareTo(d) < 0)
+//					getRight().suppress(d);
+//				else 	if (getData().compareTo(d) > 0)
+//					getLeft().suppress(d);
+//				else 	suppressRoot();
+//				equilibrate();
+//			}
+//		}
+//
+//	}
 
+	public void suppress(D d) {
+		if (!isEmpty()) {
+			if (getData().compareTo(d) < 0)
+				getRight().suppress(d);
+			else 	if (getData().compareTo(d) > 0)
+				getLeft().suppress(d);
+			else 	suppressRoot();
+			equilibrate();
+		}
 	}
 
-	public void suppressStatusStructure(D d){
+	public void suppressStatusStructure(D d, double yp){
+
 		if (!isEmpty()){
-			if (((Segment) d).pos(((Segment)getData()).getLowerEndPoint()) == Position.LEFT){
-				getRight().suppressStatusStructure(d);
+			if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
+				getRight().suppressStatusStructure(d, yp);
 			}
-			else if (((Segment)d).determinePosition(((Segment)getData()).getLowerEndPoint()) == Position.RIGHT) {
-				getLeft().suppressStatusStructure(d);
+			else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)) {
+				getLeft().suppressStatusStructure(d, yp);
 			}
 			else {
 				if (getData().compareTo(d) == 0 && height() > 2){
+//					System.out.println("------------------");
+//					print("", true);
 					D data = getData();
 					suppressRoot();
 					D newData = getData(); // on recupere la nouvelle valeur de la racine
-					getRight().suppressStatusStructure(newData); // on supprime la valeur residuelle si elle existe
-					getLeft().replace(data, newData); // on remplace la donnee la plus a droite du sous arbre gauche par la nouvelle valeur
+					getRight().suppressStatusStructure(newData, yp); // on supprime la valeur residuelle si elle existe
+					replace(data, newData, yp); // on remplace la donnee la plus a droite du sous arbre gauche par la nouvelle valeur
 					equilibrate();
 				} else if ( getData().compareTo(d) == 0 && height() == 2){
 					if (!getRight().isEmpty() && getLeft().isEmpty()){
@@ -239,11 +332,17 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 		}
 	}
 
-	public void replace(D d, D replacement){
-		if (getData().compareTo(d) == 0){
+	public void replace(D d, D replacement, double yp){
+//		System.out.println("------------------");
+//		print("", true);
+//		System.out.println(((Segment) getData()).xAtYp(yp));
+//		System.out.println(((Segment)d).xAtYp(yp));
+		if (((Segment) getData()).xAtYp(yp) == ((Segment)d).xAtYp(yp)){
 			setData(replacement);
-		} else {
-			getRight().replace(d, replacement);
+		} else if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
+			getLeft().replace(d, replacement, yp);
+		} else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)){
+			getRight().replace(d, replacement, yp);
 		}
 	}
 
@@ -283,6 +382,21 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 			min = getLeft().suppressMin();
 		equilibrate();
 		return min;
+	}
+
+	public D suppressMax(){
+		D max;
+		if (getRight().isEmpty()){
+			max = getData();
+			BSTree<D> t = getLeft();
+			setData(t.getData());
+			setRight(t.getRight());
+			setLeft(t.getLeft());
+		} else {
+			max = getRight().suppressMax();
+		}
+		equilibrate();
+		return max;
 	}
 	
 //equilibrage vide dans le cas des BSTree, sera defini pour les AVLTree

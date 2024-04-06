@@ -148,7 +148,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 	public ArrayList<D> getRightNeighbors(EventPoint p){
 		ArrayList<D> neighbors = new ArrayList<>();
 		if (getFather() == null){
-			return null;
+			return neighbors;
 		} else {
 			boolean searching = true;
 			AVLTree<D> startingLeaf = this;
@@ -156,6 +156,12 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 				if (startingLeaf.getFather().getLeft() == startingLeaf){
 					AVLTree<D> currentTree = startingLeaf;
 					currentTree = currentTree.getFather().getRight();
+
+					// si pas de fils droit
+					if (currentTree.getData() == null){
+						return neighbors;
+					}
+
 					if (currentTree.getLeft().getData() != null){
 						currentTree = currentTree.getLeft();
 					}
@@ -195,7 +201,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 	public ArrayList<D> getLeftNeighbors(EventPoint p){
 		ArrayList<D> neighbors = new ArrayList<>();
 		if (getFather() == null){
-			return null;
+			return neighbors;
 		} else {
 			boolean searching = true;
 			AVLTree<D> startingLeaf = this;

@@ -227,7 +227,7 @@ public class Segment implements Comparable<Segment> {
         if (x1 != x2) {
             double m = (y2 - y1) / (x2 - x1);
             double b = y1 - m * x1;
-            return (yp - b) / m;
+            return Math.round(((yp - b) / m) * 1000)/1000;
         } else {
             return getLeftEndPoint().getXCoords();
         }
