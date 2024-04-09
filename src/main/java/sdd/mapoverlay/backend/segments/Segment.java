@@ -1,34 +1,32 @@
 package sdd.mapoverlay.backend.segments;
 
-import javafx.geometry.Pos;
 import sdd.mapoverlay.backend.points.EventPoint;
 import sdd.mapoverlay.backend.points.types.Position;
-
 
 public class Segment implements Comparable<Segment> {
     private EventPoint upperEventPoint;
     private EventPoint lowerEventPoint;
 
-    private String id;
+    private int id;
 
     private Vector vector;
 
-    public Segment(EventPoint upperEventPoint, EventPoint lowerEventPoint){
+    public Segment(EventPoint upperEventPoint, EventPoint lowerEventPoint) {
         this.upperEventPoint = upperEventPoint;
         this.lowerEventPoint = lowerEventPoint;
         this.vector = computeVector();
     }
 
-    public Segment (double x1, double y1, double x2, double y2) throws  Exception{
+    public Segment(double x1, double y1, double x2, double y2) throws Exception {
         try {
-            if (y1 > y2){
+            if (y1 > y2) {
                 this.upperEventPoint = new EventPoint(x1, y1);
                 this.lowerEventPoint = new EventPoint(x2, y2);
-            } else if (y1 == y2){
-                if (x1 > x2){
+            } else if (y1 == y2) {
+                if (x1 > x2) {
                     this.upperEventPoint = new EventPoint(x1, y1);
                     this.lowerEventPoint = new EventPoint(x2, y2);
-                } else if (x1 < x2){
+                } else if (x1 < x2) {
                     this.upperEventPoint = new EventPoint(x2, y2);
                     this.lowerEventPoint = new EventPoint(x1, y1);
                 } else {
@@ -40,68 +38,68 @@ public class Segment implements Comparable<Segment> {
             }
             this.vector = computeVector();
 
-            if (upperEventPoint.getXCoords() < lowerEventPoint.getXCoords()){
+            if (upperEventPoint.getXCoords() < lowerEventPoint.getXCoords()) {
                 upperEventPoint.setPosition(Position.LEFT);
                 lowerEventPoint.setPosition(Position.RIGHT);
-            } else if (upperEventPoint.getXCoords() > lowerEventPoint.getXCoords()){
+            } else if (upperEventPoint.getXCoords() > lowerEventPoint.getXCoords()) {
                 upperEventPoint.setPosition(Position.RIGHT);
                 lowerEventPoint.setPosition(Position.LEFT);
             } else { // x egaux
                 upperEventPoint.setPosition(Position.LEFT);
                 lowerEventPoint.setPosition(Position.RIGHT);
             }
-        } catch( Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    public EventPoint getUpperEndPoint(){
+    public EventPoint getUpperEndPoint() {
         return upperEventPoint;
     }
 
-    public EventPoint getLowerEndPoint(){
+    public EventPoint getLowerEndPoint() {
         return lowerEventPoint;
     }
 
-    public EventPoint getLeftEndPoint(){
-        if (upperEventPoint.getPosition() == Position.LEFT){
+    public EventPoint getLeftEndPoint() {
+        if (upperEventPoint.getPosition() == Position.LEFT) {
             return upperEventPoint;
         } else {
             return lowerEventPoint;
         }
     }
 
-    public void setId(String id){
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getId(){
+    public int getId() {
         return this.id;
     }
 
-    public EventPoint getRightEndPoint(){
-        if (upperEventPoint.getPosition() == Position.RIGHT){
+    public EventPoint getRightEndPoint() {
+        if (upperEventPoint.getPosition() == Position.RIGHT) {
             return upperEventPoint;
         } else {
             return lowerEventPoint;
         }
     }
 
-    public Vector getVector(){
+    public Vector getVector() {
         return vector;
     }
 
-    public Vector computeVector(){
+    public Vector computeVector() {
         double u = upperEventPoint.getXCoords() - lowerEventPoint.getXCoords();
         double v = upperEventPoint.getYCoords() - lowerEventPoint.getYCoords();
         return new Vector(u, v);
     }
 
-    public Position determinePosition(EventPoint point){
+    public Position determinePosition(EventPoint point) {
         double vectorProduct = point.getXCoords() * vector.getY() - point.getYCoords() * vector.getX();
-        if (vectorProduct < 0){
+        if (vectorProduct < 0) {
             return Position.LEFT;
-        } else if (vectorProduct > 0){
+        } else if (vectorProduct > 0) {
             return Position.RIGHT;
         } else {
             System.out.println(point);
@@ -109,68 +107,40 @@ public class Segment implements Comparable<Segment> {
         }
     }
 
-
-//    public double angleBetweenVectors(Vector v1, Vector v2){
-//        double product = v1.getX() * v2.getX() + v1.getY() * v2.getY();
-//        double mag1 = Math.sqrt(Math.pow(v1.getX(), 2) + Math.pow(v1.getY(), 2));
-//        double mag2 = Math.sqrt(Math.pow(v2.getX(), 2) + Math.pow(v2.getY(), 2));
-//        double cosTheta = product / (mag1 * mag2);
-//        return Math.acos(cosTheta);
-//    }
-
-//    public Position pointRelativeToSegment(EventPoint p){
-//        Vector v = getVector();
-//        Vector v1 = new Vector(p.getXCoords() - lowerEventPoint.getXCoords(), p.getYCoords() - lowerEventPoint.getYCoords());
-//        Vector v2 = new Vector(p.getXCoords() - upperEventPoint.getXCoords(), p.getYCoords() - upperEventPoint.getYCoords());
-//
-//        double angle1 = angleBetweenVectors(v, v1);
-//        double angle2 = angleBetweenVectors(v, v2);
-//
-//        if (angle1 < Math.PI / 2 && angle2 < Math.PI / 2){
-//            return Position.LEFT;
-//        } else if (angle1 > Math.PI / 2 && angle2 > Math.PI / 2){
-//            return Position.RIGHT;
-//        } else {
-//            System.out.println(angle1);
-//            System.out.println(angle2);
-//            return Position.COLLINEAR;
-//        }
-//    }
-
-
-    public Position pos (EventPoint p){
+    public Position pos(EventPoint p) {
         EventPoint a = lowerEventPoint;
         EventPoint b = upperEventPoint;
-        double position = (b.getXCoords() - a.getXCoords()) * (p.getYCoords() - a.getYCoords()) - (b.getYCoords() - a.getYCoords()) * (p.getXCoords() - a.getXCoords());
+        double position = (b.getXCoords() - a.getXCoords()) * (p.getYCoords() - a.getYCoords())
+                - (b.getYCoords() - a.getYCoords()) * (p.getXCoords() - a.getXCoords());
 
-        if (position > 0){
+        if (position > 0) {
             return Position.LEFT; // point a gauche du segment
-        } else if (position < 0){
+        } else if (position < 0) {
             return Position.RIGHT; // point a droite du segment
         } else {
             return Position.COLLINEAR;
         }
     }
 
-//    public Position determinePosition(Segment segment){
-//        Vector v1 = getVector();
-//        Vector v2 = segment.getVector();
-//        Vector link  = new Vector(v2.getX() - v1.getX(), v2.getY() - v1.getY());
-//        double product = v1.getX() * link.getY() - v1.getY() * link.getX();
-//        if (product > 0) {
-//            return Position.LEFT;
-//        } else if (product < 0){
-//            return Position.RIGHT;
-//        } else {
-//            return Position.COLLINEAR;
-//        }
-//    }
+    // public Position determinePosition(Segment segment){
+    // Vector v1 = getVector();
+    // Vector v2 = segment.getVector();
+    // Vector link = new Vector(v2.getX() - v1.getX(), v2.getY() - v1.getY());
+    // double product = v1.getX() * link.getY() - v1.getY() * link.getX();
+    // if (product > 0) {
+    // return Position.LEFT;
+    // } else if (product < 0){
+    // return Position.RIGHT;
+    // } else {
+    // return Position.COLLINEAR;
+    // }
+    // }
 
-    public Position determinePosition(Segment segment){
+    public Position determinePosition(Segment segment) {
         double vectorProduct = segment.getVector().getX() * vector.getY() - segment.getVector().getY() * vector.getX();
-        if (vectorProduct < 0){
+        if (vectorProduct < 0) {
             return Position.LEFT;
-        } else if (vectorProduct > 0){
+        } else if (vectorProduct > 0) {
             return Position.RIGHT;
         } else {
             return Position.COLLINEAR;
@@ -178,20 +148,20 @@ public class Segment implements Comparable<Segment> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return upperEventPoint.toString() + " " + lowerEventPoint.toString();
-//        return id;
+        // return id;
     }
 
     @Override
     public int compareTo(Segment o) {
         double vectorProduct = vector.getX() * o.vector.getY() - vector.getY() * o.vector.getX();
-        if (vectorProduct < 0){
+        if (vectorProduct < 0) {
             return -1;
-        } else if (vectorProduct > 0){
+        } else if (vectorProduct > 0) {
             return 1;
         } else {
-            if (o.getUpperEndPoint().getXCoords() == upperEventPoint.getXCoords()){
+            if (o.getUpperEndPoint().getXCoords() == upperEventPoint.getXCoords()) {
                 return 0; // confondus
             } else {
                 return 2; // collineaires
@@ -199,19 +169,19 @@ public class Segment implements Comparable<Segment> {
         }
     }
 
-    public boolean containsPoint(EventPoint p){
+    public boolean containsPoint(EventPoint p) {
         double x1 = upperEventPoint.getXCoords();
         double y1 = upperEventPoint.getYCoords();
         double x2 = lowerEventPoint.getXCoords();
         double y2 = lowerEventPoint.getYCoords();
         double xp = p.getXCoords();
         double yp = p.getYCoords();
-        if (x1 != x2){
-            double m = (y2 - y1)/(x2 - x1);
+        if (x1 != x2) {
+            double m = (y2 - y1) / (x2 - x1);
             double b = y1 - m * x1;
             return yp - m * xp == b;
         } else {
-            if (xp == x2){
+            if (xp == x2) {
                 return y2 <= yp && yp <= y1;
             } else {
                 return false;
@@ -227,9 +197,17 @@ public class Segment implements Comparable<Segment> {
         if (x1 != x2) {
             double m = (y2 - y1) / (x2 - x1);
             double b = y1 - m * x1;
-            return Math.round(((yp - b) / m) * 1000)/1000;
+            return (yp - b) / m;
         } else {
             return getLeftEndPoint().getXCoords();
         }
+    }
+
+    public double[] getSerie() {
+        double x1 = upperEventPoint.getXCoords();
+        double y1 = upperEventPoint.getYCoords();
+        double x2 = lowerEventPoint.getXCoords();
+        double y2 = lowerEventPoint.getYCoords();
+        return new double[] { x1, y1, x2, y2 };
     }
 }
