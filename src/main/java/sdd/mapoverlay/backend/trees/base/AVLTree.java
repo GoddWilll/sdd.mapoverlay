@@ -51,14 +51,12 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 //le type AVLTree au lieu de BSTree
 	public void insertEmpty(D d) {
 		setData(d);
-		setLeft(new AVLTree<D>(this));
-		setRight(new AVLTree<D>(this));
+		setLeft(new AVLTree(this));
+		setRight(new AVLTree(this));
 		height = 1;
-//		AVLTree<D> thisTree = this;
-//		getLeft().setFather(thisTree);
-//		getRight().setFather(thisTree);
 	}
-	
+
+
 //Calcul la hauteur en fonction des hauteurs des sous-arbres
 //Le fait d'avoir stocké la hauteur donne ici un algorithme en O(1)
 	public void computeHeight() {
@@ -90,7 +88,8 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		t.getRight().setFather(t);
 		t.getLeft().setFather(t);
 		setLeft(t);
-		t.setFather(this);
+		getLeft().setFather(this);
+//		t.setFather(this);
 		t.computeHeight();
 		computeHeight();
 	}
@@ -105,10 +104,14 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		t.setData(d);
 		t.setLeft(t.getRight());
 		t.setRight(getRight());
-		t.getLeft().setFather(t);
+
 		t.getRight().setFather(t);
+
+//		t.getLeft().setFather(t);
+//		t.getRight().setFather(t);
 		setRight(t);
-		t.setFather(this);
+//		t.setFather(this);
+		getRight().setFather(this);
 		t.computeHeight();
 		computeHeight();
 	}
@@ -152,19 +155,18 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		} else {
 			boolean searching = true;
 			AVLTree<D> startingLeaf = this;
+			startingLeaf.getFather().print("", true);
 			while (searching){
 				if (startingLeaf.getFather().getLeft() == startingLeaf){
 					AVLTree<D> currentTree = startingLeaf;
 					currentTree = currentTree.getFather().getRight();
-
-					// si pas de fils droit
 					if (currentTree.getData() == null){
 						return neighbors;
 					}
-
 					if (currentTree.getLeft().getData() != null){
 						currentTree = currentTree.getLeft();
 					}
+					System.out.println(((Segment)currentTree.getData()).containsPoint(p));
 					if (((Segment)currentTree.getData()).containsPoint(p)){
 						neighbors.add(currentTree.getData());
 						startingLeaf = currentTree;
@@ -176,13 +178,16 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 					if (currentTree.getFather().getFather() == null) {
 						return neighbors;
 					}
+
 					while(currentTree.getFather() != null && currentTree.getFather().getRight() == currentTree  ){
 						currentTree = currentTree.getFather();
 					}
 					if (currentTree.getFather() == null){
 						return neighbors;
 					}
+
 					currentTree = currentTree.getFather().getRight();
+
 					while (currentTree.getLeft().getData() != null){
 						currentTree = currentTree.getLeft();
 					}
@@ -205,6 +210,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		} else {
 			boolean searching = true;
 			AVLTree<D> startingLeaf = this;
+			System.out.println(startingLeaf.getData());
 			while (searching){
 				if (startingLeaf.getFather().getRight() == startingLeaf){ // on part d'un fils droit
 					AVLTree<D> currentTree = startingLeaf; // on va dans le pere vu qu'on est un fils droit
@@ -223,6 +229,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 					if (currentTree.getFather().getFather() == null) {
 						return neighbors;
 					}
+
 					while(currentTree.getFather() != null && currentTree.getFather().getLeft() == currentTree){
 						currentTree = currentTree.getFather();
 					}
@@ -230,6 +237,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 						return neighbors;
 					}
 					currentTree = currentTree.getFather().getLeft();
+
 					while (currentTree.getRight().getData() != null){
 						currentTree = currentTree.getRight();
 					}
@@ -243,6 +251,12 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 			}
 		}
 		return neighbors;
+	}
+
+
+	@Override
+	public String toString(){
+		return "" + getData();
 	}
 
 

@@ -19,7 +19,7 @@ public class Segment implements Comparable<Segment> {
         this.vector = computeVector();
     }
 
-    public Segment (double x1, double y1, double x2, double y2) throws  Exception{
+    public Segment (double x1, double y1, double x2, double y2){
         try {
             if (y1 > y2){
                 this.upperEventPoint = new EventPoint(x1, y1);
@@ -179,7 +179,7 @@ public class Segment implements Comparable<Segment> {
 
     @Override
     public String toString(){
-        return upperEventPoint.toString() + " " + lowerEventPoint.toString();
+        return upperEventPoint.toString() + " " + lowerEventPoint.toString() ;
 //        return id;
     }
 
@@ -208,8 +208,10 @@ public class Segment implements Comparable<Segment> {
         double yp = p.getYCoords();
         if (x1 != x2){
             double m = (y2 - y1)/(x2 - x1);
-            double b = y1 - m * x1;
-            return yp - m * xp == b;
+            double b =  (y1 - m * x1);
+//            System.out.println("b : " + (double) Math.round(b * 100)/100);
+//            System.out.println("equa : "  + (double ) Math.round((yp - m * xp)*100)/100);
+            return (double) Math.round((yp - m * xp)*100)/100 == (double) Math.round(b*100)/100;
         } else {
             if (xp == x2){
                 return y2 <= yp && yp <= y1;
@@ -220,16 +222,29 @@ public class Segment implements Comparable<Segment> {
     }
 
     public double xAtYp(double yp) {
+
         double x1 = upperEventPoint.getXCoords();
         double y1 = upperEventPoint.getYCoords();
         double x2 = lowerEventPoint.getXCoords();
         double y2 = lowerEventPoint.getYCoords();
+
+        if (yp < lowerEventPoint.getYCoords())
+            return lowerEventPoint.getXCoords();
+
+        if (yp > upperEventPoint.getYCoords())
+            return upperEventPoint.getXCoords();
+
         if (x1 != x2) {
             double m = (y2 - y1) / (x2 - x1);
             double b = y1 - m * x1;
-            return Math.round(((yp - b) / m) * 1000)/1000;
+            return (double) Math.round(((yp - b) / m) * 100) /100; // /1000
+//            return (yp - b) / m;
         } else {
-            return getLeftEndPoint().getXCoords();
+            return getLowerEndPoint().getXCoords();
         }
+    }
+
+    public boolean isSameSegment(Segment other){
+        return getUpperEndPoint().getXCoords() == other.getUpperEndPoint().getXCoords() && getUpperEndPoint().getYCoords() == other.getUpperEndPoint().getYCoords() && getLowerEndPoint().getXCoords() == other.getLowerEndPoint().getXCoords() && getLowerEndPoint().getYCoords() == other.getLowerEndPoint().getYCoords();
     }
 }
