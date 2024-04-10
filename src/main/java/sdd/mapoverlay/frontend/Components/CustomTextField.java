@@ -12,15 +12,14 @@ public class CustomTextField extends TextField {
                 "-fx-text-fill: black; " +
                 "-fx-font-size: 12px; " +
                 "-fx-font-family: 'Arial'; " +
-                "-fx-padding: 8px ; " +
                 "-fx-background-radius: 8px; " +
                 "-fx-border-radius: 8px; " +
                 "-fx-border-color: transparent; " +
                 "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); ";
 
         setStyle(textFieldStyle);
-        setPrefWidth(40);
-        setPrefHeight(30);
+        setPrefWidth(90);
+        setPrefHeight(20);
 
         // Adjust prompt text color to match text fill color
     }

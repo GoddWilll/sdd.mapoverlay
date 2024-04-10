@@ -36,8 +36,8 @@ public class CustomButton extends Button {
         // Set up event handlers for hover effect
         setOnMouseEntered(e -> setStyle(onHoverButtonStyle));
         setOnMouseExited(e -> setStyle(buttonStyle));
-        setPrefHeight(40);
-        setMinHeight(40);
-        setMinWidth(40);
+        // setPrefHeight(40);
+        // setMinHeight(40);
+        // setMinWidth(40);
     }
 }

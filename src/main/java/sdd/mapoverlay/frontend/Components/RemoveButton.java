@@ -1,7 +1,6 @@
 package sdd.mapoverlay.frontend.Components;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 
 public class RemoveButton extends Button {
 
@@ -15,20 +14,20 @@ public class RemoveButton extends Button {
         removebtnStyle = "-fx-cursor: hand;"
                 + "-fx-text-fill: red;"
                 + "-fx-background-color: transparent;"
-                + "-fx-font-size: 20px;"
+                + "-fx-font-size: 15px;"
                 + "-fx-font-weight: bold;"
                 + "-fx-font-family: 'Arial';";
 
         onHoverRemovebtnStyle = "-fx-cursor: hand;"
-                + "-fx-text-fill: red;"
+                + "-fx-text-fill: #637081;"
                 + "-fx-background-color: transparent;"
-                + "-fx-font-size: 20px;"
+                + "-fx-font-size: 15px;"
                 + "-fx-font-weight: bold;"
-                + "-fx-cursor: hand; "
                 + "-fx-font-family: 'Arial';";
 
         setStyle(removebtnStyle);
-
+        setOnMouseEntered(e -> setOnHover());
+        setOnMouseExited(e -> setOnExit());
     }
 
     public void setOnHover() {

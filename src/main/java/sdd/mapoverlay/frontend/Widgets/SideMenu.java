@@ -24,6 +24,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -51,46 +52,70 @@ public class SideMenu extends VBox {
 
         // Enter segments section
         VBox enterSegmentsBox = new VBox();
+
         CustomLabel enterSegmentsLabel = new CustomLabel("Enter segments");
-        HBox enterSegmentsInputBox = new HBox();
-        enterSegmentsBox.setPadding(new Insets(0, 10, 0, 10));
+        enterSegmentsLabel.setTitleStyle();
+        VBox enterSegmentsInputBox = new VBox();
         enterSegmentsBox.setSpacing(10);
+        HBox enterSegmentsInputRow1 = new HBox();
+        HBox enterSegmentsInputRow2 = new HBox();
+        enterSegmentsInputRow1.setSpacing(10);
+        enterSegmentsInputRow1.setAlignment(Pos.CENTER);
+        HBox.setHgrow(enterSegmentsInputRow1, Priority.ALWAYS);
+        enterSegmentsInputRow1.setMaxWidth(Double.MAX_VALUE * 0.7);
+        enterSegmentsInputRow1.paddingProperty().set(new Insets(10, 10, 10, 10));
+        enterSegmentsInputRow2.setSpacing(10);
+        enterSegmentsInputRow2.setAlignment(Pos.CENTER);
+        HBox.setHgrow(enterSegmentsInputRow2, Priority.ALWAYS);
+        enterSegmentsInputRow2.setMaxWidth(Double.MAX_VALUE * 0.7);
+        enterSegmentsInputRow2.paddingProperty().set(new Insets(10, 10, 10, 10));
 
         CustomTextField xCoordStart = new CustomTextField();
         CustomTextField yCoordStart = new CustomTextField();
+        enterSegmentsInputRow1.getChildren().addAll(new CustomLabel("("), xCoordStart, new CustomLabel(";"),
+                yCoordStart, new CustomLabel(")"));
+
         CustomTextField xCoordEnd = new CustomTextField();
         CustomTextField yCoordEnd = new CustomTextField();
+        enterSegmentsInputRow2.getChildren().addAll(new CustomLabel("("), xCoordEnd, new CustomLabel(";"), yCoordEnd,
+                new CustomLabel(")"));
 
         CustomButton addButton = new CustomButton("+");
-        enterSegmentsInputBox.getChildren().addAll(new CustomLabel("("), xCoordStart, new CustomLabel(";"), yCoordStart,
-                new CustomLabel(")"), new Label(" "), new CustomLabel("("), xCoordEnd, new CustomLabel(";"), yCoordEnd,
-                new CustomLabel(")"),
-                addButton);
+        HBox.setHgrow(addButton, Priority.ALWAYS);
+        addButton.setMaxWidth(Double.MAX_VALUE);
+        enterSegmentsInputBox.getChildren().addAll(enterSegmentsInputRow1, enterSegmentsInputRow2);
 
-        enterSegmentsBox.setSpacing(10);
+        HBox enterSegmentsInputBox2 = new HBox();
+        enterSegmentsInputBox2.getChildren().addAll(enterSegmentsInputBox, addButton);
+        enterSegmentsInputBox2.setSpacing(10);
+        enterSegmentsInputBox2.setAlignment(Pos.CENTER);
+
+        enterSegmentsBox.setSpacing(5);
         enterSegmentsBox.setAlignment(Pos.TOP_LEFT);
         enterSegmentsInputBox.setSpacing(10);
         enterSegmentsInputBox.setAlignment(Pos.CENTER);
-        enterSegmentsBox.getChildren().addAll(enterSegmentsLabel, enterSegmentsInputBox);
+        enterSegmentsBox.getChildren().addAll(enterSegmentsLabel, enterSegmentsInputBox2);
 
         // Action button row
 
         HBox actionButtonRow = new HBox();
         actionButtonRow.setSpacing(10);
         CustomButton clearButton = new CustomButton("Clear");
-
-        CustomButton browseButton = new CustomButton("Browse");
-
-        CustomButton saveButton = new CustomButton("Save");
-        CustomButton ediButton = new CustomButton("Edit");
         CustomButton plotButton = new CustomButton("Plot");
-        actionButtonRow.setPadding(new Insets(0, 10, 0, 10));
-        actionButtonRow.getChildren().addAll(clearButton, browseButton, saveButton, ediButton, plotButton);
+        HBox.setHgrow(clearButton, Priority.ALWAYS);
+        HBox.setHgrow(plotButton, Priority.ALWAYS);
+        clearButton.setMaxWidth(Double.MAX_VALUE);
+        plotButton.setMaxWidth(Double.MAX_VALUE);
+
+        actionButtonRow.getChildren().addAll(clearButton, plotButton);
 
         // Show Sweep Line
         CustomToggleButton showSweepLineButton = new CustomToggleButton("Show Sweep Line");
         CustomToggleButton hideSweepLineButton = new CustomToggleButton("Hide Sweep Line");
-
+        HBox.setHgrow(showSweepLineButton, Priority.ALWAYS);
+        HBox.setHgrow(hideSweepLineButton, Priority.ALWAYS);
+        showSweepLineButton.setMaxWidth(Double.MAX_VALUE);
+        hideSweepLineButton.setMaxWidth(Double.MAX_VALUE);
         ToggleGroup sweepLineGroup = new ToggleGroup();
         showSweepLineButton.setToggleGroup(sweepLineGroup);
         hideSweepLineButton.setToggleGroup(sweepLineGroup);
@@ -98,7 +123,22 @@ public class SideMenu extends VBox {
         HBox sweepLineButtonBox = new HBox();
         sweepLineButtonBox.setSpacing(10);
         sweepLineButtonBox.getChildren().addAll(showSweepLineButton, hideSweepLineButton);
-        sweepLineButtonBox.setPadding(new Insets(0, 10, 0, 10));
+
+        // Action buttons
+        CustomButton browseButton = new CustomButton("Load from file");
+        CustomButton saveButton = new CustomButton("Save in new file");
+        CustomButton editButton = new CustomButton("Edit current file");
+        // Set HBox.hgrow property to Priority.ALWAYS for each button
+        HBox.setHgrow(browseButton, Priority.ALWAYS);
+        HBox.setHgrow(saveButton, Priority.ALWAYS);
+        HBox.setHgrow(editButton, Priority.ALWAYS);
+        browseButton.setMaxWidth(Double.MAX_VALUE);
+        saveButton.setMaxWidth(Double.MAX_VALUE);
+        editButton.setMaxWidth(Double.MAX_VALUE);
+
+        VBox actionButtonColumn = new VBox();
+        actionButtonColumn.setSpacing(10);
+        actionButtonColumn.getChildren().addAll(browseButton, saveButton, editButton);
 
         // Add components to the SideMenu
 
@@ -133,7 +173,7 @@ public class SideMenu extends VBox {
                 }
             }
         });
-        ediButton.setOnAction(event -> {
+        editButton.setOnAction(event -> {
             if (openedFile != null) {
                 writeSegmentsToFile(openedFile);
             } else {
@@ -147,6 +187,8 @@ public class SideMenu extends VBox {
         });
         clearButton.setOnAction(event -> {
             selectedSegments.clear();
+            segmentsToDraw.clear();
+            CenterStack.lineChart.clearLineChart();
             textSegmentsBox.getChildren().clear();
         });
         addButton.setOnAction(event -> {
@@ -163,8 +205,6 @@ public class SideMenu extends VBox {
                 Segment newSegment = new Segment(x1, y1, x2, y2);
                 String segmentText = formatSegmentToString(new String(x1 + " " + y1 + " " + x2 + " " + y2));
 
-                System.out.println(newSegment.toString());
-                System.out.println(segmentText);
                 selectedSegments.add(newSegment);
                 addToVbox(textSegmentsBox, newSegment.getId(), segmentText);
 
@@ -177,6 +217,7 @@ public class SideMenu extends VBox {
         VBox scrollVBox = new VBox();
 
         CustomLabel segmentsLabel = new CustomLabel("Segments to be scanned");
+        segmentsLabel.setTitleStyle();
 
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -185,16 +226,33 @@ public class SideMenu extends VBox {
         scrollPane.setContent(textSegmentsBox);
 
         CustomButton startScanButton = new CustomButton("Start scan");
+        HBox.setHgrow(startScanButton, Priority.ALWAYS);
+        startScanButton.setMaxWidth(Double.MAX_VALUE);
+        startScanButton.setOnAction(
+                event -> {
+                    CenterStack.lineChart.activateSweepline();
+                    this.toggleMenu();
+                    // if (selectedSegments.size() > 0) {
 
-        startScanButton.setOnAction(event -> {
+                    // } else {
+                    // // Inform the user to add segments first
+                    // Alert alert = new Alert(Alert.AlertType.ERROR);
+                    // alert.setTitle("Error");
+                    // alert.setHeaderText(null);
+                    // alert.setContentText("Please add segments first.");
+                    // alert.showAndWait();
+                    // }
+                });
+
+        plotButton.setOnAction(event -> {
             if (selectedSegments.size() > 0) {
                 segmentsToDraw.clear();
                 segmentsToDraw.addAll(selectedSegments);
                 CenterStack.lineChart.clearLineChart();
                 for (Segment segment : segmentsToDraw) {
-                    System.out.println(segment.getSerie());
                     CenterStack.lineChart.addSeries(segment.getSerie());
                 }
+                // this.toggleMenu();
             } else {
                 // Inform the user to add segments first
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -207,12 +265,11 @@ public class SideMenu extends VBox {
 
         scrollVBox.getChildren().addAll(segmentsLabel, scrollPane, actionButtonRow);
         scrollVBox.setSpacing(10);
-        scrollVBox.setPadding(new Insets(0, 10, 0, 10));
 
-        getChildren().addAll(enterSegmentsBox, scrollVBox, sweepLineButtonBox, startScanButton);
+        getChildren().addAll(enterSegmentsBox, scrollVBox, actionButtonColumn, sweepLineButtonBox, startScanButton);
 
         this.setSpacing(50);
-        setPadding(new Insets(0, 10, 0, 10));
+        setPadding(new Insets(20, 20, 20, 20));
         alignmentProperty().set(javafx.geometry.Pos.TOP_CENTER);
 
         setBackgroundStyle();
@@ -232,9 +289,11 @@ public class SideMenu extends VBox {
             }
 
             writer.close();
-            System.out.println("Segments saved to file successfully.");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Segments saved to file successfully");
         } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error writing to file: " + e.getMessage());
         }
     }
 
@@ -243,8 +302,8 @@ public class SideMenu extends VBox {
         styleBuilder.append("-fx-background-color: ")
                 .append(formatColor(ConstantStyles.SECONDARY_COLOR))
                 .append("; -fx-justify: center;")
-                .append("-fx-min-width: 450px;")
-                .append("-fx-max-width: 450px;")
+                .append("-fx-min-width: 400px;")
+                .append("-fx-max-width: 400px;")
                 .append("-fx-min-height: 924px;")
                 .append("fx-padding: 10px; ")
 
@@ -285,7 +344,6 @@ public class SideMenu extends VBox {
     }
 
     private String formatSegmentToString(String segmentData) {
-        System.out.println(segmentData);
         String[] coordinates = segmentData.trim().split(" ");
 
         return String.format("[ \s(%s , %s) \s (%s , %s) \s]", coordinates[0], coordinates[1], coordinates[2],
@@ -294,8 +352,15 @@ public class SideMenu extends VBox {
 
     private void addToVbox(VBox vbox, int segmentId, String segmentText) {
         String text = new String(segmentText);
+        HBox textHbox = new HBox();
+        HBox.setHgrow(textHbox, Priority.ALWAYS);
+        textHbox.setMaxWidth(Double.MAX_VALUE * 0.8);
         HBox hbox = new HBox();
-        hbox.setSpacing(30);
+        hbox.setSpacing(5);
+        hbox.setPadding(new Insets(5, 0, 5, 10));
+        hbox.setAlignment(Pos.CENTER);
+        textHbox.setAlignment(Pos.CENTER_LEFT);
+        textHbox.setStyle("-fx-width: 280; -fx-min-width: 280; -fx-max-width: 280;");
 
         RemoveButton remove = new RemoveButton(segmentId, "-");
         remove.onMouseClickedProperty().set(event -> {
@@ -303,17 +368,19 @@ public class SideMenu extends VBox {
             selectedSegments.removeIf(segment -> segment.getId() == segmentId); // Remove the segment from the list
 
         });
+
         hbox.setStyle(
                 "-fx-justify: space-between;" +
-                        "-fx-padding: 10px;" +
                         "-fx-background-color: #F4EAD5;" +
-                        "-fx-width: 100%;" +
-                        "-fx-min-width: 100%;" +
+                        "-fx-width: 300;" +
+                        "-fx-min-width: 300;" +
                         "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); "
 
         );
         CustomLabel segmentLabel = new CustomLabel(text);
-        hbox.getChildren().addAll(segmentLabel, remove);
+        segmentLabel.setSegmentStyle();
+        textHbox.getChildren().add(segmentLabel);
+        hbox.getChildren().addAll(textHbox, remove);
         vbox.getChildren().add(hbox);
     }
 

@@ -62,7 +62,8 @@ public class SaveFilePopup {
             if (fileName != null && !fileName.isEmpty()) {
                 writeSegmentsToFile(fileName, segmentsToSave);
             } else {
-                System.out.println("No file name entered.");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("No file name entered.");
             }
         });
     }
@@ -78,9 +79,11 @@ public class SaveFilePopup {
             }
 
             writer.close();
-            System.out.println("Segments saved to file successfully.");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Segments saved to file successfully.");
         } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error writing to file." + e.getMessage());
         }
     }
 
