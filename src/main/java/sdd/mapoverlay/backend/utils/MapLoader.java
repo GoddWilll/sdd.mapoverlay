@@ -9,7 +9,7 @@ public class MapLoader {
     private ArrayList<String> map;
 
     public MapLoader(String filePath) {
-        this.map = new ArrayList<String>();
+        this.map = new ArrayList<>();
         try {
             File mapDataToBeRead = new File(filePath);
             Scanner dataReader = new Scanner(mapDataToBeRead);

@@ -28,6 +28,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import sdd.mapoverlay.backend.Logic;
+import sdd.mapoverlay.backend.segments.Intersection;
 import sdd.mapoverlay.backend.utils.MapLoader;
 import sdd.mapoverlay.frontend.Components.CustomButton;
 import sdd.mapoverlay.frontend.Components.CustomLabel;
@@ -44,8 +46,8 @@ public class SideMenu extends VBox {
     private TranslateTransition showTransition;
     private TranslateTransition hideTransition;
     private boolean isMenuVisible = true;
-    private List<Segment> segmentsToDraw = new ArrayList<Segment>();
-    private List<Segment> selectedSegments = new ArrayList<Segment>();
+    private ArrayList<Segment> segmentsToDraw = new ArrayList<>();
+    private ArrayList<Segment> selectedSegments = new ArrayList<>();
     private File openedFile;
 
     public SideMenu() {
@@ -233,7 +235,8 @@ public class SideMenu extends VBox {
                     CenterStack.lineChart.activateSweepline();
                     this.toggleMenu();
                     // if (selectedSegments.size() > 0) {
-
+                    ArrayList<Intersection> intersections = Logic.findIntersection(segmentsToDraw);
+                    System.out.println("INTERSECTIONS : " + intersections);
                     // } else {
                     // // Inform the user to add segments first
                     // Alert alert = new Alert(Alert.AlertType.ERROR);

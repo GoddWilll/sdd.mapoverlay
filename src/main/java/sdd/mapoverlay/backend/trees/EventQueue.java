@@ -13,12 +13,32 @@ public class EventQueue extends AVLTree<EventPoint> {
         super();
     }
 
-    /**
-     * Initialise la Event queue. On insere les EndPoints superieurs avec leur Segment et les EndPoints inferieurs.
-     * @param map
-     */
-    public void initialize(Map map){
-        ArrayList<Segment> segments = map.getSegments();
+//    /**
+//     * Initialise la Event queue. On insere les EndPoints superieurs avec leur Segment et les EndPoints inferieurs.
+//     * @param map
+//     */
+//    public void initialize(Map map){
+//        ArrayList<Segment> segments = map.getSegments();
+//        for (Segment segment : segments){
+//            if (search(segment.getUpperEndPoint())){
+//                AVLTree<EventPoint> eq = this;
+//                while (eq.getData().getX() != segment.getUpperEndPoint().getX() && eq.getData().getY() != segment.getUpperEndPoint().getY()){
+//                    if (eq.getData().compareTo(segment.getUpperEndPoint()) < 0){
+//                        eq = eq.getRight();
+//                    } else if (eq.getData().compareTo(segment.getUpperEndPoint()) > 0){
+//                        eq = eq.getLeft();
+//                    }
+//                }
+//                eq.getData().addSegment(segment);
+//                insert(segment.getLowerEndPoint());
+//            } else {
+//                insert(segment.getUpperEndPoint());
+//                insert(segment.getLowerEndPoint());
+//            }
+//        }
+//    }
+
+    public void initialize(ArrayList<Segment> segments){
         for (Segment segment : segments){
             if (search(segment.getUpperEndPoint())){
                 AVLTree<EventPoint> eq = this;

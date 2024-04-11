@@ -18,15 +18,26 @@ public class Logic {
     private static ArrayList<Intersection> intersections = new ArrayList<>();
 
 
-    public static void main(String[] args){
-        ArrayList<Intersection> intersections1 = findIntersection("fichier2.txt");
-        System.out.println(intersections1);
-    }
+//    public static void main(String[] args){
+//        ArrayList<Intersection> intersections1 = findIntersection("fichier2.txt");
+//        System.out.println(intersections1);
+//    }
 
 
-    public static ArrayList<Intersection> findIntersection(String file){
-        Map map = new Map(file);
-        eventQueue.initialize(map);
+//    public static ArrayList<Intersection> findIntersection(String file){
+//        Map map = new Map(file);
+//        eventQueue.initialize(map);
+//        while (!eventQueue.isEmpty()){
+//            EventPoint p = determineNextEvent(eventQueue);
+//            handleEventPoint(p);
+//        }
+//        return intersections;
+//    }
+
+    public static ArrayList<Intersection> findIntersection(ArrayList<Segment> segments){
+//        Map map = new Map(segments);
+//        eventQueue.initialize(map);
+        eventQueue.initialize(segments);
         while (!eventQueue.isEmpty()){
             EventPoint p = determineNextEvent(eventQueue);
             handleEventPoint(p);

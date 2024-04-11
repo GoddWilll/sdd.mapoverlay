@@ -105,7 +105,7 @@ public class Segment implements Comparable<Segment> {
      * Permet de recuperer l'identifiant du segment
      * @return un String l'identifiant du segment
      */
-    public String getId(){
+    public int getId(){
         return this.id;
     }
 
@@ -122,10 +122,6 @@ public class Segment implements Comparable<Segment> {
     }
 
 
-//    public Vector getVector(){
-//        return vector;
-//    }
-
     /**
      * Permet de calculer le vecteur du segment
      * @return un Vector le vecteur du segment
@@ -135,46 +131,6 @@ public class Segment implements Comparable<Segment> {
         double v = upperEndPoint.getY() - lowerEndPoint.getY();
         return new Vector(u, v);
     }
-
-//    public Position determinePosition(EventPoint point){
-//        double vectorProduct = point.getX() * vector.getY() - point.getY() * vector.getX();
-//        if (vectorProduct < 0){
-//            return Position.LEFT;
-//        } else if (vectorProduct > 0){
-//            return Position.RIGHT;
-//        } else {
-//            System.out.println(point);
-//            return Position.COLLINEAR; // sur le segment
-//        }
-//    }
-
-
-//    public double angleBetweenVectors(Vector v1, Vector v2){
-//        double product = v1.getX() * v2.getX() + v1.getY() * v2.getY();
-//        double mag1 = Math.sqrt(Math.pow(v1.getX(), 2) + Math.pow(v1.getY(), 2));
-//        double mag2 = Math.sqrt(Math.pow(v2.getX(), 2) + Math.pow(v2.getY(), 2));
-//        double cosTheta = product / (mag1 * mag2);
-//        return Math.acos(cosTheta);
-//    }
-
-//    public Position pointRelativeToSegment(EventPoint p){
-//        Vector v = getVector();
-//        Vector v1 = new Vector(p.getXCoords() - lowerEventPoint.getXCoords(), p.getYCoords() - lowerEventPoint.getYCoords());
-//        Vector v2 = new Vector(p.getXCoords() - upperEventPoint.getXCoords(), p.getYCoords() - upperEventPoint.getYCoords());
-//
-//        double angle1 = angleBetweenVectors(v, v1);
-//        double angle2 = angleBetweenVectors(v, v2);
-//
-//        if (angle1 < Math.PI / 2 && angle2 < Math.PI / 2){
-//            return Position.LEFT;
-//        } else if (angle1 > Math.PI / 2 && angle2 > Math.PI / 2){
-//            return Position.RIGHT;
-//        } else {
-//            System.out.println(angle1);
-//            System.out.println(angle2);
-//            return Position.COLLINEAR;
-//        }
-//    }
 
 
     /**
@@ -275,4 +231,17 @@ public class Segment implements Comparable<Segment> {
     public boolean isSameSegment(Segment other){
         return getUpperEndPoint().getX() == other.getUpperEndPoint().getX() && getUpperEndPoint().getY() == other.getUpperEndPoint().getY() && getLowerEndPoint().getX() == other.getLowerEndPoint().getX() && getLowerEndPoint().getY() == other.getLowerEndPoint().getY();
     }
+
+    /**
+     * Fonction permettant de recuperer les coordonnées du segment
+     * @return un double[] les coordonnées du segment
+     */
+    public double[] getSerie() {
+        double x1 = upperEndPoint.getX();
+        double y1 = upperEndPoint.getY();
+        double x2 = lowerEndPoint.getX();
+        double y2 = lowerEndPoint.getY();
+        return new double[] { x1, y1, x2, y2 };
+    }
+
 }
