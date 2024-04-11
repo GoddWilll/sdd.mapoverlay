@@ -51,14 +51,12 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 //le type AVLTree au lieu de BSTree
 	public void insertEmpty(D d) {
 		setData(d);
-		setLeft(new AVLTree<D>(this));
-		setRight(new AVLTree<D>(this));
+		setLeft(new AVLTree(this));
+		setRight(new AVLTree(this));
 		height = 1;
-//		AVLTree<D> thisTree = this;
-//		getLeft().setFather(thisTree);
-//		getRight().setFather(thisTree);
 	}
-	
+
+
 //Calcul la hauteur en fonction des hauteurs des sous-arbres
 //Le fait d'avoir stocké la hauteur donne ici un algorithme en O(1)
 	public void computeHeight() {
@@ -90,7 +88,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		t.getRight().setFather(t);
 		t.getLeft().setFather(t);
 		setLeft(t);
-		t.setFather(this);
+		getLeft().setFather(this);
 		t.computeHeight();
 		computeHeight();
 	}
@@ -105,10 +103,9 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		t.setData(d);
 		t.setLeft(t.getRight());
 		t.setRight(getRight());
-		t.getLeft().setFather(t);
 		t.getRight().setFather(t);
 		setRight(t);
-		t.setFather(this);
+		getRight().setFather(this);
 		t.computeHeight();
 		computeHeight();
 	}
@@ -152,19 +149,18 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		} else {
 			boolean searching = true;
 			AVLTree<D> startingLeaf = this;
+			startingLeaf.getFather().print("", true);
 			while (searching){
 				if (startingLeaf.getFather().getLeft() == startingLeaf){
 					AVLTree<D> currentTree = startingLeaf;
 					currentTree = currentTree.getFather().getRight();
-
-					// si pas de fils droit
 					if (currentTree.getData() == null){
 						return neighbors;
 					}
-
 					if (currentTree.getLeft().getData() != null){
 						currentTree = currentTree.getLeft();
 					}
+					System.out.println(((Segment)currentTree.getData()).containsPoint(p));
 					if (((Segment)currentTree.getData()).containsPoint(p)){
 						neighbors.add(currentTree.getData());
 						startingLeaf = currentTree;
@@ -176,13 +172,16 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 					if (currentTree.getFather().getFather() == null) {
 						return neighbors;
 					}
+
 					while(currentTree.getFather() != null && currentTree.getFather().getRight() == currentTree  ){
 						currentTree = currentTree.getFather();
 					}
 					if (currentTree.getFather() == null){
 						return neighbors;
 					}
+
 					currentTree = currentTree.getFather().getRight();
+
 					while (currentTree.getLeft().getData() != null){
 						currentTree = currentTree.getLeft();
 					}
@@ -205,10 +204,16 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		} else {
 			boolean searching = true;
 			AVLTree<D> startingLeaf = this;
+			System.out.println(startingLeaf.getData());
 			while (searching){
+				System.out.println("-------- SEARCHING --------");
+				print("", true);
 				if (startingLeaf.getFather().getRight() == startingLeaf){ // on part d'un fils droit
 					AVLTree<D> currentTree = startingLeaf; // on va dans le pere vu qu'on est un fils droit
+					System.out.println("CURRENT TREE : " + currentTree.getData());
 					currentTree = currentTree.getFather().getLeft();
+
+					System.out.println("NEW CURRENT TREE : " + currentTree.getData());
 					if (currentTree.getRight().getData() != null){
 						currentTree = currentTree.getRight();
 					}
@@ -223,6 +228,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 					if (currentTree.getFather().getFather() == null) {
 						return neighbors;
 					}
+
 					while(currentTree.getFather() != null && currentTree.getFather().getLeft() == currentTree){
 						currentTree = currentTree.getFather();
 					}
@@ -230,6 +236,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 						return neighbors;
 					}
 					currentTree = currentTree.getFather().getLeft();
+
 					while (currentTree.getRight().getData() != null){
 						currentTree = currentTree.getRight();
 					}
@@ -243,6 +250,158 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 			}
 		}
 		return neighbors;
+	}
+
+
+	@Override
+	public String toString(){
+		return "" + getData();
+	}
+
+	@Override
+	public void insertStatusStructureVariant(D d, double yp){
+
+		if (isEmpty()) {
+			setData(d);
+			setLeft(new AVLTree( this));
+			setRight(new AVLTree( this));
+			equilibrate();
+		} else {
+			if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)) {
+				System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp) + " < d : " + d + " x : " + ((Segment) d).xAtYp(yp) + " at yp : " + yp);
+				if (getRight().isEmpty()){
+					getLeft().insertEmpty(getData());
+					getRight().insertEmpty(d);
+
+					getLeft().setFather(this);
+					getRight().setFather(this);
+					equilibrate();
+				} else {
+					getRight().insertStatusStructureVariant(d, yp);
+				}
+			} else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)) {
+				System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp)+ " > d : " + d + " x : " + ((Segment) d).xAtYp(yp)+ " at yp : " + yp);
+				if (getLeft().isEmpty()) {
+					getLeft().insertEmpty(d);
+					getRight().insertEmpty(getData());
+					setData(d);
+
+					getLeft().setFather(this);
+					getRight().setFather(this);
+					equilibrate();
+
+				} else {
+					getLeft().insertStatusStructureVariant(d, yp);
+				}
+			} else if (((Segment) getData()).xAtYp(yp) == ((Segment)d).xAtYp(yp)){
+//				System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp)+ " = d : " + d + " x : " + ((Segment) d).xAtYp(yp)+ " at yp : " + yp);
+				if (!((Segment)getData()).isSameSegment((Segment)d)){
+					 insertStatusStructureVariant(d, yp - 0.01);
+				}
+			}
+		}
+		equilibrate();
+	}
+
+
+
+//	@Override
+	public void suppressStatusStructure(D d, double yp){
+		if (!isEmpty()){
+			System.out.println("---------- STEPS ----------");
+			print("", true);
+			if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
+				System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp) + " < d : " + d + " x : " + ((Segment) d).xAtYp(yp) + " at yp : " + yp);
+				getRight().suppressStatusStructure(d, yp);
+			}
+			else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)) {
+				System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp) + " > d : " + d + " x : " + ((Segment) d).xAtYp(yp) + " at yp : " + yp);
+				getLeft().suppressStatusStructure(d, yp);
+			}
+			else { // meme x pour yp!
+				if (!((Segment)getData()).isSameSegment((Segment)d)){
+					System.out.println("Same x for yp but not same segment");
+					System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp) + " = d : " + d + " x : " + ((Segment) d).xAtYp(yp) + " at yp : " + yp);
+//					if (((Segment) getData()).getUpperEndPoint().getXCoords() > ((Segment) d).getUpperEndPoint().getXCoords()){
+//						getLeft().suppressStatusStructure(d, yp);
+//					} else {
+//						getRight().suppressStatusStructure(d, yp);
+//					}
+					if (((Segment) getData()).xAtYp(yp+0.01) > ((Segment)d).xAtYp(yp+0.01)){
+						getLeft().suppressStatusStructure(d, yp);
+					} else {
+						getRight().suppressStatusStructure(d, yp);
+					}
+				} else {
+					if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() > 2 && getRight().height() >= 2) {
+						D data = getData();
+						suppressRoot();
+						D newData = getData();
+						getRight().suppressStatusStructure(newData, yp);
+						System.out.println("------ BEFORE REPLACEMENT -------");
+						System.out.println("SEGMENT FOR REPLACEMENT : " + newData);
+						if (getFather() != null)
+							getFather().print("", 	true);
+
+						getLeft().replace(data, newData, yp);
+						equilibrate();
+
+					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() > 2 && getRight().height() < 2) {
+
+						D data = getData();
+						suppressRoot();
+						getRight().suppressStatusStructure(data, yp);
+						equilibrate();
+					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() == 2) {
+						if (!getRight().isEmpty() && getLeft().isEmpty()) {
+							suppressRoot();
+						} else if (getRight().isEmpty() && !getLeft().isEmpty()) {
+							getLeft().suppressRoot();
+							if (getFather() != null){
+								computeHeight();
+								getFather().equilibrate();
+							}
+							suppressRoot();
+
+						} else {
+							suppressRoot();
+							getLeft().suppressRoot();
+						}
+						System.out.println("BALANCE : " + balance());
+					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() == 1) {
+						suppressRoot();
+						equilibrate();
+					}
+				}
+			}
+			System.out.println("TOTAL BALANCE : " + balance());
+			equilibrate();
+		}
+	}
+
+	/**
+	 * Fonction permettant de remplacer un segment par un autre, lors d'une suppression. On remplace le segment le plus a droite du sous arbre gauche par la nouvelle valeur de la racine.
+	 * @param d Le segment a remplacer
+	 * @param replacement Le segment de remplacement
+	 * @param yp La coordonnee y de la sweep line
+	 */
+	@Override
+	public void replace(D d, D replacement, double yp){
+		System.out.println("data : " + getData() + " tobereplaced : " + d + " yp : " + yp);
+ 		if (((Segment) getData()).xAtYp(yp) == ((Segment)d).xAtYp(yp)){
+//			System.out.println("data : " + getData() + " d : " + d + " replacement : " + replacement + " yp : " + yp);
+			if (((Segment)getData()).isSameSegment((Segment)d)){
+				setData(replacement);
+			} else {
+				getRight().replace(d, replacement, yp);
+			}
+		} else if (((Segment) getData()).xAtYp(yp) < ((Segment)replacement).xAtYp(yp)){
+			System.out.println(((Segment) getData()).xAtYp(yp) + " < " + ((Segment)replacement).xAtYp(yp));
+			getRight().replace(d, replacement, yp);
+		} else if (((Segment) getData()).xAtYp(yp) > ((Segment)replacement).xAtYp(yp)){
+			System.out.println(((Segment) getData()).xAtYp(yp) + " > " + ((Segment)replacement).xAtYp(yp));
+			getLeft().replace(d, replacement, yp);
+		}
 	}
 
 

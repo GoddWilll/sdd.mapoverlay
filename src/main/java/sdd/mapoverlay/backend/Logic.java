@@ -19,9 +19,8 @@ public class Logic {
 
 
     public static void main(String[] args){
-        ArrayList<Intersection> intersections1 = findIntersection("test.txt");
+        ArrayList<Intersection> intersections1 = findIntersection("fichier2.txt");
         System.out.println(intersections1);
-//        statusStructure.print("", true);
     }
 
 
@@ -40,42 +39,99 @@ public class Logic {
     }
 
     public static void handleEventPoint(EventPoint p){
-//        System.out.println("-----------------------");
-//        statusStructure.print("", true);
+
+        System.out.println("-------------------------");
+        statusStructure.print("", true);
         ArrayList<Segment> U = p.getSegments(); // recuperation des segments dont p est le point superieur
         ArrayList<Segment> C = statusStructure.segmentsContainingP(p); // recherche dans T des segments contenant p
+
+        if (p.getIntercepts() != null){
+            for (Segment s : p.getIntercepts()){
+                if (!C.contains(s)){
+                    C.add(s);
+                }
+            }
+        }
+
+        if (C.size() == 1){
+            System.out.println("POINT : " + p);
+            System.out.println("SEGMENT CONTAINING P : " + C.get(0));
+        }
         ArrayList<Segment> L = new ArrayList<>();
-//        System.out.println(C);
+
         for (Iterator<Segment> it = C.iterator(); it.hasNext();){ // recherche dans C des segments dont p est le point inferieur
             Segment segment = it.next();
-            if (segment.getLowerEndPoint().getXCoords() == p.getXCoords() && segment.getLowerEndPoint().getYCoords() == p.getYCoords()){
+            if (segment.getLowerEndPoint().getX() == p.getX() && segment.getLowerEndPoint().getY() == p.getY()){
                 L.add(segment);
                 it.remove();
             }
         }
 
-
         ArrayList<Segment> CSave = new ArrayList<>(C); // on sauvegarde le C
-//        System.out.println("U : " + U);
-//        System.out.println("C : " + C);
-//        System.out.println("L : " + L);
-        if (U.size() + C.size() + L.size() > 1) // si dans U U C U L on a + d'1 segment
+
+        System.out.println("------ BEFORE DELETION ------");
+        System.out.println("p : " + p);
+        System.out.println("U : " + U);
+        System.out.println("C : " + C);
+        System.out.println("L : " + L);
+        statusStructure.print("", true);
+//
+
+
+        if (U.size() + C.size() + L.size() > 1) {
             report(new Intersection(p, U, C, L));
+        }
 
-        for (Segment segment : C)
-            statusStructure.suppressStatusStructure(segment, p.getYCoords());
+        for (Segment segment : C) {
+            System.out.println("SEGMENT TO BE DELETED : " + segment);
+            statusStructure.suppressStatusStructure(segment, p.getY());
+        }
 
-        for (Segment segment : L)
-            statusStructure.suppressStatusStructure(segment, p.getYCoords());
+        for (Segment segment : L) {
+            System.out.println("SEGMENT TO BE DELETED : " + segment);
+            statusStructure.suppressStatusStructure(segment, p.getY());
+        }
+        System.out.println("------ AFTER DELETION ------");
+        statusStructure.print("", true);
 
-        // ToDo : faire attention à l'ordre d'insertion
-        for (Segment segment : U)
-            statusStructure.insertStatusStructureVariant(segment, p.getYCoords());
+//        ArrayList<Segment> segmentsToBeInserted = new ArrayList<>();
+//        if (!U.isEmpty()){
+//            segmentsToBeInserted.addAll(U);
+//        }
+//        if (!CSave.isEmpty()){
+//            segmentsToBeInserted.addAll(CSave);
+//        }
+//
+//        segmentsToBeInserted.sort((o1, o2) -> {
+//            if (o1.xAtYp(p.getYCoords()) < o2.xAtYp(p.getYCoords())){
+//                return -1;
+//            } else if (o1.xAtYp(p.getYCoords()) > o2.xAtYp(p.getYCoords())){
+//                return 1;
+//            } else {
+//                return 0;
+//            }
+//        });
 
-        for (Segment segment : CSave)
-            statusStructure.insertStatusStructureVariant(segment, p.getYCoords());
 
-
+        for (Segment segment : U) {
+            System.out.println("SEGMENT TO BE INSERTED : " + segment);
+            statusStructure.insertStatusStructureVariant(segment, p.getY() );
+            statusStructure.equilibrate();
+            System.out.println("------ AFTER INSERTION of " + segment + "------");
+            statusStructure.print("", true);
+        }
+        for (Segment segment : CSave) {
+            System.out.println("SEGMENT TO BE INSERTED : " + segment);
+            statusStructure.insertStatusStructureVariant(segment, p.getY());
+            statusStructure.equilibrate();
+            System.out.println("------ AFTER INSERTION of " + segment + "------");
+            statusStructure.print("", true);
+        }
+        System.out.println("------ AFTER INSERTION ------");
+//        System.out.println("----------------- TREE FOR FINDNEWEVENT");
+        statusStructure.print("", true);
+//        System.out.println("----------------- ");
+        System.out.println(statusStructure.balance());
         if (U.isEmpty() && CSave.isEmpty()){
             Segment sL = statusStructure.getLeftNeighbor(p);
             Segment sR = statusStructure.getRightNeighbor(p);
@@ -86,13 +142,16 @@ public class Logic {
             Segment sPrime = leftmostSegment(p, U, CSave);
             if (sPrime != null){
                 Segment sL = statusStructure.getLeftNeighbor(sPrime, p);
-                System.out.println("SL : :" + sL);
+                System.out.println("SPRIME : " + sPrime);
+                System.out.println("sL : " + sL);
                 if (sL != null)
                     findNewEvent(sL, sPrime, p);
             }
             Segment sPrimePrime = rightmostSegment(p, U, CSave);
             if (sPrimePrime != null){
                 Segment sR = statusStructure.getRightNeighbor(sPrimePrime, p);
+                System.out.println("SPRIMEPRIME : " + sPrimePrime);
+                System.out.println("sR : " + sR);
                 if (sR != null)
                     findNewEvent(sPrimePrime, sR, p);
             }
@@ -102,7 +161,8 @@ public class Logic {
 
     public static void findNewEvent(Segment sL, Segment sR, EventPoint p){
         EventPoint intersection = intersect(sL, sR);
-        if (intersection != null && !eventQueue.search(intersection)){
+        System.out.println("INTERSECTION POINT : " + intersection);
+        if (intersection != null && !eventQueue.search(intersection) && (intersection.getY() < p.getY() || (intersection.getY() == p.getY() && intersection.getX() > p.getX()))){
             eventQueue.insert(intersection);
         }
     }
@@ -123,22 +183,32 @@ public class Logic {
      * @return le segment le plus a gauche
      */
     public static Segment leftmostSegment(EventPoint p, ArrayList<Segment> U, ArrayList<Segment> C){
-        double yp = p.getYCoords();
-        double leftMostX = p.getXCoords();
-        Segment leftMostSegment = null;
-        for (Segment segment : U){
-            if (segment.xAtYp(yp) <= leftMostX){
-                leftMostX = segment.xAtYp(yp);
-                leftMostSegment = segment;
+        double yp = p.getY() - 0.01;
+        Segment leftMost = null;
+        if (!U.isEmpty()){
+            leftMost = U.getFirst();
+        } else if (!C.isEmpty()){
+            leftMost = C.getFirst();
+        }
+        for (Segment s : U){
+            System.out.println("s : " + s + " xAtYp : " + s.xAtYp(yp) + " leftMost : " + leftMost.xAtYp(yp));
+            while (s.xAtYp(yp) == leftMost.xAtYp(yp) && !s.isSameSegment(leftMost)){
+                yp = yp - 0.01;
+            }
+            if (s.xAtYp(yp) < leftMost.xAtYp(yp)){
+                leftMost = s;
             }
         }
-        for (Segment segment : C){
-            if (segment.xAtYp(yp) <= leftMostX){
-                leftMostX = segment.xAtYp(yp);
-                leftMostSegment = segment;
+        for (Segment s : C){
+            System.out.println("s : " + s + " xAtYp : " + s.xAtYp(yp) + " leftMost : " + leftMost.xAtYp(yp));
+            while (s.xAtYp(yp) == leftMost.xAtYp(yp) && !s.isSameSegment(leftMost)){
+                yp = yp - 0.01;
+            }
+            if (s.xAtYp(yp) < leftMost.xAtYp(yp)){
+                leftMost = s;
             }
         }
-        return leftMostSegment;
+        return leftMost;
     }
 
     /**
@@ -149,22 +219,24 @@ public class Logic {
      * @return
      */
     public static Segment rightmostSegment(EventPoint p, ArrayList<Segment> U, ArrayList<Segment> C){
-        double yp = p.getYCoords();
-        double rightMostX = p.getXCoords();
-        Segment rightMostSegment = null;
-        for (Segment segment : U){
-            if (segment.xAtYp(yp) >= rightMostX){
-                rightMostX = segment.xAtYp(yp);
-                rightMostSegment = segment;
+        double yp = p.getY() - 0.01;
+        Segment rightMost = null;
+        if (!U.isEmpty()){
+            rightMost = U.getFirst();
+        } else if (!C.isEmpty()){
+            rightMost = C.getFirst();
+        }
+        for (Segment s : U){
+            if (s.xAtYp(yp) > rightMost.xAtYp(yp)){
+                rightMost = s;
             }
         }
-        for (Segment segment : C){
-            if (segment.xAtYp(yp) >= rightMostX){
-                rightMostX = segment.xAtYp(yp);
-                rightMostSegment = segment;
+        for (Segment s : C){
+            if (s.xAtYp(yp) > rightMost.xAtYp(yp)){
+                rightMost = s;
             }
         }
-        return rightMostSegment;
+        return rightMost;
     }
 
 
@@ -175,15 +247,15 @@ public class Logic {
      * @return
      */
     public static EventPoint intersect(Segment sL, Segment sR){
-        double x1 = sL.getLeftEndPoint().getXCoords();
-        double y1 = sL.getLeftEndPoint().getYCoords();
-        double x2 = sL.getRightEndPoint().getXCoords();
-        double y2 = sL.getRightEndPoint().getYCoords();
+        double x1 = sL.getLeftEndPoint().getX();
+        double y1 = sL.getLeftEndPoint().getY();
+        double x2 = sL.getRightEndPoint().getX();
+        double y2 = sL.getRightEndPoint().getY();
 
-        double x3 = sR.getLeftEndPoint().getXCoords();
-        double y3 = sR.getLeftEndPoint().getYCoords();
-        double x4 = sR.getRightEndPoint().getXCoords();
-        double y4 = sR.getRightEndPoint().getYCoords();
+        double x3 = sR.getLeftEndPoint().getX();
+        double y3 = sR.getLeftEndPoint().getY();
+        double x4 = sR.getRightEndPoint().getX();
+        double y4 = sR.getRightEndPoint().getY();
 
         double a = (x4 - x3)*(y3 - y1) - (y4 - y3) * (x3 - x1);
         double b = (x4 - x3) * (y2 - y1) - (y4 - y3) * (x2 - x1);
@@ -201,7 +273,15 @@ public class Logic {
             if ( 0 <= alpha && alpha <= 1 && 0 <= beta && beta <= 1){
                 double x0 = x1 + alpha * (x2 - x1);
                 double y0 = y1 + alpha * (y2 - y1);
-                return new EventPoint((double) Math.round(x0 * 1000) /1000, (double) Math.round(y0 * 1000) /1000);
+
+//                return new EventPoint((double) Math.round(x0 * 1000) /1000, (double) Math.round(y0 * 1000) /1000);
+//                return new EventPoint((double) Math.round(x0 * 100)/100, (double) Math.round(y0 * 100)/100);
+
+                ArrayList<Segment> intercepts = new ArrayList<>();
+                intercepts.add(sL);
+                intercepts.add(sR);
+
+                return new EventPoint(x0, y0, EventType.INTERSECTION, intercepts);
             } else {
                 return null; // NON PARA ET NON INTERCEPT
             }

@@ -5,6 +5,8 @@ package sdd.mapoverlay.backend.trees.base;//Classe Tree decrivant un arbre binai
 public class Tree<D> {
 	private D data;
 	private Tree<D> left, right;
+
+	private Tree<D> father;
 	
 //constructeurs
 	public Tree(D d, Tree<D> l, Tree<D> r) {
@@ -12,9 +14,12 @@ public class Tree<D> {
 		left = l;
 		right = r;
 	}
+
+
 	public Tree() {
 		this(null,null,null);
 	}
+
 
 //get 
 	public D getData() {
@@ -52,6 +57,13 @@ public class Tree<D> {
 		left = new Tree();
 		right = new Tree();
 	}
+
+	public void insertEmptyST(D d, Tree father){
+		data = d;
+		left = new Tree();
+		right = new Tree();
+		this.father = father;
+	}
 	
 //calcul de la hauteur
 	public int height() {
@@ -70,10 +82,13 @@ public class Tree<D> {
 //		}
 //	}
 
+	public Tree<D> getFather(){
+		return this.father;
+	}
 
 	public void print(String prefix, boolean isLeft){
 		if (!isEmpty()){
-			System.out.println(prefix + (isLeft ? "⌊ " : "⌈ ") + getData());
+			System.out.println(prefix + (isLeft ? "⌊ " : "⌈ ") + getData() + " FATHER : " + getFather());
 			right.print(prefix + (isLeft ? "│   " : "    "), false);
 			left.print(prefix + (isLeft ? "│   " : "    "), true);
 

@@ -10,6 +10,7 @@ import java.io.*;
 public class TestFX extends Application {
 
     @Override
+
     public void start(Stage primaryStage) {
         MainMenuScene example = new MainMenuScene();
         Scene scene = new Scene(example.getRoot(), 1280, 1024);
@@ -21,6 +22,7 @@ public class TestFX extends Application {
     public static void main(String[] args) {
         launch();
     }
+
 
     public InputStream getFileFromResourceAsStream(String fileName) {
 

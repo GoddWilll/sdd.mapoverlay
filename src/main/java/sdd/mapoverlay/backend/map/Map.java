@@ -13,26 +13,35 @@ import java.util.Comparator;
 
 public class Map {
     private ArrayList<Segment> segments = new ArrayList<>();
-    private double maxYPosition;
-    private double maxXPosition;
-    private double minYPosition;
-    private double minXPosition;
+//    private double maxYPosition;
+//    private double maxXPosition;
+//    private double minYPosition;
+//    private double minXPosition;
 
-    public Map(String fileName) {
+
+    /**
+     * Constructeur de la classe Map, representant la carte du plam
+     * @param fileName un String contenant le nom du fichier a charger
+     */
+    public Map(String fileName){
         fileInitialization(fileName);
     }
 
-    public void fileInitialization(String fileName) {
-
+    /**
+     * Methode permettant d'initialiser la carte a partir d'un fichier
+     * @param fileName un String contenant le nom du fichier a charger
+     */
+    public void fileInitialization(String fileName){
+        
         MapLoader mapLoader = new MapLoader(fileName);
         ArrayList<String> mapData = mapLoader.getMap();
         EventPoint upperEndPoint;
         EventPoint lowerEndPoint;
 
-        maxXPosition = 0;
-        maxYPosition = 0;
-        minXPosition = 0;
-        minYPosition = 0;
+//        maxXPosition = 0;
+//        maxYPosition = 0;
+//        minXPosition = 0;
+//        minYPosition = 0;
 
         for (String mapDatum : mapData) {
             String[] strCoordinates = mapDatum.split(" ");
@@ -41,12 +50,12 @@ public class Map {
                 coordinates[j] = Double.parseDouble(strCoordinates[j]);
             }
 
-            for (Double coordinate : coordinates) {
-                updateMaxXPosition(coordinate);
-                updateMaxYPosition(coordinate);
-                updateMinXPosition(coordinate);
-                updateMinYPosition(coordinate);
-            }
+//            for (Double coordinate : coordinates) {
+//                updateMaxXPosition(coordinate);
+//                updateMaxYPosition(coordinate);
+//                updateMinXPosition(coordinate);
+//                updateMinYPosition(coordinate);
+//            }
 
             if (coordinates[1] < coordinates[3]) { // y1 < y2
                 if (coordinates[0] <= coordinates[2]) { // x1 < x2
@@ -100,54 +109,52 @@ public class Map {
 
     }
 
-    public ArrayList<Segment> getSegments() {
+    /**
+     * Permet de retourner la liste des segments de la carte apres lecture du fichier
+     * @return un ArrayList de Segment
+     */
+    public ArrayList<Segment> getSegments(){
         return segments;
     }
 
-    // public ArrayList<Segment> getVerticallySortedSegments(){
-    // Comparator<? super Segment> SegmentComparator = new SegmentComparator();
-    // segments.sort(SegmentComparator);
-    // Collections.reverse(segments);
-    // return segments;
-    // }
 
-    public double getMaxYPosition() {
-        return maxYPosition;
-    }
-
-    public double getMaxXPosition() {
-        return maxXPosition;
-    }
-
-    public double getMinXPosition() {
-        return minXPosition;
-    }
-
-    public double getMinYPosition() {
-        return minYPosition;
-    }
-
-    private void updateMaxXPosition(double x) {
-        if (x > maxXPosition) {
-            this.maxXPosition = x;
-        }
-    }
-
-    private void updateMaxYPosition(double y) {
-        if (y > maxYPosition) {
-            this.maxYPosition = y;
-        }
-    }
-
-    private void updateMinXPosition(double x) {
-        if (x < minXPosition) {
-            this.minXPosition = x;
-        }
-    }
-
-    private void updateMinYPosition(double y) {
-        if (y < minYPosition) {
-            this.minYPosition = y;
-        }
-    }
+//    public double getMaxYPosition(){
+//        return maxYPosition;
+//    }
+//
+//    public double getMaxXPosition(){
+//        return maxXPosition;
+//    }
+//
+//    public double getMinXPosition(){
+//        return minXPosition;
+//    }
+//
+//    public double getMinYPosition(){
+//        return minYPosition;
+//    }
+//
+//    private void updateMaxXPosition(double x){
+//        if (x > maxXPosition) {
+//            this.maxXPosition = x;
+//        }
+//    }
+//
+//    private void updateMaxYPosition(double y){
+//        if (y > maxYPosition){
+//            this.maxYPosition = y;
+//        }
+//    }
+//
+//    private void updateMinXPosition(double x){
+//        if (x < minXPosition){
+//            this.minXPosition = x;
+//        }
+//    }
+//
+//    private void updateMinYPosition(double y){
+//        if (y < minYPosition){
+//            this.minYPosition = y;
+//        }
+//    }
 }
