@@ -89,7 +89,6 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		t.getLeft().setFather(t);
 		setLeft(t);
 		getLeft().setFather(this);
-//		t.setFather(this);
 		t.computeHeight();
 		computeHeight();
 	}
@@ -104,13 +103,8 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		t.setData(d);
 		t.setLeft(t.getRight());
 		t.setRight(getRight());
-
 		t.getRight().setFather(t);
-
-//		t.getLeft().setFather(t);
-//		t.getRight().setFather(t);
 		setRight(t);
-//		t.setFather(this);
 		getRight().setFather(this);
 		t.computeHeight();
 		computeHeight();
@@ -212,9 +206,14 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 			AVLTree<D> startingLeaf = this;
 			System.out.println(startingLeaf.getData());
 			while (searching){
+				System.out.println("-------- SEARCHING --------");
+				print("", true);
 				if (startingLeaf.getFather().getRight() == startingLeaf){ // on part d'un fils droit
 					AVLTree<D> currentTree = startingLeaf; // on va dans le pere vu qu'on est un fils droit
+					System.out.println("CURRENT TREE : " + currentTree.getData());
 					currentTree = currentTree.getFather().getLeft();
+
+					System.out.println("NEW CURRENT TREE : " + currentTree.getData());
 					if (currentTree.getRight().getData() != null){
 						currentTree = currentTree.getRight();
 					}
@@ -257,6 +256,152 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 	@Override
 	public String toString(){
 		return "" + getData();
+	}
+
+	@Override
+	public void insertStatusStructureVariant(D d, double yp){
+
+		if (isEmpty()) {
+			setData(d);
+			setLeft(new AVLTree( this));
+			setRight(new AVLTree( this));
+			equilibrate();
+		} else {
+			if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)) {
+				System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp) + " < d : " + d + " x : " + ((Segment) d).xAtYp(yp) + " at yp : " + yp);
+				if (getRight().isEmpty()){
+					getLeft().insertEmpty(getData());
+					getRight().insertEmpty(d);
+
+					getLeft().setFather(this);
+					getRight().setFather(this);
+					equilibrate();
+				} else {
+					getRight().insertStatusStructureVariant(d, yp);
+				}
+			} else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)) {
+				System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp)+ " > d : " + d + " x : " + ((Segment) d).xAtYp(yp)+ " at yp : " + yp);
+				if (getLeft().isEmpty()) {
+					getLeft().insertEmpty(d);
+					getRight().insertEmpty(getData());
+					setData(d);
+
+					getLeft().setFather(this);
+					getRight().setFather(this);
+					equilibrate();
+
+				} else {
+					getLeft().insertStatusStructureVariant(d, yp);
+				}
+			} else if (((Segment) getData()).xAtYp(yp) == ((Segment)d).xAtYp(yp)){
+//				System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp)+ " = d : " + d + " x : " + ((Segment) d).xAtYp(yp)+ " at yp : " + yp);
+				if (!((Segment)getData()).isSameSegment((Segment)d)){
+					 insertStatusStructureVariant(d, yp - 0.01);
+				}
+			}
+		}
+		equilibrate();
+	}
+
+
+
+//	@Override
+	public void suppressStatusStructure(D d, double yp){
+		if (!isEmpty()){
+			System.out.println("---------- STEPS ----------");
+			print("", true);
+			if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
+				System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp) + " < d : " + d + " x : " + ((Segment) d).xAtYp(yp) + " at yp : " + yp);
+				getRight().suppressStatusStructure(d, yp);
+			}
+			else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)) {
+				System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp) + " > d : " + d + " x : " + ((Segment) d).xAtYp(yp) + " at yp : " + yp);
+				getLeft().suppressStatusStructure(d, yp);
+			}
+			else { // meme x pour yp!
+				if (!((Segment)getData()).isSameSegment((Segment)d)){
+					System.out.println("Same x for yp but not same segment");
+					System.out.println("Data : " + getData() + " x : " + ((Segment) getData()).xAtYp(yp) + " = d : " + d + " x : " + ((Segment) d).xAtYp(yp) + " at yp : " + yp);
+//					if (((Segment) getData()).getUpperEndPoint().getXCoords() > ((Segment) d).getUpperEndPoint().getXCoords()){
+//						getLeft().suppressStatusStructure(d, yp);
+//					} else {
+//						getRight().suppressStatusStructure(d, yp);
+//					}
+					if (((Segment) getData()).xAtYp(yp+0.01) > ((Segment)d).xAtYp(yp+0.01)){
+						getLeft().suppressStatusStructure(d, yp);
+					} else {
+						getRight().suppressStatusStructure(d, yp);
+					}
+				} else {
+					if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() > 2 && getRight().height() >= 2) {
+						D data = getData();
+						suppressRoot();
+						D newData = getData();
+						getRight().suppressStatusStructure(newData, yp);
+						System.out.println("------ BEFORE REPLACEMENT -------");
+						System.out.println("SEGMENT FOR REPLACEMENT : " + newData);
+						if (getFather() != null)
+							getFather().print("", 	true);
+
+						getLeft().replace(data, newData, yp);
+						equilibrate();
+
+					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() > 2 && getRight().height() < 2) {
+
+						D data = getData();
+						suppressRoot();
+						getRight().suppressStatusStructure(data, yp);
+						equilibrate();
+					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() == 2) {
+						if (!getRight().isEmpty() && getLeft().isEmpty()) {
+							suppressRoot();
+						} else if (getRight().isEmpty() && !getLeft().isEmpty()) {
+							getLeft().suppressRoot();
+							if (getFather() != null){
+								computeHeight();
+								getFather().equilibrate();
+							}
+							suppressRoot();
+
+						} else {
+							suppressRoot();
+							getLeft().suppressRoot();
+						}
+						System.out.println("BALANCE : " + balance());
+					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() == 1) {
+						suppressRoot();
+						equilibrate();
+					}
+				}
+			}
+			System.out.println("TOTAL BALANCE : " + balance());
+			equilibrate();
+		}
+	}
+
+	/**
+	 * Fonction permettant de remplacer un segment par un autre, lors d'une suppression. On remplace le segment le plus a droite du sous arbre gauche par la nouvelle valeur de la racine.
+	 * @param d Le segment a remplacer
+	 * @param replacement Le segment de remplacement
+	 * @param yp La coordonnee y de la sweep line
+	 */
+	@Override
+	public void replace(D d, D replacement, double yp){
+		System.out.println("data : " + getData() + " tobereplaced : " + d + " yp : " + yp);
+ 		if (((Segment) getData()).xAtYp(yp) == ((Segment)d).xAtYp(yp)){
+//			System.out.println("data : " + getData() + " d : " + d + " replacement : " + replacement + " yp : " + yp);
+			if (((Segment)getData()).isSameSegment((Segment)d)){
+				setData(replacement);
+			} else {
+				getRight().replace(d, replacement, yp);
+			}
+		} else if (((Segment) getData()).xAtYp(yp) < ((Segment)replacement).xAtYp(yp)){
+			System.out.println(((Segment) getData()).xAtYp(yp) + " < " + ((Segment)replacement).xAtYp(yp));
+			getRight().replace(d, replacement, yp);
+		} else if (((Segment) getData()).xAtYp(yp) > ((Segment)replacement).xAtYp(yp)){
+			System.out.println(((Segment) getData()).xAtYp(yp) + " > " + ((Segment)replacement).xAtYp(yp));
+			getLeft().replace(d, replacement, yp);
+		}
 	}
 
 

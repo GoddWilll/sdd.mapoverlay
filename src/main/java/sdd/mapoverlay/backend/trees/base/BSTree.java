@@ -2,12 +2,7 @@ package sdd.mapoverlay.backend.trees.base;//Classe BSTree decrivant un arbre bin
 //Elle etend la classe Tree, sachant que les donnees sont a present comparables
 //Les doublons ne sont pas autorises
 
-import sdd.mapoverlay.backend.points.EventPoint;
-import sdd.mapoverlay.backend.points.types.EventType;
-import sdd.mapoverlay.backend.points.types.Position;
 import sdd.mapoverlay.backend.segments.Segment;
-
-import java.net.BindException;
 
 public class BSTree<D extends Comparable> extends Tree<D> {
 	final Boolean isStatus = false;
@@ -68,6 +63,8 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 			setData(d);
 			setLeft(new AVLTree((AVLTree) this));
 			setRight(new AVLTree((AVLTree) this));
+//			getLeft().setFather(this);
+//			getRight().setFather(this);
 //			getLeft().insertEmpty(d);
 //		} else if (isEmpty() && getFather() != null ){
 //			setData(d);
@@ -78,6 +75,9 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 				if (getRight().isEmpty()){
 					getLeft().insertEmpty(getData());
 					getRight().insertEmpty(d);
+
+					getLeft().setFather(this);
+					getRight().setFather(this);
 				} else {
 					getRight().insertStatusStructureVariant(d, yp);
 				}
@@ -86,6 +86,11 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 					getLeft().insertEmpty(d);
 					getRight().insertEmpty(getData());
 					setData(d);
+
+					getLeft().setFather(this);
+					getRight().setFather(this);
+
+
 				} else {
 					getLeft().insertStatusStructureVariant(d, yp);
 				}
@@ -129,39 +134,56 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 		}
 	}
 
+
+
 //	public void suppressStatusStructure(D d, double yp){
 //		if (!isEmpty()){
-//
+////			System.out.println("---------- STEPS ----------");
+////			print("", true);
 //			if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
+////				System.out.println("GOING RIGHT BECAUSE : " + ((Segment) getData()).xAtYp(yp) + " < " + ((Segment) d).xAtYp(yp));
+//
 //				getRight().suppressStatusStructure(d, yp);
 //			}
 //			else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)) {
+////				System.out.println("GOING LEFT BECAUSE : " + ((Segment) getData()).xAtYp(yp) + " > " + ((Segment) d).xAtYp(yp));
 //				getLeft().suppressStatusStructure(d, yp);
+//
 //			}
 //			else { // meme x pour yp!
 //				if (!((Segment)getData()).isSameSegment((Segment)d)){
-//					getRight().suppressStatusStructure(d, yp);
+//					if (((Segment) getData()).getUpperEndPoint().getX() > ((Segment) d).getUpperEndPoint().getX()){
+////						System.out.println("GOING RIGHT BECAUSE UPPER ENDPOINT X IS GREATER");
+//						getLeft().suppressStatusStructure(d, yp);
+//					} else {
+////						System.out.println("GOING LEFT BECAUSE UPPER ENDPOINT X IS SMALLER");
+//						getRight().suppressStatusStructure(d, yp);
+//					}
+////					getRight().suppressStatusStructure(d, yp+0.01);
 //				} else {
 //
-//					if (getData().compareTo(d) == 0 && height() > 2 && getRight().height() >= 2) {
+//					if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() > 2 && getRight().height() >= 2) {
+////						System.out.println("HERE : " + d);
+////						print("**", true);
 //						D data = getData();
 //						suppressRoot();
 //						D newData = getData();
 //						getRight().suppressStatusStructure(newData, yp);
-//						System.out.println("------ BEFORE REPLACEMENT -------");
-//						System.out.println("SEGMENT FOR REPLACEMENT : " + newData);
-//						print("", true);
+////						System.out.println("------ BEFORE REPLACEMENT -------");
+////						System.out.println("SEGMENT FOR REPLACEMENT : " + newData);
+////						if (getFather() != null)
+////							getFather().print("", 	true);
 //
 //						getLeft().replace(data, newData, yp);
 //						equilibrate();
 //
-//					} else if (getData().compareTo(d) == 0 && height() > 2 && getRight().height() < 2) {
+//					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() > 2 && getRight().height() < 2) {
 //
 //						D data = getData();
 //						suppressRoot();
 //						getRight().suppressStatusStructure(data, yp);
 //						equilibrate();
-//					} else if (getData().compareTo(d) == 0 && height() == 2) {
+//					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() == 2) {
 //						if (!getRight().isEmpty() && getLeft().isEmpty()) {
 //							suppressRoot();
 //						} else if (getRight().isEmpty() && !getLeft().isEmpty()) {
@@ -172,85 +194,15 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 //							getLeft().suppressRoot();
 //						}
 //						equilibrate();
-//					} else if (getData().compareTo(d) == 0 && height() == 1) {
+//					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() == 1) {
 //						suppressRoot();
 //						equilibrate();
 //					}
 //				}
 //			}
 //			equilibrate();
-////			System.out.println("---------- AFTER DELETION -----------");
-////			print("", true);
 //		}
 //	}
-
-	public void suppressStatusStructure(D d, double yp){
-		if (!isEmpty()){
-//			System.out.println("---------- STEPS ----------");
-//			print("", true);
-			if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
-//				System.out.println("GOING RIGHT BECAUSE : " + ((Segment) getData()).xAtYp(yp) + " < " + ((Segment) d).xAtYp(yp));
-
-				getRight().suppressStatusStructure(d, yp);
-			}
-			else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)) {
-//				System.out.println("GOING LEFT BECAUSE : " + ((Segment) getData()).xAtYp(yp) + " > " + ((Segment) d).xAtYp(yp));
-				getLeft().suppressStatusStructure(d, yp);
-
-			}
-			else { // meme x pour yp!
-				if (!((Segment)getData()).isSameSegment((Segment)d)){
-					if (((Segment) getData()).getUpperEndPoint().getXCoords() > ((Segment) d).getUpperEndPoint().getXCoords()){
-//						System.out.println("GOING RIGHT BECAUSE UPPER ENDPOINT X IS GREATER");
-						getLeft().suppressStatusStructure(d, yp);
-					} else {
-//						System.out.println("GOING LEFT BECAUSE UPPER ENDPOINT X IS SMALLER");
-						getRight().suppressStatusStructure(d, yp);
-					}
-//					getRight().suppressStatusStructure(d, yp+0.01);
-				} else {
-
-					if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() > 2 && getRight().height() >= 2) {
-//						System.out.println("HERE : " + d);
-//						print("**", true);
-						D data = getData();
-						suppressRoot();
-						D newData = getData();
-						getRight().suppressStatusStructure(newData, yp);
-//						System.out.println("------ BEFORE REPLACEMENT -------");
-//						System.out.println("SEGMENT FOR REPLACEMENT : " + newData);
-//						if (getFather() != null)
-//							getFather().print("", 	true);
-
-						getLeft().replace(data, newData, yp);
-						equilibrate();
-
-					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() > 2 && getRight().height() < 2) {
-
-						D data = getData();
-						suppressRoot();
-						getRight().suppressStatusStructure(data, yp);
-						equilibrate();
-					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() == 2) {
-						if (!getRight().isEmpty() && getLeft().isEmpty()) {
-							suppressRoot();
-						} else if (getRight().isEmpty() && !getLeft().isEmpty()) {
-							suppressRoot();
-							suppressRoot();
-						} else {
-							suppressRoot();
-							getLeft().suppressRoot();
-						}
-						equilibrate();
-					} else if (((Segment) getData()).xAtYp(yp) == ((Segment) d).xAtYp(yp) && height() == 1) {
-						suppressRoot();
-						equilibrate();
-					}
-				}
-			}
-			equilibrate();
-		}
-	}
 
 //	public void replace(D d, D replacement, double yp){
 //
@@ -276,8 +228,6 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 //	}
 
 	public void replace(D d, D replacement, double yp){
-
-
 		if (((Segment) getData()).xAtYp(yp) == ((Segment)d).xAtYp(yp)){
 			if (((Segment)getData()).isSameSegment((Segment)d)){
 				setData(replacement);
@@ -308,8 +258,7 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 			setData(t.getData());
 			setLeft(t.getLeft());
 			setRight(t.getRight());
-			getLeft().setFather(this);
-			getRight().setFather(this);
+
 			}
 		else if (getRight().isEmpty()) {
 			BSTree<D> t = getLeft();

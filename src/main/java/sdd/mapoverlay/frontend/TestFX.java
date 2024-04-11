@@ -24,20 +24,20 @@ public class TestFX extends Application {
         Scale scaleTransform = new Scale();
         scaleTransform.setX(3);
         scaleTransform.setY(3);
-
-        Map map = new Map("test.txt");
-        ArrayList<Intersection> intersections = Logic.findIntersection("test.txt");
+        String file = "test3.txt";
+        Map map = new Map(file);
+        ArrayList<Intersection> intersections = Logic.findIntersection(file);
 
         for (Segment segment : map.getSegments()){
-            Line line = new Line(segment.getLeftEndPoint().getXCoords(), segment.getLeftEndPoint().getYCoords(), segment.getRightEndPoint().getXCoords(), segment.getRightEndPoint().getYCoords());
+            Line line = new Line(segment.getLeftEndPoint().getX(), segment.getLeftEndPoint().getY(), segment.getRightEndPoint().getX(), segment.getRightEndPoint().getY());
             root.getChildren().addAll(line);
         }
 
         for (Intersection intersection : intersections){
             Circle circle = new Circle();
-            circle.setCenterX(intersection.getP().getXCoords());
-            circle.setCenterY(intersection.getP().getYCoords());
-            circle.setRadius(2);
+            circle.setCenterX(intersection.getP().getX());
+            circle.setCenterY(intersection.getP().getY());
+            circle.setRadius(1);
             circle.setStroke(Color.RED);
             circle.setFill(Color.RED);
             root.getChildren().addAll(circle);

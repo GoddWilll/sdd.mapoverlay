@@ -22,7 +22,7 @@ public class EventQueue extends AVLTree<EventPoint> {
         for (Segment segment : segments){
             if (search(segment.getUpperEndPoint())){
                 AVLTree<EventPoint> eq = this;
-                while (eq.getData().getXCoords() != segment.getUpperEndPoint().getXCoords() && eq.getData().getYCoords() != segment.getUpperEndPoint().getYCoords()){
+                while (eq.getData().getX() != segment.getUpperEndPoint().getX() && eq.getData().getY() != segment.getUpperEndPoint().getY()){
                     if (eq.getData().compareTo(segment.getUpperEndPoint()) < 0){
                         eq = eq.getRight();
                     } else if (eq.getData().compareTo(segment.getUpperEndPoint()) > 0){
