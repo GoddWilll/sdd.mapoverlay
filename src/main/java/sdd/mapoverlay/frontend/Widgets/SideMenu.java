@@ -8,27 +8,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import sdd.mapoverlay.backend.utils.MapLoader;
 import sdd.mapoverlay.frontend.Components.CustomButton;
 import sdd.mapoverlay.frontend.Components.CustomLabel;
 import sdd.mapoverlay.frontend.Components.CustomTextField;
@@ -44,8 +33,8 @@ public class SideMenu extends VBox {
     private TranslateTransition showTransition;
     private TranslateTransition hideTransition;
     private boolean isMenuVisible = true;
-    private List<Segment> segmentsToDraw = new ArrayList<Segment>();
-    private List<Segment> selectedSegments = new ArrayList<Segment>();
+    private ArrayList<Segment> segmentsToDraw = new ArrayList<Segment>();
+    private ArrayList<Segment> selectedSegments = new ArrayList<Segment>();
     private File openedFile;
 
     public SideMenu() {
@@ -71,6 +60,7 @@ public class SideMenu extends VBox {
         enterSegmentsInputRow2.paddingProperty().set(new Insets(10, 10, 10, 10));
 
         CustomTextField xCoordStart = new CustomTextField();
+        xCoordStart.setPromptText("x1");
         CustomTextField yCoordStart = new CustomTextField();
         enterSegmentsInputRow1.getChildren().addAll(new CustomLabel("("), xCoordStart, new CustomLabel(";"),
                 yCoordStart, new CustomLabel(")"));
