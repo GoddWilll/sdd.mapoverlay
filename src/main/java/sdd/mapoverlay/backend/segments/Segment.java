@@ -3,11 +3,11 @@ package sdd.mapoverlay.backend.segments;
 import sdd.mapoverlay.backend.points.EventPoint;
 import sdd.mapoverlay.backend.points.types.Position;
 
-
 public class Segment implements Comparable<Segment> {
+
     private EventPoint upperEndPoint;
     private EventPoint lowerEndPoint;
-    private String id;
+    private int id;
     private Vector vector;
 
     /**
@@ -49,6 +49,7 @@ public class Segment implements Comparable<Segment> {
             }
             this.vector = computeVector();
 
+
             if (upperEndPoint.getX() < lowerEndPoint.getX()){
                 upperEndPoint.setPosition(Position.LEFT);
                 lowerEndPoint.setPosition(Position.RIGHT);
@@ -59,7 +60,7 @@ public class Segment implements Comparable<Segment> {
                 upperEndPoint.setPosition(Position.LEFT);
                 lowerEndPoint.setPosition(Position.RIGHT);
             }
-        } catch( Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
@@ -96,7 +97,7 @@ public class Segment implements Comparable<Segment> {
      * Permet de definir l'identifiant du segment
      * @param id l'identifiant du segment
      */
-    public void setId(String id){
+    public void setId(int id){
         this.id = id;
     }
 
@@ -194,11 +195,12 @@ public class Segment implements Comparable<Segment> {
     @Override
     public int compareTo(Segment o) {
         double vectorProduct = vector.getX() * o.vector.getY() - vector.getY() * o.vector.getX();
-        if (vectorProduct < 0){
+        if (vectorProduct < 0) {
             return -1;
-        } else if (vectorProduct > 0){
+        } else if (vectorProduct > 0) {
             return 1;
         } else {
+
             if (o.getUpperEndPoint().getX() == upperEndPoint.getX()){
                 return 0;
             } else {
@@ -206,6 +208,7 @@ public class Segment implements Comparable<Segment> {
             }
         }
     }
+
 
     /**
      * Fonction permettant de verifier si un point est contenu dans le segment
@@ -226,7 +229,7 @@ public class Segment implements Comparable<Segment> {
 //            System.out.println("equa : "  + (double ) Math.round((yp - m * xp)*100)/100);
             return (double) Math.round((yp - m * xp)*100)/100 == (double) Math.round(b*100)/100;
         } else {
-            if (xp == x2){
+            if (xp == x2) {
                 return y2 <= yp && yp <= y1;
             } else {
                 return false;
@@ -255,6 +258,7 @@ public class Segment implements Comparable<Segment> {
         if (x1 != x2) {
             double m = (y2 - y1) / (x2 - x1);
             double b = y1 - m * x1;
+
             return (double) Math.round(((yp - b) / m) * 100) /100; // /1000
 //            return (yp - b) / m;
         } else {
