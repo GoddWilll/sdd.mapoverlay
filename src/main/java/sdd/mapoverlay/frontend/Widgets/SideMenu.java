@@ -73,6 +73,7 @@ public class SideMenu extends VBox {
         enterSegmentsInputRow2.paddingProperty().set(new Insets(10, 10, 10, 10));
 
         CustomTextField xCoordStart = new CustomTextField();
+        xCoordStart.setPromptText("x1");
         CustomTextField yCoordStart = new CustomTextField();
         enterSegmentsInputRow1.getChildren().addAll(new CustomLabel("("), xCoordStart, new CustomLabel(";"),
                 yCoordStart, new CustomLabel(")"));

@@ -22,7 +22,10 @@ public class Segment implements Comparable<Segment> {
     }
 
     /**
-     * Constructeur de la classe Segment a partir de coordonnées de points dont on ne connait pas encore le point superieur et inferieur. On les détermine en fonction de leur position.
+     * Constructeur de la classe Segment a partir de coordonnées de points dont on
+     * ne connait pas encore le point superieur et inferieur. On les détermine en
+     * fonction de leur position.
+     *
      * @param x1 coordonnée x du premier point
      * @param y1 coordonnée y du premier point
      * @param x2 coordonnée x du second point
@@ -103,14 +106,16 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Permet de recuperer l'identifiant du segment
+     * 
      * @return un String l'identifiant du segment
      */
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 
     /**
      * Permet de recuperer le point droit du segment
+     * 
      * @return un EventPoint le point droit du segment
      */
     public EventPoint getRightEndPoint(){
@@ -228,8 +233,11 @@ public class Segment implements Comparable<Segment> {
      * @param other le segment a comparer
      * @return un boolean true si les deux segments sont le meme segment, false sinon
      */
-    public boolean isSameSegment(Segment other){
-        return getUpperEndPoint().getX() == other.getUpperEndPoint().getX() && getUpperEndPoint().getY() == other.getUpperEndPoint().getY() && getLowerEndPoint().getX() == other.getLowerEndPoint().getX() && getLowerEndPoint().getY() == other.getLowerEndPoint().getY();
+    public boolean isSameSegment(Segment other) {
+        return getUpperEndPoint().getX() == other.getUpperEndPoint().getX()
+                && getUpperEndPoint().getY() == other.getUpperEndPoint().getY()
+                && getLowerEndPoint().getX() == other.getLowerEndPoint().getX()
+                && getLowerEndPoint().getY() == other.getLowerEndPoint().getY();
     }
 
     /**
