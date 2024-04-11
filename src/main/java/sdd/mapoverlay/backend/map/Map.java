@@ -59,39 +59,52 @@ public class Map {
 
             if (coordinates[1] < coordinates[3]) { // y1 < y2
                 if (coordinates[0] <= coordinates[2]) { // x1 < x2
-                    lowerEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.LOWERENDPOINT, Position.LEFT);
-                    upperEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.UPPERENDPOINT, Position.RIGHT);
+                    lowerEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.LOWERENDPOINT,
+                            Position.LEFT);
+                    upperEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.UPPERENDPOINT,
+                            Position.RIGHT);
                 } else { // x1 > x2
-                    lowerEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.LOWERENDPOINT, Position.RIGHT);
-                    upperEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.UPPERENDPOINT, Position.LEFT);
+                    lowerEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.LOWERENDPOINT,
+                            Position.RIGHT);
+                    upperEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.UPPERENDPOINT,
+                            Position.LEFT);
                 }
 
             } else { // y1 >= y2
                 if (coordinates[1].equals(coordinates[3])) { // y1 == y2
                     if (coordinates[0] < coordinates[2]) { // si x1 < x2
-                        upperEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.UPPERENDPOINT, Position.LEFT);
-                        lowerEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.LOWERENDPOINT, Position.RIGHT);
+                        upperEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.UPPERENDPOINT,
+                                Position.LEFT);
+                        lowerEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.LOWERENDPOINT,
+                                Position.RIGHT);
                     } else { // si x1 > x2
-                        lowerEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.LOWERENDPOINT, Position.RIGHT);
-                        upperEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.UPPERENDPOINT, Position.LEFT);
+                        lowerEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.LOWERENDPOINT,
+                                Position.RIGHT);
+                        upperEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.UPPERENDPOINT,
+                                Position.LEFT);
                     }
                 } else { // si y1 > y2
                     if (coordinates[0] < coordinates[2]) { // si x1 < x2
-                        upperEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.UPPERENDPOINT, Position.LEFT);
-                        lowerEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.LOWERENDPOINT, Position.RIGHT);
+                        upperEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.UPPERENDPOINT,
+                                Position.LEFT);
+                        lowerEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.LOWERENDPOINT,
+                                Position.RIGHT);
                     } else { // si x1 > x2
-                        upperEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.UPPERENDPOINT, Position.RIGHT);
-                        lowerEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.LOWERENDPOINT, Position.LEFT);
+                        upperEndPoint = new EventPoint(coordinates[0], coordinates[1], EventType.UPPERENDPOINT,
+                                Position.RIGHT);
+                        lowerEndPoint = new EventPoint(coordinates[2], coordinates[3], EventType.LOWERENDPOINT,
+                                Position.LEFT);
                     }
                 }
             }
-            // Section permettant d'ajouter le segment au endpoint superieur pour stockage dans eventQueue
+            // Section permettant d'ajouter le segment au endpoint superieur pour stockage
+            // dans eventQueue
             Segment upperPointSegment = new Segment(upperEndPoint, lowerEndPoint);
             upperEndPoint.addSegment(upperPointSegment);
 
             // Creation du segment et ajout a la liste de segments
             segments.add(new Segment(upperEndPoint, lowerEndPoint));
-            
+
         }
 
     }
@@ -145,4 +158,3 @@ public class Map {
 //        }
 //    }
 }
-

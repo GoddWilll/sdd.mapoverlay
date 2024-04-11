@@ -7,21 +7,25 @@ import java.util.Scanner;
 
 public class MapLoader {
     private ArrayList<String> map;
-    public MapLoader(String fileName){
+
+    public MapLoader(String filePath) {
         this.map = new ArrayList<String>();
         try {
-            File mapDataToBeRead = new File("src/main/resources/maps/" + fileName);
+            File mapDataToBeRead = new File(filePath);
             Scanner dataReader = new Scanner(mapDataToBeRead);
-            while (dataReader.hasNextLine()){
+            while (dataReader.hasNextLine()) {
                 String readData = dataReader.nextLine();
+                System.out.println(readData);
                 map.add(readData);
+
             }
-        } catch(Exception exception){
+            dataReader.close();
+        } catch (Exception exception) {
             System.out.println(exception);
         }
     }
 
-    public ArrayList<String> getMap(){
+    public ArrayList<String> getMap() {
         return map;
     }
 }
