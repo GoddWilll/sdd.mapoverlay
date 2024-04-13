@@ -9,7 +9,7 @@ public class CustomLabel extends Label {
     public CustomLabel(String text) {
         super(text);
         labelStyle = "-fx-font-size: 20; " +
-                "-fx-font-family: 'Brush Script MT'; " + // Change font family
+                "-fx-font-family: 'Arial'; " + // Change font family
                 "-fx-text-fill: black; " +
                 "-fx-font-weight:bold";
         setStyle(labelStyle);
@@ -17,14 +17,14 @@ public class CustomLabel extends Label {
 
     public void setTitleStyle() {
         setStyle("-fx-font-size: 30; " +
-                "-fx-font-family: 'Brush Script MT'; " + // Change font family
+                "-fx-font-family: 'Arial'; " + // Change font family
                 "-fx-text-fill: black; " +
                 "-fx-font-weight:bold;");
     }
 
     public void setSegmentStyle() {
         setStyle("-fx-font-size: 15; " +
-                "-fx-font-family: 'Brush Script MT'; " + // Change font family
+                "-fx-font-family: 'Arial'; " + // Change font family
                 "-fx-text-fill: black; " +
                 "-fx-font-weight:bold;");
     }

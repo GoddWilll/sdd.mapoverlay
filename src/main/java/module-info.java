@@ -10,9 +10,12 @@ module sdd.mapoverlay {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires javafx.graphics;
 
     opens sdd.mapoverlay to javafx.fxml;
+
     exports sdd.mapoverlay;
     exports sdd.mapoverlay.frontend;
+
     opens sdd.mapoverlay.frontend to javafx.fxml;
 }

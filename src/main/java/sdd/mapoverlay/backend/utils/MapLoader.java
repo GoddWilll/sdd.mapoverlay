@@ -15,7 +15,6 @@ public class MapLoader {
             Scanner dataReader = new Scanner(mapDataToBeRead);
             while (dataReader.hasNextLine()) {
                 String readData = dataReader.nextLine();
-                System.out.println(readData);
                 map.add(readData);
 
             }

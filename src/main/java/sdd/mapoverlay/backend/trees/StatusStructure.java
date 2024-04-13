@@ -6,43 +6,46 @@ import sdd.mapoverlay.backend.segments.Segment;
 
 import java.util.ArrayList;
 
-public class StatusStructure extends AVLTree<Segment>  {
+public class StatusStructure extends AVLTree<Segment> {
 
     final Boolean isStatus = true;
 
-    public StatusStructure(){
+    public StatusStructure() {
         super();
     }
 
-    public Boolean getIsStatus(){
+    public Boolean getIsStatus() {
         return isStatus;
     }
 
-    public ArrayList<Segment> segmentsContainingP(EventPoint p){
+    public ArrayList<Segment> segmentsContainingP(EventPoint p) {
         ArrayList<Segment> segments = new ArrayList<>();
         AVLTree<Segment> tree = this;
-        while (tree.height() > 1){
-            System.out.println(tree.getData());
-            if (tree.getData().xAtYp(p.getY()) < p.getX()){
-                if (tree.getFather() != null)
-                    System.out.println("FATHER : " + tree.getFather().getData() + " OF : " + tree.getData());
+        while (tree.height() > 1) {
+            // System.out.println(tree.getData());
+            if (tree.getData().xAtYp(p.getY()) < p.getX()) {
+                // if (tree.getFather() != null)
+                // System.out.println("FATHER : " + tree.getFather().getData() + " OF : " +
+                // tree.getData());
                 tree = tree.getRight();
-            } else if (tree.getData().xAtYp(p.getY()) > p.getX()){
-                if (tree.getFather() != null)
-                    System.out.println("FATHER : " + tree.getFather().getData() + " OF : " + tree.getData());
+            } else if (tree.getData().xAtYp(p.getY()) > p.getX()) {
+                // if (tree.getFather() != null)
+                // System.out.println("FATHER : " + tree.getFather().getData() + " OF : " +
+                // tree.getData());
                 tree = tree.getLeft();
             } else {
-                if (tree.getFather() != null)
-                    System.out.println("FATHER : " + tree.getFather().getData() + " OF : " + tree.getData());
+                // if (tree.getFather() != null)
+                // System.out.println("FATHER : " + tree.getFather().getData() + " OF : " +
+                // tree.getData());
                 tree = tree.getLeft();
             }
         }
 
-        if (tree.height() == 0){
+        if (tree.height() == 0) {
             return segments;
         }
 
-        if (tree.getData().containsPoint(p)){
+        if (tree.getData().containsPoint(p)) {
             segments.add(tree.getData());
         }
         ArrayList<Segment> left = tree.getLeftNeighbors(p);
@@ -55,48 +58,46 @@ public class StatusStructure extends AVLTree<Segment>  {
         return segments;
     }
 
-
-
-    public Segment getLeftNeighbor(EventPoint p){
+    public Segment getLeftNeighbor(EventPoint p) {
         AVLTree<Segment> tree = this;
-        while (tree.height() > 1){
-            if (tree.getData().xAtYp(p.getY()) < p.getX()){
+        while (tree.height() > 1) {
+            if (tree.getData().xAtYp(p.getY()) < p.getX()) {
                 tree = tree.getRight();
-            } else if (tree.getData().xAtYp(p.getY()) > p.getX()){
+            } else if (tree.getData().xAtYp(p.getY()) > p.getX()) {
                 tree = tree.getLeft();
             } else {
                 tree = tree.getLeft();
             }
         }
-        if (tree.height() == 0){
+        if (tree.height() == 0) {
             return null;
         }
-        if (tree.getData().xAtYp(p.getY()) < p.getX()){
+        if (tree.getData().xAtYp(p.getY()) < p.getX()) {
             return tree.getData();
         } else {
             if (tree.getFather() == null)
                 return null;
             AVLTree<Segment> startingLeaf = tree;
-            if (startingLeaf.getFather().getRight() == startingLeaf){ // on part d'un fils droit
+            if (startingLeaf.getFather().getRight() == startingLeaf) { // on part d'un fils droit
                 AVLTree<Segment> currentTree = startingLeaf; // on va dans le pere vu qu'on est un fils droit
                 currentTree = currentTree.getFather().getLeft();
-                if (currentTree.getRight().getData() != null){
+                if (currentTree.getRight().getData() != null) {
                     currentTree = currentTree.getRight();
                 }
                 return currentTree.getData();
-            } else if (startingLeaf.getFather().getLeft() == startingLeaf){
+            } else if (startingLeaf.getFather().getLeft() == startingLeaf) {
                 AVLTree<Segment> currentTree = startingLeaf;
                 if (currentTree.getFather().getFather() == null) {
                     return null;
                 }
-                while(currentTree.getFather() != null && currentTree.getFather().getLeft() == currentTree){
+                while (currentTree.getFather() != null && currentTree.getFather().getLeft() == currentTree) {
                     currentTree = currentTree.getFather();
                 }
-                if (currentTree.getFather() == null){
+                if (currentTree.getFather() == null) {
                     return null;
                 }
                 currentTree = currentTree.getFather().getLeft();
-                while (currentTree.getRight().getData() != null){
+                while (currentTree.getRight().getData() != null) {
                     currentTree = currentTree.getRight();
                 }
                 return currentTree.getData();
@@ -105,32 +106,28 @@ public class StatusStructure extends AVLTree<Segment>  {
         return null;
     }
 
-
-
-
-    public Segment getRightNeighbor(EventPoint p){
+    public Segment getRightNeighbor(EventPoint p) {
         AVLTree<Segment> tree = this;
         double yp = p.getY();
-        while (tree.height() > 1){
-            if (tree.getData().xAtYp(yp) < p.getX()){
+        while (tree.height() > 1) {
+            if (tree.getData().xAtYp(yp) < p.getX()) {
                 tree = tree.getRight();
-            } else if (tree.getData().xAtYp(yp) > p.getX()){
+            } else if (tree.getData().xAtYp(yp) > p.getX()) {
                 tree = tree.getLeft();
             } else {
                 tree = tree.getLeft();
             }
         } // on est dans un segment avec p
 
-        if (tree.height() == 0){
+        if (tree.height() == 0) {
             return null;
         }
 
-        if (tree.getFather() == null){
+        if (tree.getFather() == null) {
             return null;
         }
 
-
-        if (tree.getData().xAtYp(yp) > p.getX()){
+        if (tree.getData().xAtYp(yp) > p.getX()) {
             return tree.getData();
         } else {
             AVLTree<Segment> startingLeaf = tree;
@@ -165,53 +162,52 @@ public class StatusStructure extends AVLTree<Segment>  {
         return null;
     }
 
-
-    public Segment getLeftNeighbor(Segment s, EventPoint p ){
+    public Segment getLeftNeighbor(Segment s, EventPoint p) {
         double yp = p.getY();
         AVLTree<Segment> tree = this;
-        while (tree.height() > 1){
-            if (tree.getData().xAtYp(yp) < s.xAtYp(yp) ){
+        while (tree.height() > 1) {
+            if (tree.getData().xAtYp(yp) < s.xAtYp(yp)) {
                 tree = tree.getRight();
-            } else if (tree.getData().xAtYp(yp) > s.xAtYp(yp)){
+            } else if (tree.getData().xAtYp(yp) > s.xAtYp(yp)) {
                 tree = tree.getLeft();
             } else {
                 tree = tree.getLeft();
             }
         }
-        if (tree.getData() == null){
+        if (tree.getData() == null) {
             return null;
         }
 
-        if (tree.getFather() == null){
+        if (tree.getFather() == null) {
             return null;
         }
 
-        if (tree.getData().xAtYp(yp) < s.xAtYp(yp)){
+        if (tree.getData().xAtYp(yp) < s.xAtYp(yp)) {
             return tree.getData();
         } else {
             AVLTree<Segment> startingLeaf = tree;
-            if (startingLeaf.getFather().getRight() == startingLeaf){ // on part d'un fils droit
+            if (startingLeaf.getFather().getRight() == startingLeaf) { // on part d'un fils droit
                 AVLTree<Segment> currentTree = startingLeaf; // on va dans le pere vu qu'on est un fils droit
                 currentTree = currentTree.getFather().getLeft();
                 if (currentTree.getData() == null)
                     return null;
-                if (currentTree.getRight().getData() != null){
+                if (currentTree.getRight().getData() != null) {
                     currentTree = currentTree.getRight();
                 }
                 return currentTree.getData();
-            } else if (startingLeaf.getFather().getLeft() == startingLeaf){
+            } else if (startingLeaf.getFather().getLeft() == startingLeaf) {
                 AVLTree<Segment> currentTree = startingLeaf;
                 if (currentTree.getFather().getFather() == null) {
                     return null;
                 }
-                while(currentTree.getFather() != null && currentTree.getFather().getLeft() == currentTree){
+                while (currentTree.getFather() != null && currentTree.getFather().getLeft() == currentTree) {
                     currentTree = currentTree.getFather();
                 }
-                if (currentTree.getFather() == null){
+                if (currentTree.getFather() == null) {
                     return null;
                 }
                 currentTree = currentTree.getFather().getLeft();
-                while (currentTree.getRight().getData() != null){
+                while (currentTree.getRight().getData() != null) {
                     currentTree = currentTree.getRight();
                 }
                 return currentTree.getData();
@@ -220,28 +216,28 @@ public class StatusStructure extends AVLTree<Segment>  {
         return null;
     }
 
-    public Segment getRightNeighbor(Segment s, EventPoint p){
+    public Segment getRightNeighbor(Segment s, EventPoint p) {
         AVLTree<Segment> tree = this;
         double yp = p.getY();
-        while (tree.height() > 1){
-            if (tree.getData().xAtYp(yp) < s.xAtYp(yp)){
+        while (tree.height() > 1) {
+            if (tree.getData().xAtYp(yp) < s.xAtYp(yp)) {
                 tree = tree.getRight();
-            } else if (tree.getData().xAtYp(yp) > s.xAtYp(yp)){
+            } else if (tree.getData().xAtYp(yp) > s.xAtYp(yp)) {
                 tree = tree.getLeft();
-            } else if (tree.getData().xAtYp(yp) == s.xAtYp(yp) && tree.getData().isSameSegment(s)){
+            } else if (tree.getData().xAtYp(yp) == s.xAtYp(yp) && tree.getData().isSameSegment(s)) {
                 tree = tree.getLeft();
-            } else if (tree.getData().xAtYp(yp) == s.xAtYp(yp) && !tree.getData().isSameSegment(s)){
+            } else if (tree.getData().xAtYp(yp) == s.xAtYp(yp) && !tree.getData().isSameSegment(s)) {
                 tree = tree.getRight();
             }
         }
-        if (tree.getFather() == null){
+        if (tree.getFather() == null) {
             return null;
         }
 
         if (tree.getData() == null)
             return null;
 
-        if (tree.getData().xAtYp(yp) > s.xAtYp(yp)){
+        if (tree.getData().xAtYp(yp) > s.xAtYp(yp)) {
             return tree.getData();
         } else {
             AVLTree<Segment> startingLeaf = tree;
@@ -275,10 +271,8 @@ public class StatusStructure extends AVLTree<Segment>  {
         return null;
     }
 
-
-
     @Override
-    public String toString(){
+    public String toString() {
         return "" + getData();
     }
 
