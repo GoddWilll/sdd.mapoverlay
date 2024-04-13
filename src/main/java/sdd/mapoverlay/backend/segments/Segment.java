@@ -12,7 +12,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Constructeur de la classe Segment
-     * 
+     *
      * @param upperEndPoint le point de l'extremité supérieure du segment
      * @param lowerEndPoint le point de l'extremité inférieure du segment
      */
@@ -32,16 +32,16 @@ public class Segment implements Comparable<Segment> {
      * @param x2 coordonnée x du second point
      * @param y2 coordonnée y du second point
      */
-    public Segment(double x1, double y1, double x2, double y2) {
+    public Segment (double x1, double y1, double x2, double y2){
         try {
-            if (y1 > y2) {
+            if (y1 > y2){
                 this.upperEndPoint = new EventPoint(x1, y1);
                 this.lowerEndPoint = new EventPoint(x2, y2);
-            } else if (y1 == y2) {
-                if (x1 > x2) {
+            } else if (y1 == y2){ // horizontal
+                if (x1 < x2){
                     this.upperEndPoint = new EventPoint(x1, y1);
                     this.lowerEndPoint = new EventPoint(x2, y2);
-                } else if (x1 < x2) {
+                } else if (x1 > x2){
                     this.upperEndPoint = new EventPoint(x2, y2);
                     this.lowerEndPoint = new EventPoint(x1, y1);
                 } else {
@@ -53,24 +53,24 @@ public class Segment implements Comparable<Segment> {
             }
             this.vector = computeVector();
 
-            if (upperEndPoint.getX() < lowerEndPoint.getX()) {
+            if (upperEndPoint.getX() < lowerEndPoint.getX()){
                 upperEndPoint.setPosition(Position.LEFT);
                 lowerEndPoint.setPosition(Position.RIGHT);
-            } else if (upperEndPoint.getX() > lowerEndPoint.getX()) {
+            } else if (upperEndPoint.getX() > lowerEndPoint.getX()){
                 upperEndPoint.setPosition(Position.RIGHT);
                 lowerEndPoint.setPosition(Position.LEFT);
             } else { // x egaux
                 upperEndPoint.setPosition(Position.LEFT);
                 lowerEndPoint.setPosition(Position.RIGHT);
             }
-        } catch (Exception e) {
+        } catch( Exception e){
             System.out.println(e);
         }
     }
 
     /**
      * Permet de recuperer le point superieur du segment
-     * 
+     *
      * @return un EventPoint le point superieur du segment
      */
     public EventPoint getUpperEndPoint() {
@@ -79,7 +79,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Permet de recuperer le point inferieur du segment
-     * 
+     *
      * @return un EventPoint le point inferieur du segment
      */
     public EventPoint getLowerEndPoint() {
@@ -88,7 +88,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Permet de recuperer le point gauche du segment
-     * 
+     *
      * @return un EventPoint le point gauche du segment
      */
     public EventPoint getLeftEndPoint() {
@@ -101,7 +101,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Permet de definir l'identifiant du segment
-     * 
+     *
      * @param id l'identifiant du segment
      */
     public void setId(int id) {
@@ -110,7 +110,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Permet de recuperer l'identifiant du segment
-     * 
+     *
      * @return un String l'identifiant du segment
      */
     public int getId() {
@@ -119,7 +119,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Permet de recuperer le point droit du segment
-     * 
+     *
      * @return un EventPoint le point droit du segment
      */
     public EventPoint getRightEndPoint() {
@@ -132,7 +132,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Permet de calculer le vecteur du segment
-     * 
+     *
      * @return un Vector le vecteur du segment
      */
     public Vector computeVector() {
@@ -144,7 +144,7 @@ public class Segment implements Comparable<Segment> {
     /**
      * Fonction permettant de representer un segment sous forme de chaine de
      * caractères
-     * 
+     *
      * @return un String la chaine de caractères representant le segment
      */
     @Override
@@ -155,7 +155,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Fonction permettant de comparer deux segments
-     * 
+     *
      * @param o le segment a comparer
      * @return un int 0 si les deux segments sont confondus, 1 si le segment est a
      *         droite du segment o, -1 si le segment est a gauche du segment o, 2 si
@@ -180,7 +180,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Fonction permettant de verifier si un point est contenu dans le segment
-     * 
+     *
      * @param p le point a verifier
      * @return un boolean true si le point est contenu dans le segment, false sinon
      */
@@ -207,7 +207,7 @@ public class Segment implements Comparable<Segment> {
     /**
      * Fonction permettant de calculer l'abcisse du point d'intersection entre le
      * segment et une droite horizontale d'ordonnée yp
-     * 
+     *
      * @param yp l'ordonnée de la droite horizontale
      * @return un double l'abcisse du point d'intersection
      */
@@ -218,18 +218,21 @@ public class Segment implements Comparable<Segment> {
         double x2 = lowerEndPoint.getX();
         double y2 = lowerEndPoint.getY();
 
-        if (yp < lowerEndPoint.getY())
-            return lowerEndPoint.getX();
 
-        if (yp > upperEndPoint.getY())
-            return upperEndPoint.getX();
+        if (yp < y2)
+            return x2;
+
+        if (yp > y1)
+            return x1;
+
+        if (y1 == y2)
+            return x1;
 
         if (x1 != x2) {
             double m = (y2 - y1) / (x2 - x1);
             double b = y1 - m * x1;
-
-            return (double) Math.round(((yp - b) / m) * 100) / 100; // /1000
-            // return (yp - b) / m;
+//            return (double) Math.round(((yp - b) / m) * 100) /100; // /1000
+            return (yp - b) / m;
         } else {
             return getLowerEndPoint().getX();
         }
@@ -237,7 +240,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Fonction permettant de verifier si deux segments sont le meme segment
-     * 
+     *
      * @param other le segment a comparer
      * @return un boolean true si les deux segments sont le meme segment, false
      *         sinon
@@ -251,7 +254,7 @@ public class Segment implements Comparable<Segment> {
 
     /**
      * Fonction permettant de recuperer les coordonnées du segment
-     * 
+     *
      * @return un double[] les coordonnées du segment
      */
     public double[] getSerie() {
@@ -260,6 +263,10 @@ public class Segment implements Comparable<Segment> {
         double x2 = lowerEndPoint.getX();
         double y2 = lowerEndPoint.getY();
         return new double[] { x1, y1, x2, y2 };
+    }
+
+    public boolean isHorizontal(){
+        return upperEndPoint.getY() == lowerEndPoint.getY();
     }
 
 }
