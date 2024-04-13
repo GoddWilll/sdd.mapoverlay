@@ -1,5 +1,6 @@
 package sdd.mapoverlay.backend.segments;
 
+import sdd.mapoverlay.backend.Logic;
 import sdd.mapoverlay.backend.points.EventPoint;
 import sdd.mapoverlay.backend.points.types.Position;
 
@@ -194,7 +195,8 @@ public class Segment implements Comparable<Segment> {
         if (x1 != x2) {
             double m = (y2 - y1) / (x2 - x1);
             double b = (y1 - m * x1);
-            return (double) Math.round((yp - m * xp) * 100) / 100 == (double) Math.round(b * 100) / 100;
+            return Math.abs(yp - m * xp - b) < Logic.EPSILON;
+//            return (double) Math.round((yp - m * xp) * 100) / 100 == (double) Math.round(b * 100) / 100;
         } else {
             if (xp == x2) {
                 return y2 <= yp && yp <= y1;

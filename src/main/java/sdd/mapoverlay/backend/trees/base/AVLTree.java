@@ -260,64 +260,6 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		return "" + getData();
 	}
 
-//	@Override
-//	public void insertStatusStructureVariant(D d, double yp){
-//		if (isEmpty()) {
-//			insertEmpty(d);
-//		} else {
-//			if (height() == 1){
-//				if (((Segment)getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
-//					getLeft().insertEmpty(getData());
-//					getRight().insertEmpty(d);
-//
-//					getLeft().setFather(this);
-//					getRight().setFather(this);
-//
-//				} else if (((Segment)getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)){
-//					getLeft().insertEmpty(d);
-//					getRight().insertEmpty(getData());
-//					setData(d);
-//
-//					getLeft().setFather(this);
-//					getRight().setFather(this);
-//
-//				} else if (((Segment)getData()).xAtYp(yp) == ((Segment)d).xAtYp(yp)){
-//					if (!((Segment)d).isHorizontal()){
-//						if (((Segment)getData()).xAtYp(yp - 0.01) > ((Segment)d).xAtYp(yp - 0.01)){
-//							getLeft().insertEmpty(d);
-//							getRight().insertEmpty(getData());
-//							setData(d);
-//
-//						} else {
-//							getLeft().insertEmpty(getData());
-//							getRight().insertEmpty(d);
-//
-//						}
-//						getLeft().setFather(this);
-//						getRight().setFather(this);
-//					} else {
-//						getLeft().insertEmpty(getData());
-//						getRight().insertEmpty(d);
-//
-//						getLeft().setFather(this);
-//						getRight().setFather(this);
-//					}
-//				}
-//			} else {
-//				if (((Segment)getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
-//					getRight().insertStatusStructureVariant(d, yp);
-//				} else if (((Segment)getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)){
-//					getLeft().insertStatusStructureVariant(d, yp);
-//				} else if (((Segment)getData()).xAtYp(yp) == ((Segment)d).xAtYp(yp)){
-//					if (!((Segment)getData()).isSameSegment((Segment)d)){
-//						insertStatusStructureVariant(d, yp - 0.01);
-//					}
-//				}
-//			}
-//		}
-//		equilibrate();
-//	}
-
 	public void insertStatusStructureVariant(D d, double yp){
 		if (isEmpty()) {
 			insertEmpty(d);
@@ -358,58 +300,6 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		equilibrate();
 	}
 
-
-//	public void suppressStatusStructure(D d, double yp){
-//		if (!isEmpty()){
-//			if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
-//				getRight().suppressStatusStructure(d, yp);
-//			}
-//			else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)) {
-//				getLeft().suppressStatusStructure(d, yp);
-//			}
-//			else {
-//				if (!((Segment)getData()).isSameSegment((Segment)d)){
-//					if (((Segment) getData()).xAtYp(yp+0.01) > ((Segment)d).xAtYp(yp+0.01)){
-//						getLeft().suppressStatusStructure(d, yp);
-//					} else {
-//						getRight().suppressStatusStructure(d, yp);
-//					}
-//				} else {
-//					if (height() == 1){ // Si on est dans un arbre de hauteur 1 (donc une feuille)
-//						if (getFather() == null){ // Si on est la racine
-//							suppressRoot();
-//						} else {
-//							if (getFather().getLeft().height() == 1){ // Si le frere gauche de la feuille est de hauteur 1 (donc une feuille)
-//								getFather().getLeft().suppressRoot(); // On supprime la feuille gauche
-//								getFather().getRight().suppressRoot(); // On supprime la feuille droite
-////								suppressRoot(); // On supprime la feuille droite
-//							} else {
-////								suppressRoot(); // On supprime la feuille droite. Si le frere gauche est un arbre de hauteur 2, alors il va se reequilibrer
-//								suppressRoot();
-//								getFather().suppressRoot();
-//							}
-//						}
-//					} else if (height() == 2){ // Si on est dans un arbre de hauteur 2
-//						if (getRight().isEmpty()){ // Si le fils droit est vide
-//							suppressRoot(); // On supprime la racine
-//							suppressRoot(); // On supprime la racine
-//						} else {
-//							suppressRoot(); // On supprime la racine
-//							getLeft().suppressRoot(); // On supprime le fils gauche
-//						}
-//					} else if (height() > 2){
-//						suppressRoot();
-//						D newData = getData();
-//						getRight().suppressMin();
-//						getLeft().replace(newData);
-//					}
-//				}
-//			}
-//			equilibrate();
-//		}
-//	}
-
-
 	public void suppressStatusStructure(D d, double yp){
 		if (!isEmpty()){
 			if (Math.abs(((Segment) getData()).xAtYp(yp) - ((Segment) d).xAtYp(yp)) < Logic.EPSILON){
@@ -431,13 +321,8 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 							}
 						}
 					} else if (height() == 2){ // Si on est dans un arbre de hauteur 2
-						if (getRight().isEmpty()){ // Si le fils droit est vide
-							suppressRoot(); // On supprime la racine
-							suppressRoot(); // On supprime la racine
-						} else {
-							suppressRoot(); // On supprime la racine
-							getLeft().suppressRoot(); // On supprime le fils gauche
-						}
+						suppressRoot(); // On supprime la racine
+						getLeft().suppressRoot(); // On supprime le fils gauche
 					} else if (height() > 2){
 						suppressRoot();
 						D newData = getData();
