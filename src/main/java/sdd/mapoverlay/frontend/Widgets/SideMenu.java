@@ -324,7 +324,12 @@ public class SideMenu extends VBox {
             addToVbox(textSegmentsBox, newSegment.getId(), segmentText);
 
         } catch (Exception e) {
-            e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Please enter valid coordinates.");
+            alert.showAndWait();
         }
 
     }
@@ -349,7 +354,8 @@ public class SideMenu extends VBox {
                     selectedSegments.add(segment);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error loading map file please select a valid file");
             }
         }
 
