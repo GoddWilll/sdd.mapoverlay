@@ -8,10 +8,24 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import sdd.mapoverlay.frontend.Components.CustomDrawingPane;
 
+/**
+ * The CenterStack class represents a custom BorderPane that serves as the
+ * central container for the application's UI.
+ * It contains a drawing pane, side menu, and banners.
+ */
 public class CenterStack extends BorderPane {
 
+    /**
+     * The drawing pane used for custom drawings.
+     */
     public static CustomDrawingPane drawingPane = new CustomDrawingPane();
 
+    /**
+     * Constructs a new CenterStack object with the specified side menu.
+     *
+     * @param sideMenu the side menu to be displayed on the right side of the center
+     *                 stack.
+     */
     public CenterStack(SideMenu sideMenu) {
         Pane bottomBanner = new Pane();
         bottomBanner.setPrefHeight(50);
