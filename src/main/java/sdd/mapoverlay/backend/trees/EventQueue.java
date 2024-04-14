@@ -1,4 +1,5 @@
 package sdd.mapoverlay.backend.trees;
+
 import sdd.mapoverlay.backend.points.EventPoint;
 import sdd.mapoverlay.backend.segments.Segment;
 import sdd.mapoverlay.backend.trees.base.AVLTree;
@@ -6,17 +7,25 @@ import sdd.mapoverlay.backend.trees.base.AVLTree;
 import java.util.ArrayList;
 
 /**
- * Classe representant la EventQueue
+ * Represents an event queue, which is a specialized AVL tree that stores event
+ * points.
+ * The event queue is used in the map overlay algorithm to handle events during
+ * the sweep line process.
  */
 public class EventQueue extends AVLTree<EventPoint> {
 
+    /**
+     * Constructs an empty event queue.
+     */
     public EventQueue() {
         super();
     }
 
     /**
-     * Permet d'initialiser la EventQueue avec une liste de segments
-     * @param segments ArrayList la liste de segments
+     * Initializes the event queue with a list of segments.
+     * This method populates the event queue with event points and segments.
+     *
+     * @param segments the list of segments to initialize the event queue with
      */
     public void initialize(ArrayList<Segment> segments) {
         for (Segment segment : segments) {

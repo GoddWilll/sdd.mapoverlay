@@ -1,8 +1,9 @@
 package sdd.mapoverlay.backend.points.types;
 
 /**
- * Enum qui represente le type d'evenement
+ * This enum represents the type of event.
  */
+
 public enum EventType {
     UPPERENDPOINT,
     LOWERENDPOINT,

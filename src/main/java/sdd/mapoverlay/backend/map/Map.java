@@ -9,24 +9,24 @@ import java.util.ArrayList;
 import javafx.scene.control.Alert;
 
 /**
- * Classe representant la carte du plan
+ * Represents a map containing segments and points.
  */
 public class Map {
     private ArrayList<Segment> segments = new ArrayList<>();
 
     /**
-     * Constructeur de la classe Map, representant la carte du plam
-     * 
-     * @param fileName un String contenant le nom du fichier a charger
+     * Constructs a Map object with the specified file name.
+     *
+     * @param fileName the name of the file to load the map from
      */
     public Map(String fileName) {
         fileInitialization(fileName);
     }
 
     /**
-     * Methode permettant d'initialiser la carte a partir d'un fichier
-     * 
-     * @param fileName un String contenant le nom du fichier a charger
+     * Initializes the map by loading data from the specified file.
+     *
+     * @param fileName the name of the file to load the map from
      */
     public void fileInitialization(String fileName) {
 
@@ -83,17 +83,14 @@ public class Map {
                         }
                     }
                 }
-                // Section permettant d'ajouter le segment au endpoint superieur pour stockage
-                // dans eventQueue
+
                 Segment upperPointSegment = new Segment(upperEndPoint, lowerEndPoint);
                 upperEndPoint.addSegment(upperPointSegment);
 
-                // Creation du segment et ajout a la liste de segments
                 segments.add(new Segment(upperEndPoint, lowerEndPoint));
 
             }
         } catch (Exception e) {
-            // Handle the exception here
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error loading map file please select a valid file");
         }
@@ -101,10 +98,9 @@ public class Map {
     }
 
     /**
-     * Permet de retourner la liste des segments de la carte apres lecture du
-     * fichier
-     * 
-     * @return un ArrayList de Segment
+     * Returns the list of segments in the map.
+     *
+     * @return the list of segments
      */
     public ArrayList<Segment> getSegments() {
         return segments;

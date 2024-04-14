@@ -1,14 +1,17 @@
 package sdd.mapoverlay.backend.segments;
 
+/**
+ * Represents a vector in a 2D space.
+ */
 public class Vector {
     private double x;
     private double y;
 
     /**
-     * Constructeur pour un vecteur
+     * Constructor for a vector.
      * 
-     * @param x double representant la coordonnee x
-     * @param y double representant la coordonnee y
+     * @param x The x-coordinate of the vector.
+     * @param y The y-coordinate of the vector.
      */
     public Vector(double x, double y) {
         this.x = x;
@@ -16,28 +19,27 @@ public class Vector {
     }
 
     /**
-     * Permet de recuperer la coordonnee x du vecteur
+     * Gets the x-coordinate of the vector.
      * 
-     * @return double representant la coordonnee x
+     * @return The x-coordinate of the vector.
      */
     public double getX() {
         return x;
     }
 
     /**
-     * Permet de recuperer la coordonnee y du vecteur
+     * Gets the y-coordinate of the vector.
      * 
-     * @return double representant la coordonnee y
+     * @return The y-coordinate of the vector.
      */
     public double getY() {
         return y;
     }
 
     /**
-     * Permet de recuperer une representation du vecteur sous forme de chaine de
-     * caracteres
+     * Returns a string representation of the vector.
      * 
-     * @return String representant le vecteur
+     * @return A string representation of the vector.
      */
     @Override
     public String toString() {

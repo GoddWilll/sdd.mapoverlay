@@ -5,7 +5,7 @@ import sdd.mapoverlay.backend.points.EventPoint;
 import java.util.ArrayList;
 
 /**
- * Classe representant une intersection
+ * Represents an intersection between multiple segments.
  */
 public class Intersection {
 
@@ -15,58 +15,63 @@ public class Intersection {
     private ArrayList<Segment> L;
 
     /**
-     * Constructeur d'une intersection
-     * @param p point d'intersection
-     * @param U segments dont p est l'extremite superieure
-     * @param C segments contenant p
-     * @param L segments dont p est l'extremite inferieure
+     * Constructs a new Intersection object.
+     *
+     * @param p The event point representing the intersection.
+     * @param U The list of segments that are above the intersection.
+     * @param C The list of segments that cross the intersection.
+     * @param L The list of segments that are below the intersection.
      */
-    public Intersection(EventPoint p, ArrayList<Segment> U, ArrayList<Segment> C, ArrayList<Segment> L){
+    public Intersection(EventPoint p, ArrayList<Segment> U, ArrayList<Segment> C, ArrayList<Segment> L) {
         this.p = p;
         this.U = U;
         this.C = C;
         this.L = L;
     }
 
-
     /**
-     * Permet de recuperer le point d'intersection
-     * @return EventPoint le point d'intersection
+     * Returns the event point representing the intersection.
+     *
+     * @return The event point.
      */
-    public EventPoint getP(){
+    public EventPoint getP() {
         return this.p;
     }
 
     /**
-     * Permet de recuprer la liste des segments dont p est l'extremite superieure
-     * @return ArrayList les segments dont p est l'extremite superieure
+     * Returns the list of segments that are above the intersection.
+     *
+     * @return The list of segments.
      */
-    public ArrayList<Segment> getU(){
+    public ArrayList<Segment> getU() {
         return this.U;
     }
 
     /**
-     * Permet de recuprer la liste des segments contenant p
-     * @return ArrayList les segments contenant p
+     * Returns the list of segments that cross the intersection.
+     *
+     * @return The list of segments.
      */
-    public ArrayList<Segment> getC(){
+    public ArrayList<Segment> getC() {
         return this.C;
     }
 
     /**
-     * Permet de recuprer la liste des segments dont p est l'extremite inferieure
-     * @return ArrayList les segments dont p est l'extremite inferieure
+     * Returns the list of segments that are below the intersection.
+     *
+     * @return The list of segments.
      */
-    public ArrayList<Segment> getL(){
+    public ArrayList<Segment> getL() {
         return this.L;
     }
 
     /**
-     * Permet de recuperer le point d'intersection sous forme de chaine de caracteres
-     * @return String une chaine de caracteres representant le point d'intersection
+     * Returns a string representation of the Intersection object.
+     *
+     * @return The string representation.
      */
     @Override
-    public String toString(){
+    public String toString() {
         return p.toString();
     }
 

@@ -1,3 +1,6 @@
+/**
+ * This class is used to test the AVLTree implementation.
+ */
 package sdd.mapoverlay.backend.trees.base;
 
 public class AVLTreeTest {
@@ -13,14 +16,10 @@ public class AVLTreeTest {
 		t.insert("zoe");
 		t.insert("xavier");
 		t.insert("willy");
-		// t.print();
-		// System.out.println("-----------");
 
 		t.searchSucc("quentin");
-		// System.out.println("-----------");
 
 		t.suppress("quentin");
-		// t.print();
 
 		t.searchMax();
 

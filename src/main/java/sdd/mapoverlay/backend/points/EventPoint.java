@@ -7,9 +7,9 @@ import sdd.mapoverlay.backend.segments.Segment;
 import java.util.ArrayList;
 
 /**
- * Classe representant un point d'événement
+ * Represents an event point on a map.
  */
-public class EventPoint implements Comparable<EventPoint>{
+public class EventPoint implements Comparable<EventPoint> {
     private EventType eventType;
     private Position position;
     private ArrayList<Segment> intercepts;
@@ -18,11 +18,13 @@ public class EventPoint implements Comparable<EventPoint>{
     private double y;
 
     /**
-     * Constructeur d'un point d'événement
-     * @param x coordonnée x
-     * @param y coordonnée y
-     * @param eventType type d'événement
-     * @param position position du point
+     * Constructs an EventPoint object with the specified coordinates, event type,
+     * and position.
+     *
+     * @param x         the x-coordinate of the event point
+     * @param y         the y-coordinate of the event point
+     * @param eventType the type of the event
+     * @param position  the position of the event
      */
     public EventPoint(double x, double y, EventType eventType, Position position) {
         this.x = x;
@@ -33,25 +35,27 @@ public class EventPoint implements Comparable<EventPoint>{
     }
 
     /**
-     * Constructeur d'un point d'événement, a utiliser lors de creation de point dont on ne connait pas encore le type ni la position
-     * @param x coordonnée x
-     * @param y coordonnée y
+     * Constructs an EventPoint object with the specified coordinates.
+     *
+     * @param x the x-coordinate of the event point
+     * @param y the y-coordinate of the event point
      */
-    public EventPoint(double x, double y){
+    public EventPoint(double x, double y) {
         this.x = x;
         this.y = y;
         this.segments = new ArrayList<>();
     }
 
-
     /**
-     * Constructeur d'un point d'événement (pour intersection)
-     * @param x coordonnée x
-     * @param y coordonnée y
-     * @param eventType type d'événement
-     * @param intercepts segments interceptés
+     * Constructs an EventPoint object with the specified coordinates, event type,
+     * and intercepts.
+     *
+     * @param x          the x-coordinate of the event point
+     * @param y          the y-coordinate of the event point
+     * @param eventType  the type of the event
+     * @param intercepts the intercepts of the event
      */
-    public EventPoint(double x, double y, EventType eventType, ArrayList<Segment> intercepts){
+    public EventPoint(double x, double y, EventType eventType, ArrayList<Segment> intercepts) {
         this.x = x;
         this.y = y;
         this.eventType = eventType;
@@ -60,66 +64,67 @@ public class EventPoint implements Comparable<EventPoint>{
     }
 
     /**
-     * Permet de recuperer les segments de l'intersection
-     * @return un ArrauList de segments
+     * Returns the intercepts of the event point.
+     *
+     * @return the intercepts of the event point
      */
-    public ArrayList<Segment> getIntercepts(){
+    public ArrayList<Segment> getIntercepts() {
         return this.intercepts;
     }
 
     /**
-     * Permet de recuperer le type d'événement
-     * @return un objet EventType
+     * Returns the event type of the event point.
+     *
+     * @return the event type of the event point
      */
-    public EventType getEventType(){
+    public EventType getEventType() {
         return eventType;
     }
 
     /**
-     * Permet de recuperer la position du point
-     * @return un objet Position
+     * Returns the position of the event point.
+     *
+     * @return the position of the event point
      */
-    public Position getPosition(){
+    public Position getPosition() {
         return position;
     }
 
     /**
-     * Permet de definir la position du point
-     * @param position un objet Position
+     * Sets the position of the event point.
+     *
+     * @param position the position to set
      */
-    public void setPosition(Position position){
+    public void setPosition(Position position) {
         this.position = position;
     }
 
     /**
-     * Permet d'ajouter des segments dans la liste des segments dont le point est l'extremite superieure
-     * @param segment un objet Segment
+     * Adds a segment to the event point.
+     *
+     * @param segment the segment to add
      */
-    public void addSegment(Segment segment){
+    public void addSegment(Segment segment) {
         this.segments.add(segment);
     }
 
     /**
-     * Permet de recuperer la liste des segments dont le point est l'extremite superieure
-     * @return un ArrayList de segments
+     * Returns the segments of the event point.
+     *
+     * @return the segments of the event point
      */
-    public ArrayList<Segment> getSegments(){
+    public ArrayList<Segment> getSegments() {
         return this.segments;
     }
 
-    /**
-     * Permet de comparer deux points
-     * @param o le point a comparer
-     * @return un entier selon le resultat de la comparaison
-     */
     @Override
     public int compareTo(EventPoint o) {
-        if (getY() > o.getY()){
+        if (getY() > o.getY()) {
             return 1;
-        } else if (getY() == o.getY()){
-            if (getX() < o.getX()){
+        } else if (getY() == o.getY()) {
+            if (getX() < o.getX()) {
                 return 1;
-            } else if (getX() == o.getX()){
+            } else if (getX() == o.getX()) {
                 return 0;
             } else {
                 return -1;
@@ -130,24 +135,27 @@ public class EventPoint implements Comparable<EventPoint>{
     }
 
     /**
-     * Permet la representation textuelle d'un point
-     * @return une chaine de caractere representant le point
+     * Returns a string representation of the event point.
+     *
+     * @return a string representation of the event point
      */
-    public String toString(){
+    public String toString() {
         return getX() + " " + getY();
     }
 
     /**
-     * Permet de recuperer la coordonnée x du point
-     * @return un double
+     * Returns the x-coordinate of the event point.
+     *
+     * @return the x-coordinate of the event point
      */
-    public double getX(){
+    public double getX() {
         return x;
     }
 
     /**
-     * Permet de recuperer la coordonnée y du point
-     * @return
+     * Returns the y-coordinate of the event point.
+     *
+     * @return the y-coordinate of the event point
      */
     public double getY() {
         return y;

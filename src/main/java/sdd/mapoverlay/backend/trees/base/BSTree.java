@@ -1,94 +1,118 @@
-package sdd.mapoverlay.backend.trees.base;//Classe BSTree decrivant un arbre binaire de recherche (Binary Search Tree)
-//Elle etend la classe Tree, sachant que les donnees sont a present comparables
-//Les doublons ne sont pas autorises
+package sdd.mapoverlay.backend.trees.base;
 
-import sdd.mapoverlay.backend.segments.Segment;
-
+/**
+ * This class represents a Binary Search Tree (BST) that extends the Tree class.
+ * It provides methods for searching, inserting, and suppressing elements in the
+ * tree.
+ *
+ * @param <D> the type of data stored in the tree, which must implement the
+ *            Comparable interface
+ */
 public class BSTree<D extends Comparable> extends Tree<D> {
 	final Boolean isStatus = false;
 
-//	public BSTree<D> father;
-
-	//constructeurs
+	/**
+	 * Constructs an empty BSTree.
+	 */
 	public BSTree() {
 		super();
 	}
 
-	//	public BSTree(BSTree<D> father){
-//		super();
-////		this.father = father;
-//	}
+	/**
+	 * Constructs a BSTree with the specified data, left subtree, and right subtree.
+	 *
+	 * @param d the data to be stored in the tree
+	 * @param l the left subtree
+	 * @param r the right subtree
+	 */
 	public BSTree(D d, BSTree l, BSTree r) {
-		super(d,l,r);
+		super(d, l, r);
 	}
 
-	//On redefinit les "get" de la classe Tree afin d'eviter de faire du casting
-//a chaque usage.
-//En effet "getLeft" de la superclasse renvoie un Tree et pas un BSTree
+	/**
+	 * Returns the left subtree of this BSTree.
+	 *
+	 * @return the left subtree
+	 */
 	public BSTree<D> getLeft() {
 		return (BSTree<D>) super.getLeft();
 	}
+
+	/**
+	 * Returns the right subtree of this BSTree.
+	 *
+	 * @return the right subtree
+	 */
 	public BSTree<D> getRight() {
 		return (BSTree<D>) super.getRight();
 	}
 
-	//recherche recursive d'une donnee
+	/**
+	 * Searches for the specified data in the BSTree.
+	 *
+	 * @param d the data to search for
+	 * @return true if the data is found, false otherwise
+	 */
 	public boolean search(D d) {
 		if (isEmpty())
 			return false;
-		else	if (getData().compareTo(d) < 0)
+		else if (getData().compareTo(d) < 0)
 			return getRight().search(d);
-		else 	if (getData().compareTo(d) > 0)
+		else if (getData().compareTo(d) > 0)
 			return getLeft().search(d);
-		else 	return true;
+		else
+			return true;
 	}
 
+	/**
+	 * Inserts the specified data into the BSTree.
+	 *
+	 * @param d the data to insert
+	 */
 	public void insert(D d) {
 		if (isEmpty())
 			insertEmpty(d);
-		else	{
+		else {
 			if (getData().compareTo(d) < 0)
 				getRight().insert(d);
-			else 	if (getData().compareTo(d) > 0) {
+			else if (getData().compareTo(d) > 0) {
 				getLeft().insert(d);
 			}
 			equilibrate();
-
 		}
 	}
 
-
-
-	//On redefinit la methode insertEmpty de la classe Tree, afin de travailler avec
-//le type BSTree au lieu de Tree
+	/**
+	 * Inserts the specified data into an empty BSTree.
+	 *
+	 * @param d the data to insert
+	 */
 	public void insertEmpty(D d) {
 		setData(d);
 		setLeft(new AVLTree((AVLTree) this));
 		setRight(new AVLTree((AVLTree) this));
 	}
 
-//	public void setFather(BSTree father){
-//		this.father = father;
-//	}
-
-//	public BSTree<D> getFather(){
-//		return this.father;
-//	}
-
-
+	/**
+	 * Removes the specified data from the BSTree.
+	 *
+	 * @param d the data to remove
+	 */
 	public void suppress(D d) {
 		if (!isEmpty()) {
 			if (getData().compareTo(d) < 0)
 				getRight().suppress(d);
-			else 	if (getData().compareTo(d) > 0)
+			else if (getData().compareTo(d) > 0)
 				getLeft().suppress(d);
-			else 	suppressRoot();
+			else
+				suppressRoot();
 			equilibrate();
 		}
 	}
 
-	//suppression de la racine (on sait qu'elle existe)
-//rem: la methode equilibrate ne fait rien ici, mais sera utile pour la classe AVLTree
+	/**
+	 * Removes the root node of the BSTree.
+	 */
 	public void suppressRoot() {
 		if (getLeft().isEmpty()) {
 			BSTree<D> t = getRight();
@@ -96,22 +120,22 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 			setLeft(t.getLeft());
 			setRight(t.getRight());
 
-		}
-		else if (getRight().isEmpty()) {
+		} else if (getRight().isEmpty()) {
 			BSTree<D> t = getLeft();
 			setData(t.getData());
 			setRight(t.getRight());
 			setLeft(t.getLeft());
-//			getRight().setFather(this);
-//			getLeft().setFather(this);
-		}
-		else
+
+		} else
 			setData(getRight().suppressMin());
 		equilibrate();
 	}
 
-	//suppression du minimum et retour de ce minimum (on sait qu'il existe)
-//rem: la methode equilibrate ne fait rien ici, mais sera utile pour la classe AVLTree
+	/**
+	 * Removes and returns the minimum element in the BSTree.
+	 *
+	 * @return the minimum element in the tree
+	 */
 	public D suppressMin() {
 		D min;
 		if (getLeft().isEmpty()) {
@@ -120,16 +144,20 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 			setData(t.getData());
 			setLeft(t.getLeft());
 			setRight(t.getRight());
-		}
-		else
+		} else
 			min = getLeft().suppressMin();
 		equilibrate();
 		return min;
 	}
 
-	public D suppressMax(){
+	/**
+	 * Removes and returns the maximum element in the BSTree.
+	 *
+	 * @return the maximum element in the tree
+	 */
+	public D suppressMax() {
 		D max;
-		if (getRight().isEmpty()){
+		if (getRight().isEmpty()) {
 			max = getData();
 			BSTree<D> t = getLeft();
 			setData(t.getData());
@@ -142,43 +170,61 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 		return max;
 	}
 
-	//equilibrage vide dans le cas des BSTree, sera defini pour les AVLTree
+	/**
+	 * Rebalances the BSTree.
+	 */
 	public void equilibrate() {
 	}
 
-	//recherche recursive du minimum des donnees
+	/**
+	 * Searches for the minimum element in the BSTree.
+	 *
+	 * @return the minimum element in the tree, or null if the tree is empty
+	 */
 	public D searchMin() {
 		if (isEmpty())
 			return null;
 		else if (getLeft().isEmpty())
 			return getData();
-		else 	return getLeft().searchMin();
+		else
+			return getLeft().searchMin();
 	}
 
-	//recherche recursive du maximum des donnees
+	/**
+	 * Searches for the maximum element in the BSTree.
+	 *
+	 * @return the maximum element in the tree, or null if the tree is empty
+	 */
 	public D searchMax() {
 		if (isEmpty())
 			return null;
 		else if (getRight().isEmpty())
 			return getData();
-		else 	return getRight().searchMax();
+		else
+			return getRight().searchMax();
 	}
 
-	//recherche recursive du successeur d'une donnee
-//appel a la methode succ avec le parametre auxiliaire x initialise a null
+	/**
+	 * Searches for the successor of the specified data in the BSTree.
+	 *
+	 * @param d the data to find the successor for
+	 * @return the successor of the data, or null if the data is not found or has no
+	 *         successor
+	 */
 	public D searchSucc(D d) {
-		return succ(d,null);
+		return succ(d, null);
 	}
 
 	private D succ(D d, D x) {
 		if (isEmpty())
 			return null;
-		else	if (getData().compareTo(d) < 0)
-			return getRight().succ(d,x);
-		else 	if (getData().compareTo(d) > 0)
-			return getLeft().succ(d,getData());
-		else 	if (getRight().isEmpty())
+		else if (getData().compareTo(d) < 0)
+			return getRight().succ(d, x);
+		else if (getData().compareTo(d) > 0)
+			return getLeft().succ(d, getData());
+		else if (getRight().isEmpty())
 			return x;
-		else    return getRight().searchMin();
+		else
+			return getRight().searchMin();
 	}
 }

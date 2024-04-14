@@ -1,6 +1,14 @@
 package sdd.mapoverlay.backend.trees.base;
 
+/**
+ * This class is used to test the functionality of the BSTree class.
+ */
 public class BSTreeTest {
+	/**
+	 * The main method that runs the test cases.
+	 *
+	 * @param args The command-line arguments.
+	 */
 	public static void main(String[] args) {
 		BSTree<String> t = new BSTree<String>();
 
