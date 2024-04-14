@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javafx.scene.control.Alert;
+
 public class MapLoader {
     private ArrayList<String> map;
 
@@ -19,8 +21,10 @@ public class MapLoader {
 
             }
             dataReader.close();
-        } catch (Exception exception) {
-            System.out.println(exception);
+        } catch (Exception e) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error loading map file please select a valid file");
         }
     }
 

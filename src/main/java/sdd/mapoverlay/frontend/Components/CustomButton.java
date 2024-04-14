@@ -2,11 +2,19 @@ package sdd.mapoverlay.frontend.Components;
 
 import javafx.scene.control.Button;
 
+/**
+ * A custom button with hover effect.
+ */
 public class CustomButton extends Button {
 
     private final String buttonStyle;
     private final String onHoverButtonStyle;
 
+    /**
+     * Constructs a new CustomButton with the specified text.
+     *
+     * @param text the text to display on the button
+     */
     public CustomButton(String text) {
         super(text);
         buttonStyle = "-fx-background-color: #F4EAD5; " +
@@ -36,8 +44,5 @@ public class CustomButton extends Button {
         // Set up event handlers for hover effect
         setOnMouseEntered(e -> setStyle(onHoverButtonStyle));
         setOnMouseExited(e -> setStyle(buttonStyle));
-        // setPrefHeight(40);
-        // setMinHeight(40);
-        // setMinWidth(40);
     }
 }

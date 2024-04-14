@@ -1,3 +1,27 @@
+/**
+ * The SideMenu class represents a side menu in a JavaFX application. It provides functionality for entering segments, performing actions on segments, and displaying the segments to scan.
+ * 
+ * This class extends the VBox class and contains various UI components such as labels, text fields, buttons, and scroll panes.
+ * 
+ * The SideMenu class includes methods for handling user actions, such as adding segments, clearing segments, plotting segments, and starting the scan.
+ * 
+ * The class also includes private fields to store information about the segments, intersections, and the current file being edited or loaded.
+ * 
+ * Usage:
+ * SideMenu sideMenu = new SideMenu();
+ * 
+ * // Add the side menu to the application's layout
+ * root.getChildren().add(sideMenu);
+ * 
+ * // Perform actions on the side menu, such as adding segments or starting the scan
+ * sideMenu.addButton.setOnAction(event -> {
+ *     sideMenu.addButtonAction(xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
+ * });
+ * 
+ * sideMenu.startScanButton.setOnAction(event -> {
+ *     sideMenu.startScanButtonAction();
+ * });
+ */
 package sdd.mapoverlay.frontend.Widgets;
 
 import javafx.stage.FileChooser;
@@ -46,6 +70,10 @@ public class SideMenu extends VBox {
     CustomToggleButton showSweepLineButton = new CustomToggleButton("Show Sweep Line");
 
     CustomToggleButton hideSweepLineButton = new CustomToggleButton("Hide Sweep Line");
+
+    /**
+     * Constructs a new SideMenu.
+     */
 
     public SideMenu() {
 
@@ -207,6 +235,15 @@ public class SideMenu extends VBox {
 
     }
 
+    /**
+     * Handles the action when the "Plot" button is clicked.
+     * Plots the selected segments on the drawing pane.
+     * 
+     * @param xCoordStart the x-coordinate of the start point of the segment
+     * @param yCoordStart the y-coordinate of the start point of the segment
+     * @param xCoordEnd   the x-coordinate of the end point of the segment
+     * @param yCoordEnd   the y-coordinate of the end point of the segment
+     */
     private void plotButtonAction() {
         if (selectedSegments.size() > 0) {
             segmentsToDraw.clear();
@@ -231,20 +268,22 @@ public class SideMenu extends VBox {
         }
     }
 
+    /**
+     * Handles the action when the "Start scan" button is clicked.
+     * Starts the scan and displays the intersections.
+     */
     private void startScanButtonAction() {
 
         if (selectedSegments.size() > 0) {
             intersections = Logic.findIntersection(segmentsToDraw);
 
-            if (hideSweepLineButton.isSelected()) {
+            CenterStack.drawingPane.addIntersection(intersections, showSweepLineButton.isSelected());
 
-            } else {
+            if (showSweepLineButton.isSelected()) {
+
+                CenterStack.drawingPane.addSweepline();
+                CenterStack.drawingPane.startSweepAnimation();
             }
-
-            CenterStack.drawingPane.addIntersection(intersections);
-
-            CenterStack.drawingPane.addSweepline();
-            CenterStack.drawingPane.startSweepAnimation();
 
         } else {
             // Inform the user to add segments first
@@ -256,6 +295,15 @@ public class SideMenu extends VBox {
         }
     }
 
+    /**
+     * Handles the action when the "Add" button is clicked.
+     * Adds a segment to the side menu.
+     * 
+     * @param xCoordStart the x-coordinate of the start point of the segment
+     * @param yCoordStart the y-coordinate of the start point of the segment
+     * @param xCoordEnd   the x-coordinate of the end point of the segment
+     * @param yCoordEnd   the y-coordinate of the end point of the segment
+     */
     private void addButtonAction(CustomTextField xCoordStart, CustomTextField yCoordStart, CustomTextField xCoordEnd,
             CustomTextField yCoordEnd) {
         double x1 = Double.parseDouble(xCoordStart.getText());
@@ -281,6 +329,10 @@ public class SideMenu extends VBox {
 
     }
 
+    /**
+     * Handles the action when the "Browse" button is clicked.
+     * Loads segments from a file and displays them in the side menu.
+     */
     private void browseButtonAction() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
@@ -303,14 +355,23 @@ public class SideMenu extends VBox {
 
     }
 
+    /**
+     * Handles the action when the "Clear" button is clicked.
+     * Clears all segments from the side menu and the drawing pane.
+     */
     private void clearButtonAction() {
         selectedSegments.clear();
         segmentsToDraw.clear();
         CenterStack.drawingPane.clear();
         textSegmentsBox.getChildren().clear();
         intersections.clear();
+        openedFile = null;
     }
 
+    /**
+     * Handles the action when the "Edit" button is clicked.
+     * Writes the selected segments to the currently opened file.
+     */
     private void editButtonAction() {
         if (openedFile != null) {
             writeSegmentsToFile(openedFile);
@@ -325,6 +386,11 @@ public class SideMenu extends VBox {
 
     }
 
+    /**
+     * Sets the minimum and maximum x and y values for the segments.
+     * 
+     * @param segment the segment to check
+     */
     private void setMinMax(Segment segment) {
         if (segment.getUpperEndPoint().getY() > maxY) {
             maxY = segment.getUpperEndPoint().getY();
@@ -340,6 +406,11 @@ public class SideMenu extends VBox {
         }
     }
 
+    /**
+     * Writes the selected segments to a file.
+     * 
+     * @param file the file to write the segments to
+     */
     private void writeSegmentsToFile(File file) {
         try {
             FileWriter writer = new FileWriter(file);
@@ -360,6 +431,9 @@ public class SideMenu extends VBox {
         }
     }
 
+    /**
+     * Sets the background style of the side menu.
+     */
     private void setBackgroundStyle() {
         StringBuilder styleBuilder = new StringBuilder();
         styleBuilder.append("-fx-background-color: ")
@@ -370,11 +444,17 @@ public class SideMenu extends VBox {
                 .append("-fx-min-height: 924px;")
                 .append("fx-padding: 10px; ")
 
-        ; // Adjusted width to 60px
+        ;
 
         setStyle(styleBuilder.toString());
     }
 
+    /**
+     * Formats a color to a hex string.
+     * 
+     * @param color the color to format
+     * @return a string representing the color in hex format
+     */
     private String formatColor(Color color) {
         return String.format("#%02X%02X%02X",
                 (int) (color.getRed() * 255),
@@ -382,6 +462,12 @@ public class SideMenu extends VBox {
                 (int) (color.getBlue() * 255));
     }
 
+    /**
+     * Formats a segment string to a desired format.
+     * 
+     * @param segmentData the segment data to format
+     * @return a string representing the segment in the desired format
+     */
     private String formatSegmentToString(String segmentData) {
         String[] coordinates = segmentData.trim().split(" ");
 
@@ -389,6 +475,13 @@ public class SideMenu extends VBox {
                 coordinates[3]);
     }
 
+    /**
+     * Adds a segment to the side menu.
+     * 
+     * @param vbox        the VBox to add the segment to
+     * @param segmentId   the ID of the segment
+     * @param segmentText the text of the segment
+     */
     private void addToVbox(VBox vbox, int segmentId, String segmentText) {
         String text = new String(segmentText);
         HBox textHbox = new HBox();

@@ -10,10 +10,17 @@ import sdd.mapoverlay.frontend.Widgets.SideMenu;
 
 import java.io.*;
 
+/**
+ * This class represents a JavaFX application for testing purposes.
+ */
 public class TestFX extends Application {
 
+    /**
+     * The entry point for the JavaFX application.
+     *
+     * @param primaryStage the primary stage for this application
+     */
     @Override
-
     public void start(Stage primaryStage) {
         StackPane root = new StackPane();
         SideMenu sideMenu = new SideMenu();
@@ -34,6 +41,11 @@ public class TestFX extends Application {
         primaryStage.setResizable(false);
     }
 
+    /**
+     * The main method that launches the JavaFX application.
+     *
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         launch();
     }

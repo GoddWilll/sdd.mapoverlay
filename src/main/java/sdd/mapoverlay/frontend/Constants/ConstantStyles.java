@@ -2,6 +2,9 @@ package sdd.mapoverlay.frontend.Constants;
 
 import javafx.scene.paint.Color;
 
+/**
+ * Represents the constant styles in this JavaFX application.
+ */
 public class ConstantStyles {
         public static final Color PRIMARY_COLOR = Color.web("#F0F2EF");
         public static final Color SECONDARY_COLOR = Color.web("#AFD5AA");

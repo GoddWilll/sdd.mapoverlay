@@ -3,10 +3,16 @@ package sdd.mapoverlay.frontend.Components;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 
+/**
+ * A custom implementation of the JavaFX TextField with customized styling.
+ */
 public class CustomTextField extends TextField {
 
     private final String textFieldStyle;
 
+    /**
+     * Constructs a new CustomTextField with the default styling.
+     */
     public CustomTextField() {
         textFieldStyle = "-fx-background-color: #F4EAD5; " +
                 "-fx-text-fill: black; " +
@@ -21,6 +27,5 @@ public class CustomTextField extends TextField {
         setPrefWidth(90);
         setPrefHeight(20);
 
-        // Adjust prompt text color to match text fill color
     }
 }

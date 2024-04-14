@@ -2,10 +2,19 @@ package sdd.mapoverlay.frontend.Components;
 
 import javafx.scene.control.RadioButton;
 
+/**
+ * A custom implementation of a toggle button that extends the RadioButton
+ * class.
+ */
 public class CustomToggleButton extends RadioButton {
 
     private final String togglebtnStyle;
 
+    /**
+     * Constructs a new CustomToggleButton with the specified text.
+     *
+     * @param text the text to be displayed on the toggle button
+     */
     public CustomToggleButton(String text) {
         super(text);
         togglebtnStyle = "-fx-background-color: #F4EAD5; " +

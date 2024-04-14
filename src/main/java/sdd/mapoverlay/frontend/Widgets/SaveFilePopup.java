@@ -6,7 +6,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.util.Pair;
 import sdd.mapoverlay.backend.segments.Segment;
 
@@ -15,8 +14,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A class that represents a save file popup dialog.
+ */
 public class SaveFilePopup {
 
+    /**
+     * Displays a save file dialog for the user to enter a file name and saves the
+     * segments to a file.
+     *
+     * @param segmentsToSave the list of segments to save
+     */
     public static void showSaveFileDialog(List<Segment> segmentsToSave) {
         // Create the dialog
         Dialog<Pair<String, String>> dialog = new Dialog<>();
@@ -68,6 +76,12 @@ public class SaveFilePopup {
         });
     }
 
+    /**
+     * Writes the segments to a file with the given file name.
+     *
+     * @param fileName       the name of the file to save
+     * @param segmentsToSave the list of segments to save
+     */
     private static void writeSegmentsToFile(String fileName, List<Segment> segmentsToSave) {
         String directory = "src/main/resources/maps/";
         try {

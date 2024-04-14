@@ -71,11 +71,4 @@ jlink {
 jlinkZip {
   group = 'distribution'
 }
-sourceSets {
-    main {
-        resources {
-            srcDirs = ["src/main/java"]
-            includes = ["**/*.css"]
-        }
-    }
-}
+
