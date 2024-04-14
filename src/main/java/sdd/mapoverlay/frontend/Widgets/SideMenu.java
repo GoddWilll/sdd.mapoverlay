@@ -8,36 +8,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import sdd.mapoverlay.backend.Logic;
 import sdd.mapoverlay.backend.segments.Intersection;
-import sdd.mapoverlay.backend.utils.MapLoader;
 import sdd.mapoverlay.frontend.Components.CustomButton;
 import sdd.mapoverlay.frontend.Components.CustomLabel;
 import sdd.mapoverlay.frontend.Components.CustomTextField;
 import sdd.mapoverlay.frontend.Components.CustomToggleButton;
 import sdd.mapoverlay.frontend.Components.RemoveButton;
 import sdd.mapoverlay.frontend.Constants.ConstantStyles;
-import javafx.util.Duration;
 import sdd.mapoverlay.backend.map.Map;
 import sdd.mapoverlay.backend.segments.Segment;;
 
@@ -54,7 +42,7 @@ public class SideMenu extends VBox {
     private double maxY = 0;
     private double minX = 0;
     private double minY = 0;
-    VBox textSegmentsBox = new VBox();
+    VBox textSegmentsBox;
     CustomToggleButton showSweepLineButton = new CustomToggleButton("Show Sweep Line");
 
     CustomToggleButton hideSweepLineButton = new CustomToggleButton("Hide Sweep Line");
@@ -133,8 +121,6 @@ public class SideMenu extends VBox {
         hideSweepLineButton.setMaxWidth(Double.MAX_VALUE);
         ToggleGroup sweepLineGroup = new ToggleGroup();
 
-        // System.out.println(sweepLineGroup.getSelectedToggle().toString());
-        // System.out.println(showSweepLineButton.isSelected());
         showSweepLineButton.setToggleGroup(sweepLineGroup);
         hideSweepLineButton.setToggleGroup(sweepLineGroup);
         showSweepLineButton.setSelected(true);
@@ -162,7 +148,7 @@ public class SideMenu extends VBox {
         // Add components to the SideMenu
 
         // Vbox inside ScrollPane
-        VBox textSegmentsBox = new VBox();
+        textSegmentsBox = new VBox();
         textSegmentsBox.setSpacing(15);
         textSegmentsBox.setPadding(new Insets(10, 0, 20, 10));
         VBox.setMargin(textSegmentsBox, new Insets(10, 0, 20, 0));
