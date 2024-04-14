@@ -1,12 +1,13 @@
 package sdd.mapoverlay.backend.trees;
-
-import sdd.mapoverlay.backend.map.Map;
 import sdd.mapoverlay.backend.points.EventPoint;
 import sdd.mapoverlay.backend.segments.Segment;
 import sdd.mapoverlay.backend.trees.base.AVLTree;
 
 import java.util.ArrayList;
 
+/**
+ * Classe representant la EventQueue
+ */
 public class EventQueue extends AVLTree<EventPoint> {
 
     public EventQueue() {
@@ -15,7 +16,7 @@ public class EventQueue extends AVLTree<EventPoint> {
 
     /**
      * Permet d'initialiser la EventQueue avec une liste de segments
-     * @param segments ArrayList<Segment> la liste de segments
+     * @param segments ArrayList la liste de segments
      */
     public void initialize(ArrayList<Segment> segments) {
         for (Segment segment : segments) {

@@ -4,6 +4,9 @@ import sdd.mapoverlay.backend.Logic;
 import sdd.mapoverlay.backend.points.EventPoint;
 import sdd.mapoverlay.backend.points.types.Position;
 
+/**
+ * Classe representant un segment
+ */
 public class Segment implements Comparable<Segment> {
 
     private EventPoint upperEndPoint;

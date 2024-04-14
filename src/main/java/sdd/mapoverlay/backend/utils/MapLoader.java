@@ -7,6 +7,9 @@ import java.util.Scanner;
 
 import javafx.scene.control.Alert;
 
+/**
+ * Classe permettant de charger une carte a partir d'un fichier
+ */
 public class MapLoader {
     private ArrayList<String> map;
 

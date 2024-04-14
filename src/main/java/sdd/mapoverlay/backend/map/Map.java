@@ -5,20 +5,14 @@ import sdd.mapoverlay.backend.points.types.EventType;
 import sdd.mapoverlay.backend.points.types.Position;
 import sdd.mapoverlay.backend.segments.Segment;
 import sdd.mapoverlay.backend.utils.MapLoader;
-import sdd.mapoverlay.backend.utils.SegmentComparator;
-
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import javafx.scene.control.Alert;
 
+/**
+ * Classe representant la carte du plan
+ */
 public class Map {
     private ArrayList<Segment> segments = new ArrayList<>();
-    // private double maxYPosition;
-    // private double maxXPosition;
-    // private double minYPosition;
-    // private double minXPosition;
 
     /**
      * Constructeur de la classe Map, representant la carte du plam
@@ -116,43 +110,4 @@ public class Map {
         return segments;
     }
 
-    // public double getMaxYPosition(){
-    // return maxYPosition;
-    // }
-    //
-    // public double getMaxXPosition(){
-    // return maxXPosition;
-    // }
-    //
-    // public double getMinXPosition(){
-    // return minXPosition;
-    // }
-    //
-    // public double getMinYPosition(){
-    // return minYPosition;
-    // }
-    //
-    // private void updateMaxXPosition(double x){
-    // if (x > maxXPosition) {
-    // this.maxXPosition = x;
-    // }
-    // }
-    //
-    // private void updateMaxYPosition(double y){
-    // if (y > maxYPosition){
-    // this.maxYPosition = y;
-    // }
-    // }
-    //
-    // private void updateMinXPosition(double x){
-    // if (x < minXPosition){
-    // this.minXPosition = x;
-    // }
-    // }
-    //
-    // private void updateMinYPosition(double y){
-    // if (y < minYPosition){
-    // this.minYPosition = y;
-    // }
-    // }
 }

@@ -4,6 +4,9 @@ import sdd.mapoverlay.backend.points.EventPoint;
 
 import java.util.ArrayList;
 
+/**
+ * Classe representant une intersection
+ */
 public class Intersection {
 
     private EventPoint p;
@@ -36,7 +39,7 @@ public class Intersection {
 
     /**
      * Permet de recuprer la liste des segments dont p est l'extremite superieure
-     * @return ArrayList<Segment> les segments dont p est l'extremite superieure
+     * @return ArrayList les segments dont p est l'extremite superieure
      */
     public ArrayList<Segment> getU(){
         return this.U;
@@ -44,7 +47,7 @@ public class Intersection {
 
     /**
      * Permet de recuprer la liste des segments contenant p
-     * @return ArrayList<Segment> les segments contenant p
+     * @return ArrayList les segments contenant p
      */
     public ArrayList<Segment> getC(){
         return this.C;
@@ -52,7 +55,7 @@ public class Intersection {
 
     /**
      * Permet de recuprer la liste des segments dont p est l'extremite inferieure
-     * @return ArrayList<Segment> les segments dont p est l'extremite inferieure
+     * @return ArrayList les segments dont p est l'extremite inferieure
      */
     public ArrayList<Segment> getL(){
         return this.L;

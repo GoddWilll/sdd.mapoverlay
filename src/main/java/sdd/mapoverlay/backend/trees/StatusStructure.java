@@ -7,9 +7,10 @@ import sdd.mapoverlay.backend.segments.Segment;
 
 import java.util.ArrayList;
 
+/**
+ * Classe representant la structure de statut
+ */
 public class StatusStructure extends AVLTree<Segment>  {
-
-    final Boolean isStatus = true;
 
     public StatusStructure(){
         super();
@@ -18,7 +19,7 @@ public class StatusStructure extends AVLTree<Segment>  {
     /**
      * Retourne les segments dans T qui contiennent le point p
      * @param p EventPoint le point
-     * @return ArrayList<Segment> les segments qui contiennent le point p
+     * @return ArrayList les segments qui contiennent le point p
      */
     public ArrayList<Segment> segmentsContainingP(EventPoint p){
         // on cree la liste pour stocker les segments qui contiennent p

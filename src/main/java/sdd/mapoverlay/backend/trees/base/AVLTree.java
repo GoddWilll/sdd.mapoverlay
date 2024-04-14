@@ -147,7 +147,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 	/**
 	 * Fonction permettant de recuperer les voisins droits contenant le point p
 	 * @param p EventPoint le point dont on veut les voisins
-	 * @return ArrayList<D> une liste de segments voisins
+	 * @return ArrayList une liste de segments voisins
 	 */
 	public ArrayList<D> getRightNeighbors(EventPoint p){
 		ArrayList<D> neighbors = new ArrayList<>();
@@ -205,7 +205,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 	/**
 	 * Fonction permettant de recuperer les voisins gauches contenant le point p
 	 * @param p EventPoint le point dont on veut les voisins
-	 * @return ArrayList<D> une liste de segments voisins
+	 * @return ArrayList une liste de segments voisins
 	 */
 	public ArrayList<D> getLeftNeighbors(EventPoint p){
 		ArrayList<D> neighbors = new ArrayList<>();
@@ -352,8 +352,6 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 				getLeft().suppressStatusStructure(d, p);
 			}
 			equilibrate();
-		} else {
-			System.out.println("Segment non trouve");
 		}
 	}
 

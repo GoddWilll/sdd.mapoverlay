@@ -6,6 +6,9 @@ import sdd.mapoverlay.backend.segments.Segment;
 
 import java.util.ArrayList;
 
+/**
+ * Classe representant un point d'événement
+ */
 public class EventPoint implements Comparable<EventPoint>{
     private EventType eventType;
     private Position position;

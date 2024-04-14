@@ -4,6 +4,9 @@ import sdd.mapoverlay.backend.segments.Segment;
 
 import java.util.Comparator;
 
+/**
+ * Classe permettant de comparer deux segments
+ */
 public class SegmentComparator implements Comparator<Segment> {
     @Override
     public int compare(Segment o1, Segment o2) {
