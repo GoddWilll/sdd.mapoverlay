@@ -131,7 +131,6 @@ public class EventPoint implements Comparable<EventPoint>{
      * @return une chaine de caractere representant le point
      */
     public String toString(){
-//        return "(" + getX() + ", " + getY()+")";
         return getX() + " " + getY();
     }
 

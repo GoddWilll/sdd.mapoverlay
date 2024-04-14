@@ -181,8 +181,4 @@ public class BSTree<D extends Comparable> extends Tree<D> {
 			return x;
 		else    return getRight().searchMin();
 	}
-
-	public Boolean getIsStatus() {
-		return isStatus;
-	}
 }

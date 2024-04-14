@@ -44,12 +44,14 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 	public int getHeight() {
 		return height;
 	}
-	public void setHeight(int h) {
-		height = h;
-	}
 
 	//On redéfinit la méthode insertEmpty de la classe BSTree, afin de travailler avec
 //le type AVLTree au lieu de BSTree
+
+	/**
+	 * Insertion d'une donnée dans un arbre vide
+	 * @param d la donnée à insérer
+	 */
 	public void insertEmpty(D d) {
 		setData(d);
 		setLeft(new AVLTree(this));
@@ -260,19 +262,24 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		return "" + getData();
 	}
 
-	public void insertStatusStructureVariant(D d, double yp){
+	/**
+	 * Fonction permettant d'insérer un segment dans la StatusStructure
+	 * @param d Segment le segment a inserer
+	 * @param p EventPoint le point d'intersection
+	 */
+	public void insertStatusStructureVariant(D d, EventPoint p){
 		if (isEmpty()) {
 			insertEmpty(d);
 		} else {
 			if (height() == 1){
-				if (Math.abs(((Segment)getData()).xAtYp(yp) - ((Segment)d).xAtYp(yp)) < Logic.EPSILON){
+				if (Math.abs(((Segment)getData()).xAtYp(p) - ((Segment)d).xAtYp(p)) < Logic.EPSILON){
 					getLeft().insertEmpty(getData());
 					getRight().insertEmpty(d);
 
 					getLeft().setFather(this);
 					getRight().setFather(this);
 
-				} else if (((Segment)getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)){
+				} else if (((Segment)getData()).xAtYp(p) > ((Segment)d).xAtYp(p)){
 					getLeft().insertEmpty(d);
 					getRight().insertEmpty(getData());
 					setData(d);
@@ -280,7 +287,7 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 					getLeft().setFather(this);
 					getRight().setFather(this);
 
-				} else if (((Segment)getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
+				} else if (((Segment)getData()).xAtYp(p) < ((Segment)d).xAtYp(p)){
 					getLeft().insertEmpty(getData());
 					getRight().insertEmpty(d);
 
@@ -288,23 +295,28 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 					getRight().setFather(this);
 				}
 			} else {
-				if (Math.abs(((Segment)getData()).xAtYp(yp) - ((Segment)d).xAtYp(yp)) < Logic.EPSILON){
-					getRight().insertStatusStructureVariant(d, yp);
-				} else if (((Segment)getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
-					getRight().insertStatusStructureVariant(d, yp);
-				} else if (((Segment)getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)){
-					getLeft().insertStatusStructureVariant(d, yp);
+				if (Math.abs(((Segment)getData()).xAtYp(p) - ((Segment)d).xAtYp(p)) < Logic.EPSILON){
+					getRight().insertStatusStructureVariant(d, p);
+				} else if (((Segment)getData()).xAtYp(p) < ((Segment)d).xAtYp(p)){
+					getRight().insertStatusStructureVariant(d, p);
+				} else if (((Segment)getData()).xAtYp(p) > ((Segment)d).xAtYp(p)){
+					getLeft().insertStatusStructureVariant(d, p);
 				}
 			}
 		}
 		equilibrate();
 	}
 
-	public void suppressStatusStructure(D d, double yp){
+	/**
+	 * Fonction permettant de supprimer un segment de la structure de status
+	 * @param d Segment le segment a supprimer
+	 * @param p EventPoint le point d'intersection
+	 */
+	public void suppressStatusStructure(D d, EventPoint p){
 		if (!isEmpty()){
-			if (Math.abs(((Segment) getData()).xAtYp(yp) - ((Segment) d).xAtYp(yp)) < Logic.EPSILON){
+			if (Math.abs(((Segment) getData()).xAtYp(p) - ((Segment) d).xAtYp(p)) < Logic.EPSILON){
 				if (!((Segment)getData()).isSameSegment((Segment)d)){
-					getLeft().suppressStatusStructure(d, yp);
+					getLeft().suppressStatusStructure(d, p);
 				} else {
 					if (height() == 1){ // Si on est dans un arbre de hauteur 1 (donc une feuille)
 						if (getFather() == null){ // Si on est la racine
@@ -313,16 +325,19 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 							if (getFather().getLeft().height() == 1){ // Si le frere gauche de la feuille est de hauteur 1 (donc une feuille)
 								getFather().getLeft().suppressRoot(); // On supprime la feuille gauche
 								getFather().getRight().suppressRoot(); // On supprime la feuille droite
-//								suppressRoot(); // On supprime la feuille droite
 							} else {
-//								suppressRoot(); // On supprime la feuille droite. Si le frere gauche est un arbre de hauteur 2, alors il va se reequilibrer
 								suppressRoot();
 								getFather().suppressRoot();
 							}
 						}
 					} else if (height() == 2){ // Si on est dans un arbre de hauteur 2
-						suppressRoot(); // On supprime la racine
-						getLeft().suppressRoot(); // On supprime le fils gauche
+						if (getRight().isEmpty()){ // Si le fils droit est vide
+							suppressRoot(); // On supprime la racine
+							suppressRoot(); // On supprime la racine
+						} else {
+							suppressRoot(); // On supprime la racine
+							getLeft().suppressRoot(); // On supprime le fils gauche
+						}
 					} else if (height() > 2){
 						suppressRoot();
 						D newData = getData();
@@ -330,11 +345,11 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 						getLeft().replace(newData);
 					}
 				}
-			} else if (((Segment) getData()).xAtYp(yp) < ((Segment)d).xAtYp(yp)){
-				getRight().suppressStatusStructure(d, yp);
+			} else if (((Segment) getData()).xAtYp(p) < ((Segment)d).xAtYp(p)){
+				getRight().suppressStatusStructure(d, p);
 			}
-			else if (((Segment) getData()).xAtYp(yp) > ((Segment)d).xAtYp(yp)) {
-				getLeft().suppressStatusStructure(d, yp);
+			else if (((Segment) getData()).xAtYp(p) > ((Segment)d).xAtYp(p)) {
+				getLeft().suppressStatusStructure(d, p);
 			}
 			equilibrate();
 		} else {
@@ -342,6 +357,9 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 		}
 	}
 
+	/**
+	 * Fonction permettant de supprimer la racine d'un arbre
+	 */
 	@Override
 	public void suppressRoot() {
 		if (getLeft().isEmpty()) {
@@ -374,6 +392,24 @@ public class AVLTree<D extends Comparable> extends BSTree<D> {
 			getRight().replace(replacement);
 		} else {
 			setData(replacement);
+		}
+	}
+
+	/**
+	 * Permet de faire une recherche dans la structure de donnée
+	 * @param d la donnée a rechercher
+	 * @return boolean true si la donnee est trouvee, false sinon
+	 */
+	@Override
+	public boolean search(D d) {
+		if (isEmpty()) {
+			return false;
+		} else if (Math.abs(((EventPoint)getData()).getY() - ((EventPoint)d).getY()) < Logic.EPSILON && Math.abs(((EventPoint)getData()).getX() - ((EventPoint)d).getX()) < Logic.EPSILON){
+			return true;
+		} else if (((EventPoint)getData()).getY() < ((EventPoint)d).getY()){
+			return getRight().search(d);
+		} else {
+			return getLeft().search(d);
 		}
 	}
 

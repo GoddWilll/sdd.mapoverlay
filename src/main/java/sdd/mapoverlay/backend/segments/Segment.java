@@ -207,13 +207,44 @@ public class Segment implements Comparable<Segment> {
     }
 
     /**
-     * Fonction permettant de calculer l'abcisse du point d'intersection entre le
-     * segment et une droite horizontale d'ordonnée yp
-     *
-     * @param yp l'ordonnée de la droite horizontale
-     * @return un double l'abcisse du point d'intersection
+     * Fonction permettant d'obtenir l'ordonnee d'un point a partir de son abscisse
+     * @param p le point a verifier
+     * @param diff la difference a prendre en compte
+     * @return double l'ordonnee du point
      */
-    public double xAtYp(double yp) {
+    public double xAtYp(EventPoint p, double diff) {
+        double yp = p.getY() - diff;
+        double x1 = upperEndPoint.getX();
+        double y1 = upperEndPoint.getY();
+        double x2 = lowerEndPoint.getX();
+        double y2 = lowerEndPoint.getY();
+
+        if (yp < y2)
+            return x2;
+
+        if (yp > y1)
+            return x1;
+
+        if (y1 == y2)
+            return p.getX()+ 0.0001;
+
+        if (x1 != x2) {
+            double m = (y2 - y1) / (x2 - x1);
+            double b = y1 - m * x1;
+//            return (double) Math.round(((yp - b) / m) * 100) /100; // /1000
+            return (yp - b) / m;
+        } else {
+            return getLowerEndPoint().getX();
+        }
+    }
+
+    /**
+     * Fonction permettant d'obtenir l'ordonnee d'un point a partir de son abscisse
+     * @param p le point a verifier
+     * @return double l'ordonnee du point
+     */
+    public double xAtYp(EventPoint p) {
+        double yp = p.getY();
 
         double x1 = upperEndPoint.getX();
         double y1 = upperEndPoint.getY();
@@ -228,7 +259,7 @@ public class Segment implements Comparable<Segment> {
             return x1;
 
         if (y1 == y2)
-            return x1;
+            return p.getX();
 
         if (x1 != x2) {
             double m = (y2 - y1) / (x2 - x1);
@@ -267,6 +298,11 @@ public class Segment implements Comparable<Segment> {
         return new double[] { x1, y1, x2, y2 };
     }
 
+    /**
+     * Fonction permettant de verifier si un segment est horizontal
+     *
+     * @return un boolean true si le segment est horizontal, false sinon
+     */
     public boolean isHorizontal(){
         return upperEndPoint.getY() == lowerEndPoint.getY();
     }
