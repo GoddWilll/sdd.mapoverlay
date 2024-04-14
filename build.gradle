@@ -30,6 +30,7 @@ application {
   mainClass = 'sdd.mapoverlay.frontend.TestFX'
 }
 
+
 javafx {
   version = '21'
   modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing' , 'javafx.media']
